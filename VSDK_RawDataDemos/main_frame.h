@@ -119,7 +119,7 @@ public:
 private:
 	CMainFrame();
 	~CMainFrame();
-	void DestroyAllOwnedWnd();
+	
 	void InitControls();
 	
 	
@@ -134,8 +134,7 @@ private:
 	void OnMeetingDisconnecting();
 	void SetCommandChannelConnect(bool is_connect);
 
-	void AddTheTray();
-	void DeleteTheTray();
+
 
 private:
 	CJoinSessionWndUI* join_session_wnd_ = nullptr;
