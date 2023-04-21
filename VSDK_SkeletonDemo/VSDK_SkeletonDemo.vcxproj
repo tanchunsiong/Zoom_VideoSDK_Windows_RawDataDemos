@@ -151,6 +151,9 @@
     <ClInclude Include="videosdk_include_files.h" />
     <ClInclude Include="VSDK_SkeletonDemo.h" />
     <ClInclude Include="ZoomVideoSDKRawDataPipeDelegate.h" />
+    <ClInclude Include="ZoomVideoSDKShareSource.h" />
+    <ClInclude Include="ZoomVideoSDKVideoSource.h" />
+    <ClInclude Include="ZoomVideoSDKVirtualAudioMic.h" />
     <ClInclude Include="ZoomVideoSDKVirtualAudioSpeaker.h" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +161,9 @@
     <ClCompile Include="videosdk_demo_mgr.cpp" />
     <ClCompile Include="VSDK_SkeletonDemo.cpp" />
     <ClCompile Include="ZoomVideoSDKRawDataPipeDelegate.cpp" />
+    <ClCompile Include="ZoomVideoSDKShareSource.cpp" />
+    <ClCompile Include="ZoomVideoSDKVideoSource.cpp" />
+    <ClCompile Include="ZoomVideoSDKVirtualAudioMic.cpp" />
     <ClCompile Include="ZoomVideoSDKVirtualAudioSpeaker.cpp" />
   </ItemGroup>
   <ItemGroup>
