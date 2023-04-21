@@ -24,7 +24,7 @@ bool getRawVideo = false;
 bool getRawShare = false;
 bool sendRawVideo = false;
 bool sendRawAudio = false;
-bool sendRawShare = false;
+bool sendRawShare = true;
 
 CMainFrame::CMainFrame()
 {
@@ -232,9 +232,7 @@ void CMainFrame::onSessionJoin()
 		}
 	}
 
-	//checking the use for this
-	//IZoomVideoSDKRecordingHelper* m_pRecordhelper =  video_sdk_obj->getRecordingHelper();
-
+	
 
 	if (sendRawShare) {
 
@@ -248,6 +246,24 @@ void CMainFrame::onSessionJoin()
 			printf("Error setting external source %s\n", err2);
 		}
 	};
+
+	if (sendRawVideo) {
+		//dreamtcs todo: do a start video here
+		
+	}
+
+	if (sendRawAudio) {
+		//dreamtcs todo: do a start / unmute audio here
+		IZoomVideoSDKAudioHelper* m_pAudiohelper = ZoomVideoSDKMgr::GetInst().getAudioHelper();
+		if (m_pAudiohelper) {
+			// Connect User's audio.
+			printf("Starting Audio\n");
+			m_pAudiohelper->unMuteAudio(0);
+
+
+
+		}
+	}
 }
 
 void CMainFrame::onSessionLeave()

@@ -72,6 +72,7 @@ int j = 0;
 
 void ZoomVideoSDKRawDataPipeDelegate::onRawDataFrameReceived(YUVRawDataI420* data)
 {
+	//getRawVideo
 	const zchar_t* userName = user_->getUserName();
 	const zchar_t* userID = user_->getUserID();
 	const int width = data->GetStreamWidth();
