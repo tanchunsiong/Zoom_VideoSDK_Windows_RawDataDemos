@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "videosdk_demo_mgr.h"
 
+
+
 ZoomVideoSDKMgr::ZoomVideoSDKMgr()
 	: video_sdk_obj_(nullptr)
 	, is_inited_(false)
@@ -11,6 +13,37 @@ ZoomVideoSDKMgr::ZoomVideoSDKMgr()
 ZoomVideoSDKMgr::~ZoomVideoSDKMgr()
 {
 
+}
+
+
+//dreamtcs experimental
+IZoomVideoSDKAudioHelper* ZoomVideoSDKMgr::getAudioHelper()
+{
+	IZoomVideoSDKAudioHelper* audioHelper = nullptr;
+	if (is_inited_)
+	{
+		if (video_sdk_obj_)
+		{
+			audioHelper= video_sdk_obj_->getAudioHelper();
+		}
+		
+	}
+	return audioHelper;
+}
+
+//dreamtcs experimental
+IZoomVideoSDKShareHelper* ZoomVideoSDKMgr::getShareHelper()
+{
+	IZoomVideoSDKShareHelper* shareHelper = nullptr;
+	if (is_inited_)
+	{
+		if (video_sdk_obj_)
+		{
+			shareHelper = video_sdk_obj_->getShareHelper();
+		}
+
+	}
+	return shareHelper;
 }
 
 ZoomVideoSDKMgr& ZoomVideoSDKMgr::GetInst()

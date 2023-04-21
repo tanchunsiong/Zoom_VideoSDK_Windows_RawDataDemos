@@ -45,18 +45,9 @@ public:
 
 	void InitVideoSDK();
 	void UninitVideoSDK();
-
-	
-	
-
-	
 	void StopShare();
 	void SendChatToAll(const zchar_t* msgContent);
-
-
-
 	bool IsCommandChannelConnect();
-
 	void JoinSession();
 	void LeaveSession(bool bEnd);
 
@@ -121,26 +112,15 @@ private:
 	~CMainFrame();
 	
 	void InitControls();
-	
-	
-
 	void StartPreview();
-
-
-
 	void OnLeaveSessionUIUpdate();
 	void OnJoinMettingJoinFailed(int error_code);
 	void OnInvalidParamterNotification();
 	void OnMeetingDisconnecting();
 	void SetCommandChannelConnect(bool is_connect);
 
-
-
 private:
 	
-
-
-
 	bool is_show_gallery_ = false;
 	bool is_command_channel_connected_ = false;
 	bool is_full_screen_ = false;

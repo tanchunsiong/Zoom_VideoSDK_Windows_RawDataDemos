@@ -3,6 +3,28 @@
 #include "main_frame.h"
 #include "videosdk_demo_mgr.h"
 
+//getRawShare, getRawVideo
+#include "ZoomVideoSDKRawDataPipeDelegate.h"
+
+//getRawAudio
+#include "ZoomVideoSDKVirtualAudioSpeaker.h"
+
+//sendRawVideo
+#include "ZoomVideoSDKVideoSource.h"
+
+//sendRawAudio
+#include "ZoomVideoSDKVirtualAudioMic.h"
+
+//sendRawShare
+#include "ZoomVideoSDKShareSource.h"
+
+//these are controls to demonstrate the flow
+bool getRawAudio = false;
+bool getRawVideo = false;
+bool getRawShare = false;
+bool sendRawVideo = false;
+bool sendRawAudio = false;
+bool sendRawShare = false;
 
 CMainFrame::CMainFrame()
 {
@@ -78,9 +100,6 @@ void CMainFrame::OnMeetingDisconnecting()
 
 
 
-
-
-
 void CMainFrame::StartPreview()
 {
 	
@@ -134,8 +153,34 @@ void CMainFrame::JoinSession()
 		session_context.audioOption.connect = false;
 		session_context.audioOption.mute = is_mute_audio;
 
+		if (getRawAudio) {
 		
-	
+			ZoomVideoSDKVirtualAudioSpeaker* vSpeaker = new ZoomVideoSDKVirtualAudioSpeaker();
+			session_context.virtualAudioSpeaker = vSpeaker;
+
+			session_context.audioOption.connect = true;
+		}
+		if (sendRawVideo) {
+			//needed for send raw video
+			//the sdk uses a Video Source to send raw video
+			//this needs to be done before joining session
+			ZoomVideoSDKVideoSource* virtual_video_source = new ZoomVideoSDKVideoSource();
+			session_context.externalVideoSource = virtual_video_source;
+		}
+		if (sendRawShare) {
+			//nothing much to do before joining session
+		}
+
+
+		if (sendRawAudio) {
+			session_context.audioOption.connect = true; //needed for sending raw audio data
+			session_context.audioOption.mute = false; //needed for sending raw audio data
+
+			//ZoomVideoSDKVirtualAudioMic is the object used to send audio
+			ZoomVideoSDKVirtualAudioMic* vMic = new ZoomVideoSDKVirtualAudioMic();
+			session_context.virtualAudioMic = vMic;
+
+		}
 
 	IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
 	if (pSession)
@@ -163,6 +208,46 @@ void CMainFrame::onSessionJoin()
 {
 	
 	std::cout << "onSessionJoin()" << std::endl;
+
+	if (getRawAudio) {
+		IZoomVideoSDKAudioHelper* m_pAudiohelper = ZoomVideoSDKMgr::GetInst().getAudioHelper();
+		if (m_pAudiohelper) {
+			//needed for getting raw audio
+			ZoomVideoSDKErrors err = m_pAudiohelper->subscribe();
+			printf("subscribe status is %d\n", err);
+		}
+	}
+
+
+	if (sendRawAudio) {
+		//needed for audio
+		IZoomVideoSDKAudioHelper* m_pAudiohelper = ZoomVideoSDKMgr::GetInst().getAudioHelper();
+		if (m_pAudiohelper) {
+			// Connect User's audio.
+			printf("Starting Audio\n");
+			m_pAudiohelper->startAudio();
+
+
+
+		}
+	}
+
+	//checking the use for this
+	//IZoomVideoSDKRecordingHelper* m_pRecordhelper =  video_sdk_obj->getRecordingHelper();
+
+
+	if (sendRawShare) {
+
+		//needed for share source
+		//this needs to be done after joing session
+		ZoomVideoSDKShareSource* virtual_share_source = new ZoomVideoSDKShareSource();
+		ZoomVideoSDKErrors err2 = ZoomVideoSDKMgr::GetInst().getShareHelper()->startSharingExternalSource(virtual_share_source);
+		if (err2 == ZoomVideoSDKErrors_Success) {
+		}
+		else {
+			printf("Error setting external source %s\n", err2);
+		}
+	};
 }
 
 void CMainFrame::onSessionLeave()
@@ -190,18 +275,21 @@ void CMainFrame::onError(ZoomVideoSDKErrors errorCode, int detailErrorCode)
 void CMainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList)
 {
 	std::cout << "onUserJoin()" << std::endl;
-	if (video_show_mgr_)
-	{
-		//video_show_mgr_->OnUserJoin(userList);
+	if (getRawVideo) {
+		if (userList)
+		{
+			int count = userList->GetCount();
+			for (int index = 0; index < count; index++)
+			{
+				IZoomVideoSDKUser* user = userList->GetItem(index);
+				if (user)
+				{
+					ZoomVideoSDKRawDataPipeDelegate* encoder = new ZoomVideoSDKRawDataPipeDelegate(user);
+				}
+
+			}
+		}
 	}
-
-	//update ui
-	//UpdateParticipantNum();
-	//if (session_infos_wnd_)
-	//{
-	//	session_infos_wnd_->UpdateSessionInfoUI();
-	//}
-
 
 }
 
@@ -223,7 +311,19 @@ void CMainFrame::onUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper
 
 void CMainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, ZoomVideoSDKShareStatus status, ZoomVideoSDKShareType type)
 {
+	if (getRawShare) {
+		if (status== ZoomVideoSDKShareStatus::ZoomVideoSDKShareStatus_Start)
+		{
+			ZoomVideoSDKRawDataPipeDelegate *pVideoPipe = new ZoomVideoSDKRawDataPipeDelegate(pUser,true);
+			
+			
+		}
+		else if (status == ZoomVideoSDKShareStatus::ZoomVideoSDKShareStatus_Stop)
+		{
+			ZoomVideoSDKRawDataPipeDelegate::stop_encoding_for(pUser, true);
+		}
 	
+	}
 }
 
 void CMainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status)
@@ -293,16 +393,27 @@ void CMainFrame::onSessionPasswordWrong(IZoomVideoSDKPasswordHandler* handler)
 
 void CMainFrame::onMixedAudioRawDataReceived(AudioRawData* data_)
 {
+	//dreamtcs to set getRawAudio to true and test if this fires
+	if (getRawAudio) {
+	
+	}
+
 }
 
 void CMainFrame::onOneWayAudioRawDataReceived(AudioRawData* data_, IZoomVideoSDKUser* pUser)
 {
+	//dreamtcs to set getRawAudio to true and test if this fires
+	if (getRawAudio) {
 
+	}
 }
 
 void CMainFrame::onSharedAudioRawDataReceived(AudioRawData* data_)
 {
+	//dreamtcs to set getRawAudio to true and test if this fires
+	if (getRawAudio) {
 
+	}
 }
 
 void CMainFrame::onUserManagerChanged(IZoomVideoSDKUser* pUser)
