@@ -24,7 +24,7 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VSDK_RawDataDemos.h">
+    <ClInclude Include="VSDK_GetAudioRaw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="videosdk_demo_mgr.h">
@@ -41,7 +41,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="VSDK_RawDataDemos.cpp">
+    <ClCompile Include="VSDK_GetAudioRaw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="videosdk_demo_mgr.cpp">

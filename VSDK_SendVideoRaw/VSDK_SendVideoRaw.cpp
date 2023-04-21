@@ -2,7 +2,7 @@
 //
 
 #include "framework.h"
-#include "VSDK_RawDataDemos.h"
+#include "VSDK_SendVideoRaw.h"
 #include "main_frame.h"
 
 #define MAX_LOADSTRING 100
@@ -28,33 +28,46 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // TODO: Place code here.
 
-    // Initialize global strings
-    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_VSDKRAWDATADEMOS, szWindowClass, MAX_LOADSTRING);
-    MyRegisterClass(hInstance);
-
-    // Perform application initialization:
-    if (!InitInstance (hInstance, nCmdShow))
-    {
-        return FALSE;
-    }
-
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_VSDKRAWDATADEMOS));
-
-    MSG msg;
     CMainFrame::GetInstance().InitVideoSDK();
-    // Main message loop:
-    while (GetMessage(&msg, nullptr, 0, 0))
+
+    while (true)
     {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
+        // Wait for some kind of input or event
+        // For example, you could wait for a key press using the following code:
+         if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+         {
+            break;
+         }
     }
+    return 0; 
+
+    //// Initialize global strings
+    //LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+    //LoadStringW(hInstance, IDC_VSDKRAWDATADEMOS, szWindowClass, MAX_LOADSTRING);
+    //MyRegisterClass(hInstance);
+
+    //// Perform application initialization:
+    //if (!InitInstance (hInstance, nCmdShow))
+    //{
+    //    return FALSE;
+    //}
+
+    //HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_VSDKRAWDATADEMOS));
+
+    //MSG msg;
+   
+    //// Main message loop:
+    //while (GetMessage(&msg, nullptr, 0, 0))
+    //{
+    //    if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+    //    {
+    //        TranslateMessage(&msg);
+    //        DispatchMessage(&msg);
+    //    }
+    //}
 
 
-    return (int) msg.wParam;
+    //return (int) msg.wParam;
 }
 
 

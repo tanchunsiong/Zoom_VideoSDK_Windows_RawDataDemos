@@ -3,27 +3,6 @@
 #include "main_frame.h"
 #include "videosdk_demo_mgr.h"
 
-//custom message
-#define WM_ICON_NOTIFY WM_USER + 1
-
-#define CPATION_HEIGHT 100
-#define BOTTOM_BAR_HEIGHT 48
-#define HIDE_BOTTOM_BAR_TIMER 1000
-#define HIDE_ERROR_TIP_TIMER 1001
-
-#define VIDEO_CANTAINER_DEFAULT_INSET 20,20,20,20
-#define DEFAULT_ROW_GAP 20
-#define DEFAULT_COLUMN_GAP 20
-#define BOTTOM_BAR_MARGIN 20
-#define CHAT_CONTENT_LEFT_MARGIN 10
-#define SESSION_SETTING_WND_GAP 10
-#define TURN_PAGE_MARIGN 5
-
-#define LOWERTHIRDS_PADDING_LEFT 8
-#define LOWERTHIRDS_PADDING_TOP 42
-
-#define LOWERTHIRDS_WND_FULL_HEIGHT 62
-#define LOWERTHIRDS_WND_LITE_HEIGHT 42
 
 CMainFrame::CMainFrame()
 {
@@ -61,6 +40,8 @@ void CMainFrame::UninitVideoSDK()
 {
 	ZoomVideoSDKMgr::GetInst().UnInit();
 }
+
+
 
 void CMainFrame::InitControls()
 {
@@ -129,13 +110,38 @@ bool CMainFrame::IsCommandChannelConnect()
 	return is_command_channel_connected_;
 }
 
-void CMainFrame::JoinSession(ZoomVideoSDKSessionContext& session_context)
+void CMainFrame::JoinSession()
 {
+
+
+		std::wstring session_name = L"webchun6871";
+		std::wstring sUserName = L"vsdk_skeletondemo";
+		std::wstring session_password_ = L"12345678";
+		std::wstring token = L"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiY0FzWUFCcThST1p0cWtnS1lLVUxSRjVTa2o5aWpVdzBXMGlZIiwidmVyc2lvbiI6MSwicm9sZV90eXBlIjoxLCJ1c2VyX2lkZW50aXR5IjoiVXNlciBJRCBGcm9tIFB5dGhvbiBTY3JpcHQiLCJzZXNzaW9uX2tleSI6IiIsImlhdCI6MTY4MTg5MDE0MSwiZXhwIjoxNjgyMDYyOTQxLCJ0cGMiOiJ3ZWJjaHVuNjg3MSJ9.LAPSTqSIeadpsG4NSmjqkQ8rN80AhFbmALhHITATT68";
+
+
+		//is turn off video
+		bool is_video_on = false;
+		//is mute audio
+		bool is_mute_audio = true;
+
+		ZoomVideoSDKSessionContext session_context;
+		session_context.sessionName = session_name.c_str();
+		session_context.sessionPassword = session_password_.c_str();
+		session_context.userName = sUserName.c_str();
+		session_context.token = token.c_str();
+		session_context.videoOption.localVideoOn = is_video_on;
+		session_context.audioOption.connect = false;
+		session_context.audioOption.mute = is_mute_audio;
+
+		
+	
+
 	IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
 	if (pSession)
 	{
-
-
+		pSession->getMyself()->GetVideoPipe();
+		
 		if (video_show_mgr_)
 		{
 		
@@ -156,6 +162,7 @@ void CMainFrame::LeaveSession(bool end)
 void CMainFrame::onSessionJoin()
 {
 	
+	std::cout << "onSessionJoin()" << std::endl;
 }
 
 void CMainFrame::onSessionLeave()
@@ -165,6 +172,7 @@ void CMainFrame::onSessionLeave()
 
 void CMainFrame::onError(ZoomVideoSDKErrors errorCode, int detailErrorCode)
 {
+	std::cout << "onError()" << std::endl;
 	if (errorCode == ZoomVideoSDKErrors_Session_Disconnecting || errorCode == ZoomVideoSDKErrors_Session_Reconnecting)
 	{
 		OnMeetingDisconnecting();
@@ -181,6 +189,7 @@ void CMainFrame::onError(ZoomVideoSDKErrors errorCode, int detailErrorCode)
 
 void CMainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList)
 {
+	std::cout << "onUserJoin()" << std::endl;
 	if (video_show_mgr_)
 	{
 		//video_show_mgr_->OnUserJoin(userList);
@@ -224,6 +233,7 @@ void CMainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveS
 
 void CMainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZoomVideoSDKChatMessage* messageItem)
 {
+	std::cout << "onChatNewMessageNotify()" << std::endl;
 	if (!messageItem)
 		return;
 	IZoomVideoSDKUser* send_user = messageItem->getSendUser();
@@ -340,14 +350,7 @@ void CMainFrame::onCommandChannelConnectResult(bool isSuccess)
 {
 	this->SetCommandChannelConnect(isSuccess);
 
-	if (isSuccess && lower_thirds_setting_wnd_)
-	{
-		std::wstring username, description, color, isenable;
-		
-		if (username.empty())
-			return;
 
-	}
 }
 
 void CMainFrame::onCloudRecordingStatus(RecordingStatus status, IZoomVideoSDKRecordingConsentHandler* pHandler)

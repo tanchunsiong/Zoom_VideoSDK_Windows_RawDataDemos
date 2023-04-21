@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7581daf6-6d1a-4845-947d-83583911ff4d}</ProjectGuid>
+    <ProjectGuid>{F98BA8DF-F4C6-4340-9A70-F180FF64BA30}</ProjectGuid>
     <RootNamespace>VSDKRawDataDemos</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -148,12 +148,12 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="videosdk_demo_mgr.h" />
     <ClInclude Include="videosdk_include_files.h" />
-    <ClInclude Include="VSDK_RawDataDemos.h" />
+    <ClInclude Include="VSDK_GetAudioRaw.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_frame.cpp" />
     <ClCompile Include="videosdk_demo_mgr.cpp" />
-    <ClCompile Include="VSDK_RawDataDemos.cpp" />
+    <ClCompile Include="VSDK_GetAudioRaw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VSDK_RawDataDemos.rc" />

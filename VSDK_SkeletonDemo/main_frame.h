@@ -57,7 +57,7 @@ public:
 
 	bool IsCommandChannelConnect();
 
-	void JoinSession(ZoomVideoSDKSessionContext& session_context);
+	void JoinSession();
 	void LeaveSession(bool bEnd);
 
 
@@ -137,27 +137,7 @@ private:
 
 
 private:
-	CJoinSessionWndUI* join_session_wnd_ = nullptr;
-	CTitleBarWndUI* title_bar_wnd_ = nullptr;
-	CBottomBarWndUI* bottom_bar_wnd_ = nullptr;
-	CLeaveSessionTipsWndUI* leave_session_tips_wnd_ = nullptr;
-	CSessionInfoWndUI* session_infos_wnd_ = nullptr;
-	CSessionSettingsWndUI* session_setting_wnd_ = nullptr;
-	ShareSelectAppsWndUI* share_select_apps_wnd_ = nullptr;
-	CReactionBarWnd* reaction_bar_wnd_ = nullptr;
-	CMorePopWnd* more_pop_wnd_ = nullptr;
-	ShareToolBarWndUI* share_tool_bar_wnd_ = nullptr;
-	ChatContentWndUI* chat_content_wnd_ = nullptr;
-	TurnPageWndUI* turn_up_page_wnd_ = nullptr;
-	TurnPageWndUI* turn_down_page_wnd_ = nullptr;
-	MessageTipWndUI* message_tip_wnd_ = nullptr;
-	CBulletScreenWnd* bullet_screen_wnd_ = nullptr;
-	CLowerThirdsInfoWnd* lower_thirds_info_wnd_ = nullptr;
-	CFeedBackLaunchWnd* feedback_launch_wnd_ = nullptr;
-	CFeedBackSubmitWnd* feedback_submit_wnd_ = nullptr;
-	CFeedBackTipsWnd* feedback_tips_wnd_ = nullptr;
-	CLowerThirdsSettingWndUI* lower_thirds_setting_wnd_ = nullptr;
-	StatisticsWndUI* statistics_wnd_ = nullptr;
+	
 
 
 
