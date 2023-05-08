@@ -24,8 +24,8 @@ bool getRawVideo = false;
 bool getRawShare = false;
 bool sendRawVideo = false;
 bool sendRawAudio = false;
-bool sendRawShare = true;
-
+bool sendRawShare = false;
+bool enableLTT = true;
 CMainFrame::CMainFrame()
 {
 }
@@ -136,7 +136,7 @@ void CMainFrame::JoinSession()
 		std::wstring session_name = L"webchun6871";
 		std::wstring sUserName = L"vsdk_skeletondemo";
 		std::wstring session_password_ = L"12345678";
-		std::wstring token = L"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiY0FzWUFCcThST1p0cWtnS1lLVUxSRjVTa2o5aWpVdzBXMGlZIiwidmVyc2lvbiI6MSwicm9sZV90eXBlIjoxLCJ1c2VyX2lkZW50aXR5IjoiVXNlciBJRCBGcm9tIFB5dGhvbiBTY3JpcHQiLCJzZXNzaW9uX2tleSI6IiIsImlhdCI6MTY4MTg5MDE0MSwiZXhwIjoxNjgyMDYyOTQxLCJ0cGMiOiJ3ZWJjaHVuNjg3MSJ9.LAPSTqSIeadpsG4NSmjqkQ8rN80AhFbmALhHITATT68";
+		std::wstring token = L"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiY0FzWUFCcThST1p0cWtnS1lLVUxSRjVTa2o5aWpVdzBXMGlZIiwidmVyc2lvbiI6MSwicm9sZV90eXBlIjoxLCJ1c2VyX2lkZW50aXR5IjoiVXNlciBJRCBGcm9tIFB5dGhvbiBTY3JpcHQiLCJzZXNzaW9uX2tleSI6IiIsImlhdCI6MTY4MzUxNzE0OSwiZXhwIjoxNjgzNjg5OTQ5LCJ0cGMiOiJ3ZWJjaHVuNjg3MSJ9.TmPxzaNed10Css-Gyii5RhC0IgMfFfy9p4b5Pbl-fGM";
 
 
 		//is turn off video
@@ -179,6 +179,12 @@ void CMainFrame::JoinSession()
 			//ZoomVideoSDKVirtualAudioMic is the object used to send audio
 			ZoomVideoSDKVirtualAudioMic* vMic = new ZoomVideoSDKVirtualAudioMic();
 			session_context.virtualAudioMic = vMic;
+
+		}
+
+		if (enableLTT) {
+			session_context.audioOption.connect = true; //needed for sending raw audio data
+			session_context.audioOption.mute = false; //needed for sending raw audio data
 
 		}
 
@@ -232,7 +238,40 @@ void CMainFrame::onSessionJoin()
 		}
 	}
 
-	
+	if (enableLTT) {
+		IZoomVideoSDKAudioHelper* m_pAudiohelper = ZoomVideoSDKMgr::GetInst().getAudioHelper();
+		if (m_pAudiohelper) {
+			// Connect User's audio.
+			printf("Starting Audio\n");
+			m_pAudiohelper->startAudio();
+
+		}
+	}
+	if (enableLTT) {
+
+		//vector<IZoomVideoSDKUser*> remoteUsers = ZoomVideoSDKMgr::GetInst().GetAllUsers();
+
+		IZoomVideoSDKUser* user = ZoomVideoSDKMgr::GetInst().GetMySelf();
+		if (user != NULL)
+		{
+
+			IZoomVideoSDKLiveTranscriptionHelper* m_ltthelper = user->getLiveTranscriptionHelper();
+			if (m_ltthelper) {
+				m_ltthelper->setSpokenLanguage(0);
+				m_ltthelper->setTranslationLanguage(0);
+				bool canstartLTT = m_ltthelper->canStartLiveTranscription();
+				if (canstartLTT) {
+					ZoomVideoSDKErrors err = m_ltthelper->startLiveTranscription();
+					printf(">startLiveTranscription() status is : %s\n", err);
+
+				}
+			}//end if m_ltthelper
+
+
+
+		}
+
+	}
 
 	if (sendRawShare) {
 
@@ -264,6 +303,7 @@ void CMainFrame::onSessionJoin()
 
 		}
 	}
+
 }
 
 void CMainFrame::onSessionLeave()
@@ -306,6 +346,7 @@ void CMainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVecto
 			}
 		}
 	}
+
 
 }
 
@@ -521,15 +562,55 @@ void CMainFrame::onSelectedAudioDeviceChanged()
 
 void CMainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status)
 {
-
+	if (enableLTT) {
+		
+		char buffer[256];
+		sprintf(buffer, "Transcription status Received is %d\n", status);
+		OutputDebugStringA(buffer);
+	}
 }
 
 void CMainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideoSDKUser* pUser, ZoomVideoSDKLiveTranscriptionOperationType type)
 {
+	if (enableLTT) {
+		char buffer[256]; 
+		sprintf(buffer, "Transcription Message Received is %s\n", ltMsg);
+		OutputDebugStringA(buffer);
+		sprintf(buffer, "Transcription Message2 Received is %ls\n", ltMsg);
+		OutputDebugStringA(buffer);
+	
+		sprintf(buffer, "Transcription User Received is %ls\n", pUser->getUserName());
+		OutputDebugStringA(buffer);
 
+		sprintf(buffer, "Transcription Type Received is %d\n", type);
+		OutputDebugStringA(buffer);
+
+		//printf("Transcription Type Receieved is %s\n", type);
+
+	}
 }
 
 void CMainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage)
 {
+	if (enableLTT) {
+		char buffer[256];
+		sprintf(buffer, "Transcription spokenLanguage Received is %ls\n", spokenLanguage->getLTTLanguageName());
+		OutputDebugStringA(buffer);
 
+		sprintf(buffer, "Transcription transcriptLanguage Received is %ls\n", transcriptLanguage->getLTTLanguageName());
+		OutputDebugStringA(buffer);
+	}
+		//printf("Transcription transcriptLanguage Receieved is %s\n", transcriptLanguage);
 }
+ void CMainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo* messageInfo) {
+	 if (enableLTT) {
+
+		 char buffer[256];
+		 sprintf(buffer, "Transcription messageType Received is %d\n", messageInfo->getMessageType());
+		 OutputDebugStringA(buffer);
+		 sprintf(buffer, "Transcription messageContent Received is %s\n", messageInfo->getMessageContent());
+		 OutputDebugStringA(buffer);
+		 sprintf(buffer, "Transcription messageContent2 Received is %ls\n", messageInfo->getMessageContent());
+		 OutputDebugStringA(buffer);
+	 }
+ };
