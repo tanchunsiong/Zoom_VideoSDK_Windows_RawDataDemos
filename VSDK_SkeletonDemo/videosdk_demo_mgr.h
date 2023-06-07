@@ -68,6 +68,14 @@ public:
 	IZoomVideoSDKAudioHelper* getAudioHelper();
 
 	IZoomVideoSDKShareHelper* getShareHelper();
+
+	IZoomVideoSDKRecordingHelper* getRecordingHelper();
+
+	IZoomVideoSDKPhoneHelper* getPhoneHelper();
+
+	IZoomVideoSDKVideoHelper* getVideoHelper();
+
+	IZoomVideoSDKTestAudioDeviceHelper* getAudioDeviceTestHelper();
 private:
 	ZoomVideoSDKMgr();
 

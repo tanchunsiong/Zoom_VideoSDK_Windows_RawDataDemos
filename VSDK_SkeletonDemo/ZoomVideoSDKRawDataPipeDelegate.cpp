@@ -8,8 +8,15 @@ using namespace ZOOMVIDEOSDK;
 std::vector<ZoomVideoSDKRawDataPipeDelegate*> ZoomVideoSDKRawDataPipeDelegate::list_;
 int ZoomVideoSDKRawDataPipeDelegate::instance_count = 0;
 
+//this is for video preview only, doesn't need user
+ZoomVideoSDKRawDataPipeDelegate::ZoomVideoSDKRawDataPipeDelegate()
+{
+
+}
+
 ZoomVideoSDKRawDataPipeDelegate::ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user)
 {
+	//getRawVideo
 	instance_id_ = instance_count++;
 	user_ = user;
 	user_->GetVideoPipe()->subscribe(ZoomVideoSDKResolution_360P, this);
@@ -18,6 +25,8 @@ ZoomVideoSDKRawDataPipeDelegate::ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUs
 
 ZoomVideoSDKRawDataPipeDelegate::ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user, bool isShareScreen)
 {
+	//getRawShare
+	isShareScreen_ = true;
 	instance_id_ = instance_count++;
 	user_ = user;
 	user_->GetSharePipe()->subscribe(ZoomVideoSDKResolution_360P, this);
@@ -73,6 +82,12 @@ int j = 0;
 void ZoomVideoSDKRawDataPipeDelegate::onRawDataFrameReceived(YUVRawDataI420* data)
 {
 	//getRawVideo
+	//this is the part where callback for raw video data or raw share data happens.
+	//you can choose to save the data_ buffer as raw YUV file (warning, this is huge), or convert it to mp4 / avi or other format. 
+	//do be mindful of the compute power and memory usage which this callback can utilize
+
+	//I'm using isShareScreen_ to determine if it is user's video or sharescreen video
+
 	const zchar_t* userName = user_->getUserName();
 	const zchar_t* userID = user_->getUserID();
 	const int width = data->GetStreamWidth();
@@ -98,7 +113,7 @@ void ZoomVideoSDKRawDataPipeDelegate::onRawDataStatusChanged(RawDataStatus statu
 void ZoomVideoSDKRawDataPipeDelegate::err_msg(int code)
 {
 	char errbuf[100];
-	
+
 	printf("%s\n", errbuf);
 }
 

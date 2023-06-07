@@ -46,9 +46,70 @@ IZoomVideoSDKShareHelper* ZoomVideoSDKMgr::getShareHelper()
 	return shareHelper;
 }
 
+//dreamtcs experimental
+IZoomVideoSDKRecordingHelper* ZoomVideoSDKMgr::getRecordingHelper()
+{
+	IZoomVideoSDKRecordingHelper* recordingHelper = nullptr;
+	if (is_inited_)
+	{
+		if (video_sdk_obj_)
+		{
+			recordingHelper = video_sdk_obj_->getRecordingHelper();
+		}
+
+	}
+	return recordingHelper;
+}
+
+//dreamtcs experimental
+IZoomVideoSDKPhoneHelper* ZoomVideoSDKMgr::getPhoneHelper()
+{
+	IZoomVideoSDKPhoneHelper* phoneHelper = nullptr;
+	if (is_inited_)
+	{
+		if (video_sdk_obj_)
+		{
+			phoneHelper = video_sdk_obj_->getPhoneHelper();
+		}
+
+	}
+	return phoneHelper;
+}
+
+//dreamtcs experimental
+IZoomVideoSDKVideoHelper* ZoomVideoSDKMgr::getVideoHelper()
+{
+	IZoomVideoSDKVideoHelper* videoHelper = nullptr;
+	if (is_inited_)
+	{
+		if (video_sdk_obj_)
+		{
+			videoHelper = video_sdk_obj_->getVideoHelper();
+		}
+
+	}
+	return videoHelper;
+}
+
+//dreamtcs experimental
+IZoomVideoSDKTestAudioDeviceHelper* ZoomVideoSDKMgr::getAudioDeviceTestHelper()
+{
+	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = nullptr;
+	if (is_inited_)
+	{
+		if (video_sdk_obj_)
+		{
+			audioDeviceHelper = video_sdk_obj_->GetAudioDeviceTestHelper();
+		}
+
+	}
+	return audioDeviceHelper;
+}
+
 ZoomVideoSDKMgr& ZoomVideoSDKMgr::GetInst()
 {
 	static ZoomVideoSDKMgr inst;
+	
 	return inst;
 }
 

@@ -8,33 +8,7 @@
 #define POPUP_EXIST_APP 1
 using namespace ZOOM_VIDEO_SDK_NAMESPACE;
 
-enum ReactionType;
-enum CmdChannelType;
-struct LowerThirdColorInfo;
-struct LowerThirdInfo;
 
-class CJoinSessionWndUI;
-class CTitleBarWndUI;
-class CBottomBarWndUI;
-class CLeaveSessionTipsWndUI;
-class CSessionInfoWndUI;
-class CSessionSettingsWndUI;
-class VideoShowMgr;
-class ShareSelectAppsWndUI;
-class ShareToolBarWndUI;
-class ChatContentWndUI;
-class TurnPageWndUI;
-class MessageTipWndUI;
-class CReactionBarWnd;
-class CLowerThirdsInfoWnd;
-class CBulletScreenWnd;
-class IParseChannelCmdWnd;
-class CFeedBackLaunchWnd;
-class CFeedBackSubmitWnd;
-class CFeedBackTipsWnd;
-class CLowerThirdsSettingWndUI;
-class CMorePopWnd;
-class StatisticsWndUI;
 
 class CMainFrame :public IZoomVideoSDKDelegate
 {
@@ -126,5 +100,4 @@ private:
 	bool is_full_screen_ = false;
 public:
 
-	VideoShowMgr* video_show_mgr_;
 };

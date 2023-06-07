@@ -10,12 +10,13 @@
 using namespace ZOOMVIDEOSDK;
 
 class ZoomVideoSDKRawDataPipeDelegate :
-	private  IZoomVideoSDKRawDataPipeDelegate
+	public  IZoomVideoSDKRawDataPipeDelegate
 {
 	virtual void onRawDataFrameReceived(YUVRawDataI420* data);
 	virtual void onRawDataStatusChanged(RawDataStatus status);
 	static ZoomVideoSDKRawDataPipeDelegate* find_instance(IZoomVideoSDKUser* user);
 
+	bool isShareScreen_;
 	int instance_id_;
 	static int instance_count;
 	static std::vector<ZoomVideoSDKRawDataPipeDelegate*> list_;
@@ -28,6 +29,8 @@ class ZoomVideoSDKRawDataPipeDelegate :
 	
 
 public:
+	//this is for preview only, doesn't need user
+	ZoomVideoSDKRawDataPipeDelegate();
 	ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user);
 	ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user, bool isShareScreen);
 	~ZoomVideoSDKRawDataPipeDelegate();
