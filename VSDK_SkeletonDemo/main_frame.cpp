@@ -36,6 +36,22 @@ bool enableCloudRecording = false;
 bool enableCallout = false;
 bool previewCameraAndMicrophone = true; //work in progress, ignore this sample code for now
 
+void CMainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle)
+{
+}
+
+void CMainFrame::onShareCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle)
+{
+}
+
+void CMainFrame::onAnnotationHelperCleanUp(IZoomVideoSDKAnnotationHelper* helper)
+{
+}
+
+void CMainFrame::onAnnotationPrivilegeChange(IZoomVideoSDKUser* pUser, bool enable)
+{
+}
+
 CMainFrame::CMainFrame()
 {
 }
@@ -89,7 +105,7 @@ void CMainFrame::OnLeaveSessionUIUpdate()
 
 }
 
-void CMainFrame::OnJoinMettingJoinFailed(int error_code)
+void CMainFrame::OnJoinMeetingJoinFailed(int error_code)
 {
 
 }
@@ -104,56 +120,50 @@ void CMainFrame::OnMeetingDisconnecting()
 
 }
 
-
-
-
 void CMainFrame::StartPreview()
 {
+	//previewCameraAndMicrophone
 
-		//IVideoSDKVector<IZoomVideoSDKCameraDevice*> *cameras = ZoomVideoSDKMgr::GetInst().getVideoHelper()->getCameraList();
+	//IVideoSDKVector<IZoomVideoSDKCameraDevice*> *cameras = ZoomVideoSDKMgr::GetInst().getVideoHelper()->getCameraList();
 
-		////Get ID of selected camera
-		//const zchar_t* deviceID = cameras->GetItem(0)->getDeviceId();
+	////Get ID of selected camera
+	//const zchar_t* deviceID = cameras->GetItem(0)->getDeviceId();
 
-		////Start Preview, and handle the callback in a ZoomVideoSDKRawDataPipeDelegate instance
+	////Start Preview, and handle the callback in a ZoomVideoSDKRawDataPipeDelegate instance
 
-		//ZoomVideoSDKRawDataPipeDelegate* dataDelegate = new ZoomVideoSDKRawDataPipeDelegate();
-		//ZoomVideoSDKMgr::GetInst().getVideoHelper()->startVideoPreview(dataDelegate, deviceID);
+	//ZoomVideoSDKRawDataPipeDelegate* dataDelegate = new ZoomVideoSDKRawDataPipeDelegate();
+	//ZoomVideoSDKMgr::GetInst().getVideoHelper()->startVideoPreview(dataDelegate, deviceID);
 
-		//List all microphones
-		IVideoSDKVector<IZoomVideoSDKMicDevice*>* mics = ZoomVideoSDKMgr::GetInst().getAudioHelper()->getMicList(); //not verified pseudo code
+	//List all microphones
+	IVideoSDKVector<IZoomVideoSDKMicDevice*>* mics = ZoomVideoSDKMgr::GetInst().getAudioHelper()->getMicList(); //not verified pseudo code
 
-		//////Get ID of selected microphone 
-		//const zchar_t* deviceID2 = mics->GetItem(2)->getDeviceId();
-		//const zchar_t* deviceName2 = mics->GetItem(2)->getDeviceName();
-		//////Start, stop and playback
-		IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
-		//audioDeviceHelper->setTimerInterval(500);
-		//ZoomVideoSDKErrors err1 = audioDeviceHelper->startMicTestRecording(deviceID2);
-		//std::this_thread::sleep_for(std::chrono::seconds(1));
-		//ZoomVideoSDKErrors err2 = audioDeviceHelper->stopMicTestRecording();
-		//ZoomVideoSDKErrors err3 = audioDeviceHelper->playMicTestRecording();
-		//printf("playmictestrecording status is %d\n", err3);
-		IVideoSDKVector<IZoomVideoSDKSpeakerDevice*>* speakers = ZoomVideoSDKMgr::GetInst().getAudioHelper()->getSpeakerList(); //not verified pseudo code
+	//////Get ID of selected microphone 
+	//const zchar_t* deviceID2 = mics->GetItem(2)->getDeviceId();
+	//const zchar_t* deviceName2 = mics->GetItem(2)->getDeviceName();
+	//////Start, stop and playback
+	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
+	//audioDeviceHelper->setTimerInterval(500);
+	//ZoomVideoSDKErrors err1 = audioDeviceHelper->startMicTestRecording(deviceID2);
+	//std::this_thread::sleep_for(std::chrono::seconds(1));
+	//ZoomVideoSDKErrors err2 = audioDeviceHelper->stopMicTestRecording();
+	//ZoomVideoSDKErrors err3 = audioDeviceHelper->playMicTestRecording();
+	//printf("playmictestrecording status is %d\n", err3);
+	IVideoSDKVector<IZoomVideoSDKSpeakerDevice*>* speakers = ZoomVideoSDKMgr::GetInst().getAudioHelper()->getSpeakerList(); //not verified pseudo code
 
-		IZoomVideoSDKSpeakerDevice* speaker = speakers->GetItem(0);
-		const zchar_t* deviceID3 = speaker->getDeviceId();
-		const zchar_t* deviceName3 = speaker->getDeviceName();
+	IZoomVideoSDKSpeakerDevice* speaker = speakers->GetItem(0);
+	const zchar_t* deviceID3 = speaker->getDeviceId();
+	const zchar_t* deviceName3 = speaker->getDeviceName();
 
-		ZoomVideoSDKErrors err4 = ZoomVideoSDKMgr::GetInst().getAudioHelper()->selectSpeaker(deviceID3, deviceName3);
-		bool selectedDevice = speaker->isSelectedDevice();
-		ZoomVideoSDKErrors err7 = audioDeviceHelper->startSpeakerTest(deviceID3);
-		ZoomVideoSDKErrors err5 = audioDeviceHelper->startSpeakerTest(NULL);
-		ZoomVideoSDKErrors err6 = audioDeviceHelper->startSpeakerTest();
+	ZoomVideoSDKErrors err4 = ZoomVideoSDKMgr::GetInst().getAudioHelper()->selectSpeaker(deviceID3, deviceName3);
+	bool selectedDevice = speaker->isSelectedDevice();
+	ZoomVideoSDKErrors err7 = audioDeviceHelper->startSpeakerTest(deviceID3);
+	ZoomVideoSDKErrors err5 = audioDeviceHelper->startSpeakerTest(NULL);
+	ZoomVideoSDKErrors err6 = audioDeviceHelper->startSpeakerTest();
 
+	printf("startSpeakerTest status is %d\n", err7);
 
-		printf("startSpeakerTest status is %d\n", err7);
-
-
-	
 
 }
-
 
 void CMainFrame::StopShare()
 {
@@ -242,13 +252,14 @@ void CMainFrame::JoinSession()
 		session_context.audioOption.mute = false;
 	}
 
-	IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
-	if (pSession)
-	{
-		pSession->getMyself()->GetVideoPipe();
-
-		if (previewCameraAndMicrophone) {
-			StartPreview();
+	if (previewCameraAndMicrophone) {
+		StartPreview();
+	}
+	else {
+		IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
+		if (pSession)
+		{
+			pSession->getMyself()->GetVideoPipe();
 		}
 	}
 }
@@ -412,7 +423,7 @@ void CMainFrame::onError(ZoomVideoSDKErrors errorCode, int detailErrorCode)
 	}
 	else
 	{
-		OnJoinMettingJoinFailed(errorCode);
+		OnJoinMeetingJoinFailed(errorCode);
 	}
 }
 
@@ -693,6 +704,10 @@ void CMainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideo
 	}
 }
 
+void CMainFrame::onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo)
+{
+}
+
 void CMainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage)
 {
 	if (enableLTT) {
@@ -716,4 +731,8 @@ void CMainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInf
 		sprintf(buffer, "Transcription messageContent2 Received is %ls\n", messageInfo->getMessageContent());
 		OutputDebugStringA(buffer);
 	}
-};
+}
+void CMainFrame::onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege)
+{
+}
+;

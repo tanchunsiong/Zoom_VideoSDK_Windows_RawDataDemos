@@ -41,12 +41,15 @@ public:
 	virtual void onUserVideoStatusChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList);
 	virtual void onUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList);
 	virtual void onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, ZoomVideoSDKShareStatus status, ZoomVideoSDKShareType type);
+	
+
+	virtual void onUserRecordingConsent(IZoomVideoSDKUser* pUser) {}
+
 	virtual void onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status);
 	virtual void onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZoomVideoSDKChatMessage* messageItem);
 	virtual void onUserHostChanged(IZoomVideoSDKUserHelper* pUserHelper, IZoomVideoSDKUser* pUser);
 	virtual void onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* list);
 
-	virtual void onUserRecordingConsent(IZoomVideoSDKUser* pUser) {}
 
 	virtual void onSessionNeedPassword(IZoomVideoSDKPasswordHandler* handler);
 	virtual void onSessionPasswordWrong(IZoomVideoSDKPasswordHandler* handler);
@@ -54,13 +57,16 @@ public:
 	virtual void onMixedAudioRawDataReceived(AudioRawData* data_);
 	virtual void onOneWayAudioRawDataReceived(AudioRawData* data_, IZoomVideoSDKUser* pUser);
 	virtual void onSharedAudioRawDataReceived(AudioRawData* data_);
+
 	virtual void onUserManagerChanged(IZoomVideoSDKUser* pUser);
 	virtual void onUserNameChanged(IZoomVideoSDKUser* pUser);
 	virtual void onCameraControlRequestResult(IZoomVideoSDKUser* pUser, bool isApproved);
 	virtual void onCameraControlRequestReceived(IZoomVideoSDKUser* pUser, ZoomVideoSDKCameraControlRequestType requestType, IZoomVideoSDKCameraControlRequestHandler* pCameraControlRequestHandler);
+
 	virtual void onCommandReceived(IZoomVideoSDKUser* sender, const zchar_t* strCmd);
 	virtual void onCommandChannelConnectResult(bool isSuccess);
 	virtual void onInviteByPhoneStatus(PhoneStatus status, PhoneFailedReason reason);
+	
 	virtual void onCloudRecordingStatus(RecordingStatus status, IZoomVideoSDKRecordingConsentHandler* pHandler);
 	virtual void onHostAskUnmute();
 	virtual void onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe);
@@ -72,15 +78,25 @@ public:
 
 	virtual void onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status);
 	virtual void onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideoSDKUser* pUser, ZoomVideoSDKLiveTranscriptionOperationType type);
+	virtual void onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo);
 	virtual void onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage);
 	virtual void onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo* messageInfo);
+
 	virtual void onChatMsgDeleteNotification(IZoomVideoSDKChatHelper* pChatHelper, const zchar_t* msgID, ZoomVideoSDKChatMessageDeleteType deleteBy) {}
+	virtual void onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege);
 
 	virtual void onProxyDetectComplete() {}
 	virtual void onProxySettingNotification(IZoomVideoSDKProxySettingHandler* handler) {}
 	virtual void onSSLCertVerifiedFailNotification(IZoomVideoSDKSSLCertificateInfo* handler) {}
 
 	virtual void onUserVideoNetworkStatusChanged(ZoomVideoSDKNetworkStatus status, IZoomVideoSDKUser* pUser) {}
+	virtual void onCallCRCDeviceStatusChanged(ZoomVideoSDKCRCCallStatus status) {}
+
+
+	virtual void onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle);
+	virtual void onShareCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle);
+	virtual void onAnnotationHelperCleanUp(IZoomVideoSDKAnnotationHelper* helper);
+	virtual void onAnnotationPrivilegeChange(IZoomVideoSDKUser* pUser, bool enable);
 private:
 	CMainFrame();
 	~CMainFrame();
@@ -95,9 +111,9 @@ private:
 
 private:
 	
-	bool is_show_gallery_ = false;
+
 	bool is_command_channel_connected_ = false;
-	bool is_full_screen_ = false;
+
 public:
 
 };
