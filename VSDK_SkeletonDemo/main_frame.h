@@ -104,7 +104,7 @@ private:
 	void InitControls();
 	void StartPreview();
 	void OnLeaveSessionUIUpdate();
-	void OnJoinMettingJoinFailed(int error_code);
+	void OnJoinMeetingJoinFailed(int error_code);
 	void OnInvalidParamterNotification();
 	void OnMeetingDisconnecting();
 	void SetCommandChannelConnect(bool is_connect);

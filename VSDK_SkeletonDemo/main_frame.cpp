@@ -34,6 +34,8 @@ bool enableLTT = false;
 bool getLang = false;
 bool enableCloudRecording = false;
 bool enableCallout = false;
+
+//turning this on will prevent this sample code from joining session!
 bool previewCameraAndMicrophone = true; //work in progress, ignore this sample code for now
 
 void CMainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle)
@@ -91,10 +93,6 @@ void CMainFrame::UninitVideoSDK()
 
 
 
-void CMainFrame::InitControls()
-{
-
-}
 
 
 
@@ -252,6 +250,7 @@ void CMainFrame::JoinSession()
 		session_context.audioOption.mute = false;
 	}
 
+	//if preview is on, don't join session
 	if (previewCameraAndMicrophone) {
 		StartPreview();
 	}
@@ -706,6 +705,11 @@ void CMainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideo
 
 void CMainFrame::onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo)
 {
+	if (enableLTT) {
+		char buffer[256];
+		sprintf(buffer, "Original Language Received is %ls\n", messageInfo->getMessageContent());
+		OutputDebugStringA(buffer);
+	}
 }
 
 void CMainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage)
