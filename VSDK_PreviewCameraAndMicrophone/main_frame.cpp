@@ -3,11 +3,18 @@
 #include "main_frame.h"
 #include "videosdk_demo_mgr.h"
 
+//previewCameraAndMicrophone
+#include "ZoomVideoSDKRawDataPipeDelegate.h"
+
+//previewCameraAndMicrophone
+#include "helpers/zoom_video_sdk_video_helper_interface.h"
+#include <chrono>
+#include <thread>
 
 
-//these are controls to demonstrate the flow
 
-
+//turning this on will prevent this sample code from joining session!
+bool previewCameraAndMicrophone = true; //work in progress, ignore this sample code for now
 
 void CMainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle)
 {
@@ -64,9 +71,6 @@ void CMainFrame::UninitVideoSDK()
 
 
 
-
-
-
 void CMainFrame::OnLeaveSessionUIUpdate()
 {
 
@@ -91,7 +95,49 @@ void CMainFrame::OnMeetingDisconnecting()
 
 void CMainFrame::StartPreview()
 {
-	
+	//previewCameraAndMicrophone
+
+	//Get list of all cameras
+	IVideoSDKVector<IZoomVideoSDKCameraDevice*> *cameras = ZoomVideoSDKMgr::GetInst().getVideoHelper()->getCameraList();
+
+	//Get ID of selected camera
+	const zchar_t* deviceID = cameras->GetItem(0)->getDeviceId();
+
+	//Start Preview, and handle the callback in a ZoomVideoSDKRawDataPipeDelegate instance
+	ZoomVideoSDKRawDataPipeDelegate* dataDelegate = new ZoomVideoSDKRawDataPipeDelegate();
+	ZoomVideoSDKMgr::GetInst().getVideoHelper()->startVideoPreview(dataDelegate, deviceID);
+
+	//Get list of all microphones
+	IVideoSDKVector<IZoomVideoSDKMicDevice*>* mics = ZoomVideoSDKMgr::GetInst().getAudioHelper()->getMicList(); //not verified pseudo code
+
+	////Get ID of selected microphone 
+	const zchar_t* deviceID2 = mics->GetItem(2)->getDeviceId();
+	const zchar_t* deviceName2 = mics->GetItem(2)->getDeviceName();
+
+	////Start, stop and playback
+	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
+	//audioDeviceHelper->setTimerInterval(500);
+
+	ZoomVideoSDKErrors err1 = audioDeviceHelper->startMicTestRecording(deviceID2);
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+	ZoomVideoSDKErrors err2 = audioDeviceHelper->stopMicTestRecording();
+	ZoomVideoSDKErrors err3 = audioDeviceHelper->playMicTestRecording();
+	printf("playmictestrecording status is %d\n", err3);
+
+	//speaker test here
+	IVideoSDKVector<IZoomVideoSDKSpeakerDevice*>* speakers = ZoomVideoSDKMgr::GetInst().getAudioHelper()->getSpeakerList(); //not verified pseudo code
+
+	IZoomVideoSDKSpeakerDevice* speaker = speakers->GetItem(0);
+	const zchar_t* deviceID3 = speaker->getDeviceId();
+	const zchar_t* deviceName3 = speaker->getDeviceName();
+
+	ZoomVideoSDKErrors err4 = ZoomVideoSDKMgr::GetInst().getAudioHelper()->selectSpeaker(deviceID3, deviceName3);
+	bool selectedDevice = speaker->isSelectedDevice();
+	ZoomVideoSDKErrors err7 = audioDeviceHelper->startSpeakerTest(deviceID3);
+	ZoomVideoSDKErrors err5 = audioDeviceHelper->startSpeakerTest(NULL);
+	ZoomVideoSDKErrors err6 = audioDeviceHelper->startSpeakerTest();
+
+	printf("startSpeakerTest status is %d\n", err7);
 
 
 }
@@ -146,13 +192,19 @@ void CMainFrame::JoinSession()
 	session_context.audioOption.mute = is_mute_audio;
 
 
-	
+
+
+	//if preview is on, don't join session
+	if (previewCameraAndMicrophone) {
+		StartPreview();
+	}
+	else {
 		IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
 		if (pSession)
 		{
 			pSession->getMyself()->GetVideoPipe();
 		}
-	
+	}
 }
 
 void CMainFrame::LeaveSession(bool end)
@@ -169,6 +221,8 @@ void CMainFrame::onSessionJoin()
 
 
 	
+
+
 
 }
 
@@ -197,9 +251,6 @@ void CMainFrame::onError(ZoomVideoSDKErrors errorCode, int detailErrorCode)
 void CMainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList)
 {
 	std::cout << "onUserJoin()" << std::endl;
-	//we are using the onUserJoin callback to subscribe to a user's video feed
-	//this is a efficient way of subscription, as there is a limit on the number of video feed which the sdk can subscribe to
-	//for a rule of thumb, you should be able to subscribe up to 4 x 360p video stream per instance of SDK 
 
 
 
@@ -223,7 +274,7 @@ void CMainFrame::onUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper
 
 void CMainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, ZoomVideoSDKShareStatus status, ZoomVideoSDKShareType type)
 {
-
+	
 }
 
 void CMainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status)
@@ -248,7 +299,20 @@ void CMainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZ
 
 void CMainFrame::onUserHostChanged(IZoomVideoSDKUserHelper* pUserHelper, IZoomVideoSDKUser* pUser)
 {
-	
+	/*if (pUser)
+	{
+		const zchar_t* szUserName = pUser->getUserName();
+		ZoomVideoSDKAudioStatus audioStatus = pUser->getAudioStatus();
+		if (audioStatus.isMuted)
+		{
+
+		}
+
+		ZoomVideoSDKVideoStatus videoStatus = pUser->getVideoStatus();
+	}
+
+	if (bottom_bar_wnd_)
+		bottom_bar_wnd_->OnSessionJoin();*/
 }
 
 void CMainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* list)
@@ -258,28 +322,39 @@ void CMainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper
 
 void CMainFrame::onSessionNeedPassword(IZoomVideoSDKPasswordHandler* handler)
 {
-	
+	/*if (!handler)
+		return;
+
+	if (join_session_wnd_)
+		join_session_wnd_->OnJoinPasswordWrong();
+
+	handler->leaveSessionIgnorePassword();*/
 }
 
 void CMainFrame::onSessionPasswordWrong(IZoomVideoSDKPasswordHandler* handler)
 {
+	//if (!handler)
+	//	return;
 
+	//if (join_session_wnd_)
+	//	join_session_wnd_->OnJoinPasswordWrong();
+
+	//handler->leaveSessionIgnorePassword();
 }
 
 void CMainFrame::onMixedAudioRawDataReceived(AudioRawData* data_)
 {
-
-
+	
 }
 
 void CMainFrame::onOneWayAudioRawDataReceived(AudioRawData* data_, IZoomVideoSDKUser* pUser)
 {
-
+	
 }
 
 void CMainFrame::onSharedAudioRawDataReceived(AudioRawData* data_)
 {
-	
+
 }
 
 void CMainFrame::onUserManagerChanged(IZoomVideoSDKUser* pUser)
@@ -376,12 +451,12 @@ void CMainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus s
 
 void CMainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideoSDKUser* pUser, ZoomVideoSDKLiveTranscriptionOperationType type)
 {
-	
+
 }
 
 void CMainFrame::onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo)
 {
-
+	
 }
 
 void CMainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage)
@@ -389,7 +464,7 @@ void CMainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenL
 
 }
 void CMainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo* messageInfo) {
-	
+
 }
 void CMainFrame::onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege)
 {

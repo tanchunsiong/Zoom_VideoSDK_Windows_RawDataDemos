@@ -21,10 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7581daf6-6d1a-4845-947d-83583911ff4d}</ProjectGuid>
+    <ProjectGuid>{3CFD3D38-D00E-4467-8E8A-C7BC71BED6F4}</ProjectGuid>
     <RootNamespace>VSDKRawDataDemos</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>VSDK_SkeletonDemo</ProjectName>
+    <ProjectName>VSDK_CloudRecording</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

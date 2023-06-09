@@ -7,6 +7,7 @@
 
 //these are controls to demonstrate the flow
 
+bool enableCloudRecording = false;
 
 
 void CMainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle)
@@ -91,7 +92,6 @@ void CMainFrame::OnMeetingDisconnecting()
 
 void CMainFrame::StartPreview()
 {
-	
 
 
 }
@@ -146,7 +146,7 @@ void CMainFrame::JoinSession()
 	session_context.audioOption.mute = is_mute_audio;
 
 
-	
+
 		IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
 		if (pSession)
 		{
@@ -167,8 +167,20 @@ void CMainFrame::onSessionJoin()
 
 	std::cout << "onSessionJoin()" << std::endl;
 
+	if (enableCloudRecording) {
 
-	
+		IZoomVideoSDKRecordingHelper* m_pRecordhelper = ZoomVideoSDKMgr::GetInst().getRecordingHelper();
+		ZoomVideoSDKErrors err = m_pRecordhelper->canStartRecording();
+		if (err == ZoomVideoSDKErrors_Success) {
+			ZoomVideoSDKErrors err2 = m_pRecordhelper->startCloudRecording();
+			if (err2 != ZoomVideoSDKErrors_Success) {
+
+			}
+		}
+
+	}
+
+
 
 }
 
@@ -223,7 +235,7 @@ void CMainFrame::onUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper
 
 void CMainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, ZoomVideoSDKShareStatus status, ZoomVideoSDKShareType type)
 {
-
+	
 }
 
 void CMainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status)
@@ -248,7 +260,20 @@ void CMainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZ
 
 void CMainFrame::onUserHostChanged(IZoomVideoSDKUserHelper* pUserHelper, IZoomVideoSDKUser* pUser)
 {
-	
+	/*if (pUser)
+	{
+		const zchar_t* szUserName = pUser->getUserName();
+		ZoomVideoSDKAudioStatus audioStatus = pUser->getAudioStatus();
+		if (audioStatus.isMuted)
+		{
+
+		}
+
+		ZoomVideoSDKVideoStatus videoStatus = pUser->getVideoStatus();
+	}
+
+	if (bottom_bar_wnd_)
+		bottom_bar_wnd_->OnSessionJoin();*/
 }
 
 void CMainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* list)
@@ -258,23 +283,34 @@ void CMainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper
 
 void CMainFrame::onSessionNeedPassword(IZoomVideoSDKPasswordHandler* handler)
 {
-	
+	/*if (!handler)
+		return;
+
+	if (join_session_wnd_)
+		join_session_wnd_->OnJoinPasswordWrong();
+
+	handler->leaveSessionIgnorePassword();*/
 }
 
 void CMainFrame::onSessionPasswordWrong(IZoomVideoSDKPasswordHandler* handler)
 {
+	//if (!handler)
+	//	return;
 
+	//if (join_session_wnd_)
+	//	join_session_wnd_->OnJoinPasswordWrong();
+
+	//handler->leaveSessionIgnorePassword();
 }
 
 void CMainFrame::onMixedAudioRawDataReceived(AudioRawData* data_)
 {
 
-
 }
 
 void CMainFrame::onOneWayAudioRawDataReceived(AudioRawData* data_, IZoomVideoSDKUser* pUser)
 {
-
+	
 }
 
 void CMainFrame::onSharedAudioRawDataReceived(AudioRawData* data_)
@@ -332,7 +368,9 @@ void CMainFrame::onCommandChannelConnectResult(bool isSuccess)
 
 void CMainFrame::onCloudRecordingStatus(RecordingStatus status, IZoomVideoSDKRecordingConsentHandler* pHandler)
 {
-	
+	if (enableCloudRecording) {
+
+	}
 }
 
 void CMainFrame::onHostAskUnmute()
@@ -371,17 +409,15 @@ void CMainFrame::onSelectedAudioDeviceChanged()
 
 void CMainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status)
 {
-	
+
 }
 
 void CMainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideoSDKUser* pUser, ZoomVideoSDKLiveTranscriptionOperationType type)
 {
-	
 }
 
 void CMainFrame::onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo)
 {
-
 }
 
 void CMainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage)
@@ -389,7 +425,7 @@ void CMainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenL
 
 }
 void CMainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo* messageInfo) {
-	
+
 }
 void CMainFrame::onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege)
 {

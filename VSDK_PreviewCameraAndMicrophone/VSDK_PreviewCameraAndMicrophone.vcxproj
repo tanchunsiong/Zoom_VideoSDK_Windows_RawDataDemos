@@ -21,10 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7581daf6-6d1a-4845-947d-83583911ff4d}</ProjectGuid>
+    <ProjectGuid>{D32AEB66-400C-424C-9254-7F63C118DB2C}</ProjectGuid>
     <RootNamespace>VSDKRawDataDemos</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>VSDK_SkeletonDemo</ProjectName>
+    <ProjectName>VSDK_PreviewCameraAndMicrophone</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ZoomVideoSDKRawDataPipeDelegate.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="main_frame.h" />
     <ClInclude Include="Resource.h" />
@@ -152,6 +153,7 @@
     <ClInclude Include="VSDK_SkeletonDemo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ZoomVideoSDKRawDataPipeDelegate.cpp" />
     <ClCompile Include="main_frame.cpp" />
     <ClCompile Include="videosdk_demo_mgr.cpp" />
     <ClCompile Include="VSDK_SkeletonDemo.cpp" />

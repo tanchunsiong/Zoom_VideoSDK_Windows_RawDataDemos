@@ -3,11 +3,18 @@
 #include "main_frame.h"
 #include "videosdk_demo_mgr.h"
 
+//getRawAudio
+#include "ZoomVideoSDKVirtualAudioSpeaker.h"
 
+//savePCMtoBuffer
+#include <fstream>
+#include <iostream>
 
 //these are controls to demonstrate the flow
+bool getRawAudio = false;
 
-
+//turning this on will prevent this sample code from joining session!
+bool previewCameraAndMicrophone = true; //work in progress, ignore this sample code for now
 
 void CMainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle)
 {
@@ -31,8 +38,6 @@ CMainFrame::CMainFrame()
 
 CMainFrame::~CMainFrame()
 {
-
-
 	UninitVideoSDK();
 }
 
@@ -62,11 +67,6 @@ void CMainFrame::UninitVideoSDK()
 	ZoomVideoSDKMgr::GetInst().UnInit();
 }
 
-
-
-
-
-
 void CMainFrame::OnLeaveSessionUIUpdate()
 {
 
@@ -91,14 +91,11 @@ void CMainFrame::OnMeetingDisconnecting()
 
 void CMainFrame::StartPreview()
 {
-	
-
 
 }
 
 void CMainFrame::StopShare()
 {
-
 	ZoomVideoSDKErrors err = ZoomVideoSDKMgr::GetInst().StopShare();
 }
 
@@ -106,7 +103,6 @@ void CMainFrame::SendChatToAll(const zchar_t* msgContent)
 {
 	ZoomVideoSDKMgr::GetInst().SendChatToAll(msgContent);
 }
-
 
 
 void CMainFrame::SetCommandChannelConnect(bool is_connect)
@@ -146,13 +142,22 @@ void CMainFrame::JoinSession()
 	session_context.audioOption.mute = is_mute_audio;
 
 
-	
-		IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
-		if (pSession)
-		{
-			pSession->getMyself()->GetVideoPipe();
-		}
-	
+	if (getRawAudio) {
+
+		//Optional: Virtual Audio Speaker is needed if you are intended to get raw audio from virtual microphone
+		ZoomVideoSDKVirtualAudioSpeaker* vSpeaker = new ZoomVideoSDKVirtualAudioSpeaker();
+		session_context.virtualAudioSpeaker = vSpeaker;
+
+		//the sdk needs to connect to audio
+		session_context.audioOption.connect = true;
+	}
+
+	IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
+	if (pSession)
+	{
+		pSession->getMyself()->GetVideoPipe();
+	}
+
 }
 
 void CMainFrame::LeaveSession(bool end)
@@ -168,7 +173,17 @@ void CMainFrame::onSessionJoin()
 	std::cout << "onSessionJoin()" << std::endl;
 
 
-	
+	if (getRawAudio) {
+		IZoomVideoSDKAudioHelper* m_pAudiohelper = ZoomVideoSDKMgr::GetInst().getAudioHelper();
+		if (m_pAudiohelper) {
+			//needed for getting raw audio
+
+			//you will need to subscribe to audio, before the callback happens next
+			ZoomVideoSDKErrors err = m_pAudiohelper->subscribe();
+			printf("subscribe status is %d\n", err);
+		}
+	}
+
 
 }
 
@@ -200,7 +215,6 @@ void CMainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVecto
 	//we are using the onUserJoin callback to subscribe to a user's video feed
 	//this is a efficient way of subscription, as there is a limit on the number of video feed which the sdk can subscribe to
 	//for a rule of thumb, you should be able to subscribe up to 4 x 360p video stream per instance of SDK 
-
 
 
 }
@@ -248,7 +262,7 @@ void CMainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZ
 
 void CMainFrame::onUserHostChanged(IZoomVideoSDKUserHelper* pUserHelper, IZoomVideoSDKUser* pUser)
 {
-	
+
 }
 
 void CMainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* list)
@@ -258,28 +272,66 @@ void CMainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper
 
 void CMainFrame::onSessionNeedPassword(IZoomVideoSDKPasswordHandler* handler)
 {
+
+
 	
 }
 
 void CMainFrame::onSessionPasswordWrong(IZoomVideoSDKPasswordHandler* handler)
 {
-
+	
 }
-
+//this is a helper method, and not part of the implementation
+void savePcmBufferToFile(const std::string& filename, char* pcmBuffer, std::size_t bufferSize) {
+	std::ofstream outfile(filename, std::ios::out | std::ios::binary | std::ios::app);
+	outfile.write(reinterpret_cast<char*>(pcmBuffer), bufferSize);
+	outfile.close();
+	if (!outfile) {
+		std::cerr << "Error writing PCM data to file!" << std::endl;
+	}
+	else {
+		std::cout << "PCM data saved to file: " << filename << std::endl;
+	}
+}
 void CMainFrame::onMixedAudioRawDataReceived(AudioRawData* data_)
 {
+	//this is the part where callback for raw audio data happens. this is the audio stream where everyone's audio has already been mixed into one channel.
+	//you can choose to save the data_ buffer as PCM file, or convert it to wav / mp3 or other format. 
+	//do be mindful of the compute power and memory usage which this callback can utilize
+	if (getRawAudio) {
+		std::string filename = "onMixedAudioRawDataReceived.pcm";
 
+		printf("onMixedAudioRawDataReceived\n");
+		if (data_) {
+			savePcmBufferToFile(filename, data_->GetBuffer(), data_->GetBufferLen());
+			printf("Data buffer: %s\n", data_->GetBuffer());
+			printf("Length is : %d\n", data_->GetBufferLen());
+			printf("Sample is : %d\n", data_->GetSampleRate());
+			printf("Channel is : %d\n", data_->GetChannelNum());
+		}
+
+	}
 
 }
 
 void CMainFrame::onOneWayAudioRawDataReceived(AudioRawData* data_, IZoomVideoSDKUser* pUser)
 {
+	//this is the part where callback for raw audio data happens. this is the audio stream for each individual users
+	//you can choose to save the data_ buffer as PCM file, or convert it to wav / mp3 or other format. 
+	//do be mindful of the compute power and memory usage which this callback can utilize
+	if (getRawAudio) {
 
+	}
 }
 
 void CMainFrame::onSharedAudioRawDataReceived(AudioRawData* data_)
 {
-	
+	//this is the part where callback for raw audio data happens. this is the audio stream from screensharing.
+	//you can choose to save the data_ buffer as PCM file, or convert it to wav / mp3 or other format. 
+	//do be mindful of the compute power and memory usage which this callback can utilize
+	if (getRawAudio) {
+
+	}
 }
 
 void CMainFrame::onUserManagerChanged(IZoomVideoSDKUser* pUser)
@@ -303,24 +355,7 @@ void CMainFrame::onCameraControlRequestReceived(IZoomVideoSDKUser* pUser, ZoomVi
 
 void CMainFrame::onCommandReceived(IZoomVideoSDKUser* pSender, const zchar_t* strCmd)
 {
-	/*wstring wstrCmd(strCmd);
-	if (wstrCmd.empty())
-		return;
 
-	std::vector<std::wstring> cmd_elems;
-	split(wstrCmd, _T('|'), cmd_elems);
-
-	if (cmd_elems.size() == 0)
-		return;
-
-	CmdChannelType nCmdType = (CmdChannelType)_ttoi(cmd_elems[0].c_str());
-
-	IParseChannelCmdWnd* channelCmdWnd = NULL;
-	if (cmd_channel_wnd_map_.count(nCmdType) > 0)
-		channelCmdWnd = cmd_channel_wnd_map_[nCmdType];
-
-	if (channelCmdWnd)
-		channelCmdWnd->OnParseChannelCmd(pSender, cmd_elems);*/
 }
 
 void CMainFrame::onCommandChannelConnectResult(bool isSuccess)
@@ -332,7 +367,7 @@ void CMainFrame::onCommandChannelConnectResult(bool isSuccess)
 
 void CMainFrame::onCloudRecordingStatus(RecordingStatus status, IZoomVideoSDKRecordingConsentHandler* pHandler)
 {
-	
+
 }
 
 void CMainFrame::onHostAskUnmute()
@@ -371,12 +406,12 @@ void CMainFrame::onSelectedAudioDeviceChanged()
 
 void CMainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status)
 {
-	
+
 }
 
 void CMainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideoSDKUser* pUser, ZoomVideoSDKLiveTranscriptionOperationType type)
 {
-	
+
 }
 
 void CMainFrame::onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo)
@@ -389,7 +424,7 @@ void CMainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenL
 
 }
 void CMainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo* messageInfo) {
-	
+
 }
 void CMainFrame::onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege)
 {

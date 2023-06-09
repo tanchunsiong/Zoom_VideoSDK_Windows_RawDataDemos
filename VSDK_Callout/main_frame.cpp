@@ -5,9 +5,13 @@
 
 
 
+
 //these are controls to demonstrate the flow
 
+bool enableCallout = false;
 
+//turning this on will prevent this sample code from joining session!
+bool previewCameraAndMicrophone = true; //work in progress, ignore this sample code for now
 
 void CMainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle)
 {
@@ -146,7 +150,7 @@ void CMainFrame::JoinSession()
 	session_context.audioOption.mute = is_mute_audio;
 
 
-	
+
 		IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
 		if (pSession)
 		{
@@ -168,6 +172,20 @@ void CMainFrame::onSessionJoin()
 	std::cout << "onSessionJoin()" << std::endl;
 
 
+	
+
+
+	
+	
+
+
+	if (enableCallout) {
+
+		IZoomVideoSDKPhoneHelper* m_phonehelper = ZoomVideoSDKMgr::GetInst().getPhoneHelper();
+		if (m_phonehelper->isSupportPhoneFeature()) {
+			m_phonehelper->inviteByPhone(L"+65", L"91234567", L"Alice");
+		}
+	}
 	
 
 }
@@ -197,10 +215,6 @@ void CMainFrame::onError(ZoomVideoSDKErrors errorCode, int detailErrorCode)
 void CMainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList)
 {
 	std::cout << "onUserJoin()" << std::endl;
-	//we are using the onUserJoin callback to subscribe to a user's video feed
-	//this is a efficient way of subscription, as there is a limit on the number of video feed which the sdk can subscribe to
-	//for a rule of thumb, you should be able to subscribe up to 4 x 360p video stream per instance of SDK 
-
 
 
 }
@@ -223,7 +237,7 @@ void CMainFrame::onUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper
 
 void CMainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, ZoomVideoSDKShareStatus status, ZoomVideoSDKShareType type)
 {
-
+	
 }
 
 void CMainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status)
@@ -258,17 +272,19 @@ void CMainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper
 
 void CMainFrame::onSessionNeedPassword(IZoomVideoSDKPasswordHandler* handler)
 {
-	
+
 }
 
 void CMainFrame::onSessionPasswordWrong(IZoomVideoSDKPasswordHandler* handler)
 {
 
+
+	
 }
+
 
 void CMainFrame::onMixedAudioRawDataReceived(AudioRawData* data_)
 {
-
 
 }
 
@@ -279,7 +295,7 @@ void CMainFrame::onOneWayAudioRawDataReceived(AudioRawData* data_, IZoomVideoSDK
 
 void CMainFrame::onSharedAudioRawDataReceived(AudioRawData* data_)
 {
-	
+
 }
 
 void CMainFrame::onUserManagerChanged(IZoomVideoSDKUser* pUser)
@@ -371,7 +387,7 @@ void CMainFrame::onSelectedAudioDeviceChanged()
 
 void CMainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status)
 {
-	
+
 }
 
 void CMainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideoSDKUser* pUser, ZoomVideoSDKLiveTranscriptionOperationType type)
@@ -381,12 +397,12 @@ void CMainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideo
 
 void CMainFrame::onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo)
 {
-
+	
 }
 
 void CMainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage)
 {
-
+	
 }
 void CMainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo* messageInfo) {
 	

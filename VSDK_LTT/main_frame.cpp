@@ -7,7 +7,8 @@
 
 //these are controls to demonstrate the flow
 
-
+bool enableLTT = false;
+bool getLang = false;
 
 void CMainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle)
 {
@@ -93,7 +94,6 @@ void CMainFrame::StartPreview()
 {
 	
 
-
 }
 
 void CMainFrame::StopShare()
@@ -146,7 +146,18 @@ void CMainFrame::JoinSession()
 	session_context.audioOption.mute = is_mute_audio;
 
 
-	
+
+
+
+
+	if (enableLTT) {
+
+		//the sdk will need to connect to audio to do live transcription and translation for self.
+		session_context.audioOption.connect = true;
+		session_context.audioOption.mute = false;
+	}
+
+
 		IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
 		if (pSession)
 		{
@@ -169,6 +180,77 @@ void CMainFrame::onSessionJoin()
 
 
 	
+
+	if (enableLTT) {
+		IZoomVideoSDKAudioHelper* m_pAudiohelper = ZoomVideoSDKMgr::GetInst().getAudioHelper();
+		if (m_pAudiohelper) {
+			// Connect User's audio.
+			printf("Starting Audio\n");
+			m_pAudiohelper->startAudio();
+			m_pAudiohelper->unMuteAudio(0);
+		}
+	}
+	if (enableLTT) {
+
+
+		IZoomVideoSDKUser* user = ZoomVideoSDKMgr::GetInst().GetMySelf();
+		if (user != NULL)
+		{
+			IZoomVideoSDKLiveTranscriptionHelper* m_ltthelper = user->getLiveTranscriptionHelper();
+			if (m_ltthelper) {
+				m_ltthelper->setSpokenLanguage(0);
+				m_ltthelper->setTranslationLanguage(0);
+				bool canstartLTT = m_ltthelper->canStartLiveTranscription();
+				if (canstartLTT) {
+					ZoomVideoSDKErrors err = m_ltthelper->startLiveTranscription();
+					printf(">startLiveTranscription() status is : %s\n", err);
+				}
+			}//end if m_ltthelper
+		}
+
+	}
+	if (getLang) {
+		//iterate and print out language ID and language Name of supported Spoken languages 
+		IZoomVideoSDKUser* user = ZoomVideoSDKMgr::GetInst().GetMySelf();
+		IZoomVideoSDKLiveTranscriptionHelper* m_ltthelper = user->getLiveTranscriptionHelper();
+
+		IVideoSDKVector<ILiveTranscriptionLanguage*>* availableSpokenLanguages = m_ltthelper->getAvailableSpokenLanguages();
+
+		if (availableSpokenLanguages) {
+			for (size_t i = 0; i < availableSpokenLanguages->GetCount(); ++i) {
+				ILiveTranscriptionLanguage* language = availableSpokenLanguages->GetItem(i);
+				if (language) {
+					printf("Spoken Language ID: %d\n", language->getLTTLanguageID());
+					printf("Spoken Language Name: %ls\n", language->getLTTLanguageName());
+					// Print other properties as needed
+					printf("---------------------\n");
+				}
+			}
+		}
+
+
+		//iterate and print out language ID and language Name of supported translation languages 
+
+
+		IVideoSDKVector<ILiveTranscriptionLanguage*>* availableTranslateLanguages = m_ltthelper->getAvailableTranslationLanguages();
+
+
+		if (availableTranslateLanguages) {
+			for (size_t i = 0; i < availableTranslateLanguages->GetCount(); ++i) {
+				ILiveTranscriptionLanguage* language = availableTranslateLanguages->GetItem(i);
+				if (language) {
+					printf("Translate Language ID: %d\n", language->getLTTLanguageID());
+					printf("Translate Language Name: %ls\n", language->getLTTLanguageName());
+					// Print other properties as needed        printf("---------------------\n");
+				}
+			}
+		}
+	}
+
+
+
+	
+
 
 }
 
@@ -248,7 +330,20 @@ void CMainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZ
 
 void CMainFrame::onUserHostChanged(IZoomVideoSDKUserHelper* pUserHelper, IZoomVideoSDKUser* pUser)
 {
-	
+	/*if (pUser)
+	{
+		const zchar_t* szUserName = pUser->getUserName();
+		ZoomVideoSDKAudioStatus audioStatus = pUser->getAudioStatus();
+		if (audioStatus.isMuted)
+		{
+
+		}
+
+		ZoomVideoSDKVideoStatus videoStatus = pUser->getVideoStatus();
+	}
+
+	if (bottom_bar_wnd_)
+		bottom_bar_wnd_->OnSessionJoin();*/
 }
 
 void CMainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* list)
@@ -258,17 +353,29 @@ void CMainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper
 
 void CMainFrame::onSessionNeedPassword(IZoomVideoSDKPasswordHandler* handler)
 {
-	
+	/*if (!handler)
+		return;
+
+	if (join_session_wnd_)
+		join_session_wnd_->OnJoinPasswordWrong();
+
+	handler->leaveSessionIgnorePassword();*/
 }
 
 void CMainFrame::onSessionPasswordWrong(IZoomVideoSDKPasswordHandler* handler)
 {
+	//if (!handler)
+	//	return;
 
+	//if (join_session_wnd_)
+	//	join_session_wnd_->OnJoinPasswordWrong();
+
+	//handler->leaveSessionIgnorePassword();
 }
 
 void CMainFrame::onMixedAudioRawDataReceived(AudioRawData* data_)
 {
-
+	
 
 }
 
@@ -371,25 +478,66 @@ void CMainFrame::onSelectedAudioDeviceChanged()
 
 void CMainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status)
 {
-	
+	if (enableLTT) {
+
+		char buffer[256];
+		sprintf(buffer, "Transcription status Received is %d\n", status);
+		OutputDebugStringA(buffer);
+	}
 }
 
 void CMainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideoSDKUser* pUser, ZoomVideoSDKLiveTranscriptionOperationType type)
 {
-	
+	if (enableLTT) {
+		char buffer[256];
+		sprintf(buffer, "Transcription Message Received is %s\n", ltMsg);
+		OutputDebugStringA(buffer);
+		sprintf(buffer, "Transcription Message2 Received is %ls\n", ltMsg);
+		OutputDebugStringA(buffer);
+
+		sprintf(buffer, "Transcription User Received is %ls\n", pUser->getUserName());
+		OutputDebugStringA(buffer);
+
+		sprintf(buffer, "Transcription Type Received is %d\n", type);
+		OutputDebugStringA(buffer);
+
+		//printf("Transcription Type Receieved is %s\n", type);
+
+	}
 }
 
 void CMainFrame::onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo)
 {
-
+	if (enableLTT) {
+		char buffer[256];
+		sprintf(buffer, "Original Language Received is %ls\n", messageInfo->getMessageContent());
+		OutputDebugStringA(buffer);
+	}
 }
 
 void CMainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage)
 {
+	if (enableLTT) {
+		char buffer[256];
+		sprintf(buffer, "Transcription spokenLanguage Received is %ls\n", spokenLanguage->getLTTLanguageName());
+		OutputDebugStringA(buffer);
 
+		sprintf(buffer, "Transcription transcriptLanguage Received is %ls\n", transcriptLanguage->getLTTLanguageName());
+		OutputDebugStringA(buffer);
+	}
+	//printf("Transcription transcriptLanguage Receieved is %s\n", transcriptLanguage);
 }
 void CMainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo* messageInfo) {
-	
+	if (enableLTT) {
+
+		char buffer[256];
+		sprintf(buffer, "Transcription messageType Received is %d\n", messageInfo->getMessageType());
+		OutputDebugStringA(buffer);
+		sprintf(buffer, "Transcription messageContent Received is %s\n", messageInfo->getMessageContent());
+		OutputDebugStringA(buffer);
+		sprintf(buffer, "Transcription messageContent2 Received is %ls\n", messageInfo->getMessageContent());
+		OutputDebugStringA(buffer);
+	}
 }
 void CMainFrame::onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege)
 {

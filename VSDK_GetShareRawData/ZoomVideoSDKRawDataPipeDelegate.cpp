@@ -1,5 +1,13 @@
 #include "ZoomVideoSDKRawDataPipeDelegate.h"
 #include "helpers/zoom_video_sdk_user_helper_interface.h"
+
+
+#include <iostream>
+#include <cstdint>
+#include <fstream>
+#include <cstring>
+#include <cstdio>
+
 //getRawShare
 //getRawVideo
 
@@ -96,6 +104,44 @@ void ZoomVideoSDKRawDataPipeDelegate::onRawDataFrameReceived(YUVRawDataI420* dat
 	const int rotation = data->GetRotation();
 	const int sourceID = data->GetSourceID();
 
+
+
+	// Open the file for writing
+	std::ofstream outputFile("output.yuv", std::ios::out | std::ios::binary | std::ios::app);
+	if (!outputFile.is_open())
+	{
+		//error opening file
+		return;
+	}
+
+
+	char* _data = new char[data->GetStreamHeight() * data->GetStreamWidth() * 3 / 2];
+
+	memset(_data, 0, data->GetStreamHeight() * data->GetStreamWidth() * 3 / 2);
+
+	// Copy Y buffer
+	memcpy(_data, data->GetYBuffer(), data->GetStreamHeight() * data->GetStreamWidth());
+
+	// Copy U buffer
+	size_t loc = data->GetStreamHeight() * data->GetStreamWidth();
+	memcpy(&_data[loc], data->GetUBuffer(), data->GetStreamHeight() * data->GetStreamWidth() / 4);
+
+
+	// Copy V buffer
+	loc = (data->GetStreamHeight() * data->GetStreamWidth()) + (data->GetStreamHeight() * data->GetStreamWidth() / 4);
+	memcpy(&_data[loc], data->GetVBuffer(), data->GetStreamHeight() * data->GetStreamWidth() / 4);
+
+
+
+	//outputFile.write((char*)data->GetBuffer(), data->GetBufferLen());
+	// Write the Y plane
+	outputFile.write(_data, data->GetStreamHeight() * data->GetStreamWidth() * 3 / 2);
+
+
+	// Close the file
+	outputFile.close();
+	outputFile.flush();
+	//cout << "YUV420 buffer saved to file." << endl;
 
 }
 

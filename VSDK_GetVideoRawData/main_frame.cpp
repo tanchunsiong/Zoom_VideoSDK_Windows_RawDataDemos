@@ -3,11 +3,14 @@
 #include "main_frame.h"
 #include "videosdk_demo_mgr.h"
 
+//getRawShare, getRawVideo
+#include "ZoomVideoSDKRawDataPipeDelegate.h"
+
 
 
 //these are controls to demonstrate the flow
 
-
+bool getRawVideo = false;
 
 void CMainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle)
 {
@@ -62,11 +65,6 @@ void CMainFrame::UninitVideoSDK()
 	ZoomVideoSDKMgr::GetInst().UnInit();
 }
 
-
-
-
-
-
 void CMainFrame::OnLeaveSessionUIUpdate()
 {
 
@@ -92,8 +90,6 @@ void CMainFrame::OnMeetingDisconnecting()
 void CMainFrame::StartPreview()
 {
 	
-
-
 }
 
 void CMainFrame::StopShare()
@@ -145,14 +141,11 @@ void CMainFrame::JoinSession()
 	session_context.audioOption.connect = false;
 	session_context.audioOption.mute = is_mute_audio;
 
-
-	
-		IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
-		if (pSession)
-		{
-			pSession->getMyself()->GetVideoPipe();
-		}
-	
+	IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().JoinSession(session_context);
+	if (pSession)
+	{
+		pSession->getMyself()->GetVideoPipe();
+	}
 }
 
 void CMainFrame::LeaveSession(bool end)
@@ -166,9 +159,6 @@ void CMainFrame::onSessionJoin()
 {
 
 	std::cout << "onSessionJoin()" << std::endl;
-
-
-	
 
 }
 
@@ -200,7 +190,23 @@ void CMainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVecto
 	//we are using the onUserJoin callback to subscribe to a user's video feed
 	//this is a efficient way of subscription, as there is a limit on the number of video feed which the sdk can subscribe to
 	//for a rule of thumb, you should be able to subscribe up to 4 x 360p video stream per instance of SDK 
+	if (getRawVideo) {
+		if (userList)
+		{
+			int count = userList->GetCount();
+			for (int index = 0; index < count; index++)
+			{
+				IZoomVideoSDKUser* user = userList->GetItem(index);
+				if (user)
+				{
 
+					//the callback for raw video frame in YUV420 format is handled in the ZoomVideoSDKRawDataPipeDelegate delegate
+					ZoomVideoSDKRawDataPipeDelegate* encoder = new ZoomVideoSDKRawDataPipeDelegate(user);
+				}
+
+			}
+		}
+	}
 
 
 }
@@ -248,7 +254,7 @@ void CMainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZ
 
 void CMainFrame::onUserHostChanged(IZoomVideoSDKUserHelper* pUserHelper, IZoomVideoSDKUser* pUser)
 {
-	
+
 }
 
 void CMainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* list)
@@ -259,11 +265,12 @@ void CMainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper
 void CMainFrame::onSessionNeedPassword(IZoomVideoSDKPasswordHandler* handler)
 {
 	
+
 }
 
 void CMainFrame::onSessionPasswordWrong(IZoomVideoSDKPasswordHandler* handler)
 {
-
+	
 }
 
 void CMainFrame::onMixedAudioRawDataReceived(AudioRawData* data_)
@@ -274,12 +281,12 @@ void CMainFrame::onMixedAudioRawDataReceived(AudioRawData* data_)
 
 void CMainFrame::onOneWayAudioRawDataReceived(AudioRawData* data_, IZoomVideoSDKUser* pUser)
 {
-
+	
 }
 
 void CMainFrame::onSharedAudioRawDataReceived(AudioRawData* data_)
 {
-	
+
 }
 
 void CMainFrame::onUserManagerChanged(IZoomVideoSDKUser* pUser)
@@ -376,20 +383,20 @@ void CMainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus s
 
 void CMainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideoSDKUser* pUser, ZoomVideoSDKLiveTranscriptionOperationType type)
 {
-	
+
 }
 
 void CMainFrame::onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo)
 {
-
+	
 }
 
 void CMainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage)
 {
-
+	
 }
 void CMainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo* messageInfo) {
-	
+
 }
 void CMainFrame::onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege)
 {
