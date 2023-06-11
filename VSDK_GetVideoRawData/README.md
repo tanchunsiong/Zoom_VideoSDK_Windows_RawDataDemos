@@ -30,10 +30,10 @@ Within `main_frame.cpp` you will need to enter your credentials in the `JoinSess
 ```
 void CMainFrame::JoinSession()
 
-		std::wstring session_name = L"chunsession6871";
+		std::wstring session_name = L"webchun6871";
 		std::wstring sUserName = L"vsdk_skeletondemo";
 		std::wstring session_password_ = L"12345678";
-		std::wstring token = L"xxxx.yyyy.zzzz";
+		std::wstring token = L"xxxxx.yyyyyy.zzzzz";
 ```
 
 
