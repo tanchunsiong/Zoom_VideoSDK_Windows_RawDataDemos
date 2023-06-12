@@ -33,7 +33,7 @@ void CMainFrame::JoinSession()
 		std::wstring session_name = L"webchun6871";
 		std::wstring sUserName = L"vsdk_skeletondemo";
 		std::wstring session_password_ = L"12345678";
-		std::wstring token = L"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiY0FzWUFCcThST1p0cWtnS1lLVUxSRjVTa2o5aWpVdzBXMGlZIiwidmVyc2lvbiI6MSwicm9sZV90eXBlIjoxLCJ1c2VyX2lkZW50aXR5IjoiVXNlciBJRCBGcm9tIFB5dGhvbiBTY3JpcHQiLCJzZXNzaW9uX2tleSI6IiIsImlhdCI6MTY4NjI5NTE5MywiZXhwIjoxNjg2NDY3OTkzLCJ0cGMiOiJ3ZWJjaHVuNjg3MSJ9.146Y9Lvs_0NAq6k-_1VcbSU_HOZma3TiS875nGWRja8";
+		std::wstring token = L"xxxx.yyyy.zzzz";
 ```
 
 
