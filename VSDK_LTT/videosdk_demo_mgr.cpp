@@ -15,6 +15,22 @@ ZoomVideoSDKMgr::~ZoomVideoSDKMgr()
 
 }
 
+IZoomVideoSDKLiveTranscriptionHelper* ZoomVideoSDKMgr::getLiveTranscriptionHelper()
+
+{
+	IZoomVideoSDKLiveTranscriptionHelper* lttHelper = nullptr;
+	if (is_inited_)
+	{
+		if (video_sdk_obj_)
+		{
+			lttHelper = video_sdk_obj_->getLiveTranscriptionHelper();
+		}
+
+	}
+	return lttHelper;
+}
+
+
 
 //dreamtcs experimental
 IZoomVideoSDKAudioHelper* ZoomVideoSDKMgr::getAudioHelper()
@@ -236,6 +252,7 @@ bool ZoomVideoSDKMgr::IsMyselfVideoOn()
 		IZoomVideoSDKUser* myself = GetMySelf();
 		if (myself)
 		{
+			
 			ZoomVideoSDKVideoStatus video_status = myself->getVideoStatus();
 			if (video_status.isOn)
 				return true;

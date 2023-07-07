@@ -193,10 +193,11 @@ void CMainFrame::onSessionJoin()
 	if (enableLTT) {
 
 
-		IZoomVideoSDKUser* user = ZoomVideoSDKMgr::GetInst().GetMySelf();
-		if (user != NULL)
+		IZoomVideoSDKLiveTranscriptionHelper* m_ltthelper = ZoomVideoSDKMgr::GetInst().getLiveTranscriptionHelper();
+		if (m_ltthelper != NULL)
 		{
-			IZoomVideoSDKLiveTranscriptionHelper* m_ltthelper = user->getLiveTranscriptionHelper();
+			
+
 			if (m_ltthelper) {
 				m_ltthelper->setSpokenLanguage(0);
 				m_ltthelper->setTranslationLanguage(0);
@@ -211,8 +212,8 @@ void CMainFrame::onSessionJoin()
 	}
 	if (getLang) {
 		//iterate and print out language ID and language Name of supported Spoken languages 
-		IZoomVideoSDKUser* user = ZoomVideoSDKMgr::GetInst().GetMySelf();
-		IZoomVideoSDKLiveTranscriptionHelper* m_ltthelper = user->getLiveTranscriptionHelper();
+
+		IZoomVideoSDKLiveTranscriptionHelper* m_ltthelper = ZoomVideoSDKMgr::GetInst().getLiveTranscriptionHelper();
 
 		IVideoSDKVector<ILiveTranscriptionLanguage*>* availableSpokenLanguages = m_ltthelper->getAvailableSpokenLanguages();
 

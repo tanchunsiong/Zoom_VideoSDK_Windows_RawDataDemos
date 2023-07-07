@@ -65,6 +65,8 @@ public:
 	ZoomVideoSDKErrors GetSessionShareStatisticInfo(ZoomVideoSDKSessionASVStatisticInfo& send_info, ZoomVideoSDKSessionASVStatisticInfo& recv_info);
 
 
+	IZoomVideoSDKLiveTranscriptionHelper* getLiveTranscriptionHelper();
+
 	IZoomVideoSDKAudioHelper* getAudioHelper();
 
 	IZoomVideoSDKShareHelper* getShareHelper();
