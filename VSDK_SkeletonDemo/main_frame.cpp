@@ -124,11 +124,10 @@ void CMainFrame::JoinSession()
 
 
 	//credentials to auth and password & topic name to join specific session
-	std::wstring session_name = L"herochun6871";
+	std::wstring session_name = L"webchun6870";
 	std::wstring sUserName = L"vsdk_skeletondemo";
-	std::wstring session_password_ = L"12345678";
-	std::wstring token = L"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiY0FzWUFCcThST1p0cWtnS1lLVUxSRjVTa2o5aWpVdzBXMGlZIiwidmVyc2lvbiI6MSwicm9sZV90eXBlIjoxLCJ1c2VyX2lkZW50aXR5IjoiVXNlciBJRCBGcm9tIFB5dGhvbiBTY3JpcHQiLCJzZXNzaW9uX2tleSI6IiIsImlhdCI6MTY4NjU1Mjk2MywiZXhwIjoxNjg2NzI1NzYzLCJ0cGMiOiJoZXJvY2h1bjY4NzEifQ.I21utjBJ3Cuesq9Le9diDS2DfOnsrraYiub3j9Crs1U";
-
+	std::wstring session_password_ = L"";
+	std::wstring token = L"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiY0FzWUFCcThST1p0cWtnS1lLVUxSRjVTa2o5aWpVdzBXMGlZIiwidmVyc2lvbiI6MSwicm9sZV90eXBlIjoxLCJ1c2VyX2lkZW50aXR5IjoiVXNlciBJRCBmcm9tIFB5dGhvbiBTY3JpcHQiLCJzZXNzaW9uX2tleSI6IiIsImlhdCI6MTY4Njc0NjM1MiwiZXhwIjoxNjg2OTE5MTUyLCJ0cGMiOiJ3ZWJjaHVuNjg3MCIsInB3ZCI6Ijg3NjU0MzIxIn0.nzV4s6gaFDKZuoPqmcuUlLz10gKMPqmR5U8SSRUafy8";
 	//is turn off video
 	bool is_video_on = false;
 	//is mute audio

@@ -60,6 +60,8 @@ void CMainFrame::InitVideoSDK()
 	init_params.shareRawDataMemoryMode = ZoomVideoSDKRawDataMemoryModeHeap;
 	init_params.audioRawDataMemoryMode = ZoomVideoSDKRawDataMemoryModeHeap;
 	init_params.enableIndirectRawdata = false;
+	
+	init_params.extendParam.speakerTestFilePath = L"C:\\Users\\dreamtcs\\source\\video\\windows\\VSDK_RawDataDemos\\VSDK_PreviewCameraAndMicrophone\\example.mp3";
 
 	ZoomVideoSDKMgr::GetInst().Init(this, init_params);
 }
@@ -192,7 +194,7 @@ void CMainFrame::JoinSession()
 	session_context.audioOption.mute = is_mute_audio;
 
 
-
+	
 
 	//if preview is on, don't join session
 	if (previewCameraAndMicrophone) {

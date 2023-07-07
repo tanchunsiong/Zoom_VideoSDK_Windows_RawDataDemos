@@ -3,7 +3,7 @@
 #include "main_frame.h"
 #include "videosdk_demo_mgr.h"
 
-//sendRawShare
+//sendRawVideo
 #include "ZoomVideoSDKVideoSource.h"
 
 

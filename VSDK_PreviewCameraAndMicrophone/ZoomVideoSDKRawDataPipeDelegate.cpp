@@ -96,8 +96,8 @@ void ZoomVideoSDKRawDataPipeDelegate::onRawDataFrameReceived(YUVRawDataI420* dat
 
 	//I'm using isShareScreen_ to determine if it is user's video or sharescreen video
 
-	const zchar_t* userName = user_->getUserName();
-	const zchar_t* userID = user_->getUserID();
+	//const zchar_t* userName = user_->getUserName();
+	//const zchar_t* userID = user_->getUserID();
 	const int width = data->GetStreamWidth();
 	const int height = data->GetStreamHeight();
 	const int bufLen = data->GetBufferLen();
