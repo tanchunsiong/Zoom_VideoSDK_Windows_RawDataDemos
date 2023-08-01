@@ -15,6 +15,11 @@
 #define IDC_MYICON				2
 #ifndef IDC_STATIC
 #define IDC_STATIC				-1
+#define IDC_BUTTON1 1001
+#define IDC_BUTTON2 1002
+#define IDC_BUTTON3 1003
+#define IDC_BUTTON4 1004
+#define IDC_BUTTON5 1005
 #endif
 // Next default values for new objects
 //

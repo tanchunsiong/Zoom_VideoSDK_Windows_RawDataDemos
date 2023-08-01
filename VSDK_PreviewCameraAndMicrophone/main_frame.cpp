@@ -53,7 +53,7 @@ CMainFrame& CMainFrame::GetInstance()
 void CMainFrame::InitVideoSDK()
 {
 	ZoomVideoSDKInitParams init_params;
-	init_params.domain = _T("https://zoom.us");
+	init_params.domain = _T("https://zosom.us");
 	init_params.enableLog = true;
 	init_params.logFilePrefix = _T("zoom_win_video_demo");
 	init_params.videoRawDataMemoryMode = ZoomVideoSDKRawDataMemoryModeHeap;
@@ -62,6 +62,7 @@ void CMainFrame::InitVideoSDK()
 	init_params.enableIndirectRawdata = false;
 	
 	init_params.extendParam.speakerTestFilePath = L"C:\\Users\\dreamtcs\\source\\video\\windows\\VSDK_RawDataDemos\\VSDK_PreviewCameraAndMicrophone\\example.mp3";
+	
 
 	ZoomVideoSDKMgr::GetInst().Init(this, init_params);
 }
@@ -99,34 +100,26 @@ void CMainFrame::StartPreview()
 {
 	//previewCameraAndMicrophone
 
+
+
 	//Get list of all cameras
-	IVideoSDKVector<IZoomVideoSDKCameraDevice*> *cameras = ZoomVideoSDKMgr::GetInst().getVideoHelper()->getCameraList();
+	IVideoSDKVector<IZoomVideoSDKCameraDevice*>* cameras = ZoomVideoSDKMgr::GetInst().getVideoHelper()->getCameraList();
 
 	//Get ID of selected camera
 	const zchar_t* deviceID = cameras->GetItem(0)->getDeviceId();
 
 	//Start Preview, and handle the callback in a ZoomVideoSDKRawDataPipeDelegate instance
 	ZoomVideoSDKRawDataPipeDelegate* dataDelegate = new ZoomVideoSDKRawDataPipeDelegate();
-	ZoomVideoSDKMgr::GetInst().getVideoHelper()->startVideoPreview(dataDelegate, deviceID);
+	//ZoomVideoSDKMgr::GetInst().getVideoHelper()->startVideoPreview(dataDelegate, deviceID);
 
-	//Get list of all microphones
-	IVideoSDKVector<IZoomVideoSDKMicDevice*>* mics = ZoomVideoSDKMgr::GetInst().getAudioHelper()->getMicList(); //not verified pseudo code
 
-	////Get ID of selected microphone 
-	const zchar_t* deviceID2 = mics->GetItem(2)->getDeviceId();
-	const zchar_t* deviceName2 = mics->GetItem(2)->getDeviceName();
 
-	////Start, stop and playback
-	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
-	//audioDeviceHelper->setTimerInterval(500);
 
-	ZoomVideoSDKErrors err1 = audioDeviceHelper->startMicTestRecording(deviceID2);
-	std::this_thread::sleep_for(std::chrono::seconds(1));
-	ZoomVideoSDKErrors err2 = audioDeviceHelper->stopMicTestRecording();
-	ZoomVideoSDKErrors err3 = audioDeviceHelper->playMicTestRecording();
-	printf("playmictestrecording status is %d\n", err3);
+
+
 
 	//speaker test here
+	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
 	IVideoSDKVector<IZoomVideoSDKSpeakerDevice*>* speakers = ZoomVideoSDKMgr::GetInst().getAudioHelper()->getSpeakerList(); //not verified pseudo code
 
 	IZoomVideoSDKSpeakerDevice* speaker = speakers->GetItem(0);
@@ -135,13 +128,75 @@ void CMainFrame::StartPreview()
 
 	ZoomVideoSDKErrors err4 = ZoomVideoSDKMgr::GetInst().getAudioHelper()->selectSpeaker(deviceID3, deviceName3);
 	bool selectedDevice = speaker->isSelectedDevice();
-	ZoomVideoSDKErrors err7 = audioDeviceHelper->startSpeakerTest(deviceID3);
-	ZoomVideoSDKErrors err5 = audioDeviceHelper->startSpeakerTest(NULL);
-	ZoomVideoSDKErrors err6 = audioDeviceHelper->startSpeakerTest();
-
-	printf("startSpeakerTest status is %d\n", err7);
+	//ZoomVideoSDKErrors err7 = audioDeviceHelper->startSpeakerTest(deviceID3);
 
 
+	//printf("startSpeakerTest status is %d\n", err4);
+	//StartMicRecording();
+
+}
+void CMainFrame::StartMicRecording()
+{
+	//Get list of all microphones
+	IVideoSDKVector<IZoomVideoSDKMicDevice*>* mics = ZoomVideoSDKMgr::GetInst().getAudioHelper()->getMicList();
+
+	//Get ID of selected microphone 
+	const zchar_t* deviceID2 = mics->GetItem(0)->getDeviceId();
+	const zchar_t* deviceName2 = mics->GetItem(0)->getDeviceName();
+
+	//Start recording
+	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper2 = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
+
+
+	//ZoomVideoSDKErrors err = audioDeviceHelper2->startMicTestRecording(deviceID2);
+	ZoomVideoSDKErrors err = audioDeviceHelper2->startMicTestRecording();
+	printf("StartRecording status is %d\n", err);
+
+}
+
+
+void CMainFrame::StopMicRecording()
+{
+
+	//Stop Recording
+	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper2 = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
+
+
+	ZoomVideoSDKErrors err = audioDeviceHelper2->stopMicTestRecording();
+	printf("StartRecording status is %d\n", err);
+
+}
+
+void CMainFrame::PlayMicRecording()
+{
+	////Start playback
+	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper2 = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
+
+
+	ZoomVideoSDKErrors err = audioDeviceHelper2->playMicTestRecording();
+	printf("StartRecording status is %d\n", err);
+
+}
+void CMainFrame::StartSpeakerTest()
+{
+
+	//speaker test here
+	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
+	IVideoSDKVector<IZoomVideoSDKSpeakerDevice*>* speakers = ZoomVideoSDKMgr::GetInst().getAudioHelper()->getSpeakerList(); //not verified pseudo code
+
+	IZoomVideoSDKSpeakerDevice* speaker = speakers->GetItem(0);
+	const zchar_t* deviceID3 = speaker->getDeviceId();
+	const zchar_t* deviceName3 = speaker->getDeviceName();
+
+	ZoomVideoSDKErrors err4 = ZoomVideoSDKMgr::GetInst().getAudioHelper()->selectSpeaker(deviceID3, deviceName3);
+	bool selectedDevice = speaker->isSelectedDevice();
+	ZoomVideoSDKErrors err = audioDeviceHelper->startSpeakerTest(deviceID3);
+
+}
+void CMainFrame::StopSpeakerTest()
+{
+	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
+	ZoomVideoSDKErrors err = audioDeviceHelper->stopSpeakerTest();
 }
 
 void CMainFrame::StopShare()
@@ -430,20 +485,45 @@ void CMainFrame::onMicSpeakerVolumeChanged(unsigned int micVolume, unsigned int 
 {
 
 }
-
+//previewCameraAndMicrophone
 void CMainFrame::onAudioDeviceStatusChanged(ZoomVideoSDKAudioDeviceType type, ZoomVideoSDKAudioDeviceStatus status)
-{
+{	if (type == ZoomVideoSDKDevice_Microphone) {
+	
+	}
+	else if (type == ZoomVideoSDKDevice_Speaker) {
+	
+	}
 
+	printf("onAudioDeviceStatusChanged");
 }
 
+//previewCameraAndMicrophone
 void CMainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status)
 {
 
-}
+	if (status== ZoomVideoSDKMic_CanTest) {
+		
+	}
+	else if (status == ZoomVideoSDKMic_Recording) {
+		printf("onTestMicStatusChanged status is ZoomVideoSDKMic_Recording");
+	}
+	else if (status == ZoomVideoSDKMic_CanPlay) {
+		//StopMicRecording();
+		//PlayMicRecording();
+	////Start playback
+		IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper2 = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
 
+
+		ZoomVideoSDKErrors err = audioDeviceHelper2->playMicTestRecording();
+		printf("StartRecording status is %d\n", err);
+		
+	}
+
+}
+//previewCameraAndMicrophone
 void CMainFrame::onSelectedAudioDeviceChanged()
 {
-
+	printf("onSelectedAudioDeviceChanged");
 }
 
 void CMainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status)

@@ -24,7 +24,12 @@ public:
 	bool IsCommandChannelConnect();
 	void JoinSession();
 	void LeaveSession(bool bEnd);
-
+	void StartMicRecording();
+	void StopMicRecording();
+	void PlayMicRecording();
+	void StartSpeakerTest();
+	void StopSpeakerTest();
+	
 
 
 

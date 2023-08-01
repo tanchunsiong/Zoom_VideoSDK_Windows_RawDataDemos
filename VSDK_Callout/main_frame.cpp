@@ -373,9 +373,10 @@ void CMainFrame::onAudioDeviceStatusChanged(ZoomVideoSDKAudioDeviceType type, Zo
 {
 
 }
-
+//previewCameraAndMicrophone
 void CMainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status)
 {
+
 
 }
 

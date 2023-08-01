@@ -5,10 +5,14 @@
 #include "VSDK_SkeletonDemo.h"
 #include "main_frame.h"
 #include <string>
+#include "Windows.h"
 
 
 // Global Variables:
 HINSTANCE hInst;                                // current instance
+
+// Declaration of the callback function
+INT_PTR CALLBACK MainDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 
 
@@ -22,9 +26,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // TODO: Place code here.
 
+
+    
     CMainFrame::GetInstance().InitVideoSDK();
     CMainFrame::GetInstance().JoinSession();
 
+    // Create the main dialog, dreamtcs this is for UI
+    DialogBoxW(hInstance, MAKEINTRESOURCE(IDD_VSDKRAWDATADEMOS_DIALOG), NULL, MainDialogProc);
 
     // Main loop
     while (true) {
@@ -43,3 +51,50 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     return 0;
 }
+
+// Dialog procedure for the main dialog
+INT_PTR CALLBACK MainDialogProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message)
+    {
+    case WM_COMMAND:
+        // Handle button clicks
+        switch (LOWORD(wParam))
+        {
+        case IDC_BUTTON1:
+          
+            CMainFrame::GetInstance().StartMicRecording();
+            break;
+
+        case IDC_BUTTON2:
+            
+            CMainFrame::GetInstance().StopMicRecording();
+            break;
+
+        case IDC_BUTTON3:
+           
+            CMainFrame::GetInstance().PlayMicRecording();
+            break;
+        case IDC_BUTTON4:
+
+            CMainFrame::GetInstance().StartSpeakerTest();
+            break;
+
+        case IDC_BUTTON5:
+
+            CMainFrame::GetInstance().StopSpeakerTest();
+            break;
+        }
+
+        break;
+
+    case WM_CLOSE:
+        EndDialog(hwndDlg, 0);
+        break;
+
+    default:
+        return FALSE;
+    }
+    return TRUE;
+}
+
