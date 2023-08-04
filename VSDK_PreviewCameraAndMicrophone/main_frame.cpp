@@ -511,11 +511,11 @@ void CMainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status)
 		//StopMicRecording();
 		//PlayMicRecording();
 	////Start playback
-		IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper2 = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
+		//IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper2 = ZoomVideoSDKMgr::GetInst().getAudioDeviceTestHelper();
 
 
-		ZoomVideoSDKErrors err = audioDeviceHelper2->playMicTestRecording();
-		printf("StartRecording status is %d\n", err);
+		//ZoomVideoSDKErrors err = audioDeviceHelper2->playMicTestRecording();
+		//printf("StartRecording status is %d\n", err);
 		
 	}
 

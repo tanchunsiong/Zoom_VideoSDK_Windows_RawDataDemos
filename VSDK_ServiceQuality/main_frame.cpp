@@ -6,7 +6,7 @@
 
 
 //these are controls to demonstrate the flow
-
+//servicequality
 
 
 void CMainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle)
@@ -126,10 +126,10 @@ void CMainFrame::JoinSession()
 	//credentials to auth and password & topic name to join specific session
 	std::wstring session_name = L"webchun6871";
 	std::wstring sUserName = L"vsdk_skeletondemo";
-	std::wstring session_password_ = L"";
-	std::wstring token = L"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiY0FzWUFCcThST1p0cWtnS1lLVUxSRjVTa2o5aWpVdzBXMGlZIiwidmVyc2lvbiI6MSwicm9sZV90eXBlIjoxLCJ1c2VyX2lkZW50aXR5IjoiVXNlciBJRCBmcm9tIFB5dGhvbiBTY3JpcHQiLCJzZXNzaW9uX2tleSI6IiIsImlhdCI6MTY4Njc0NjM1MiwiZXhwIjoxNjg2OTE5MTUyLCJ0cGMiOiJ3ZWJjaHVuNjg3MCIsInB3ZCI6Ijg3NjU0MzIxIn0.nzV4s6gaFDKZuoPqmcuUlLz10gKMPqmR5U8SSRUafy8";
+	std::wstring session_password_ = L"12345678";
+	std::wstring token = L"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiZmpJMm0wdnBXUmRpdm9EOE9pd25NR1Z4dkRqWGNjVU1RNFhwIiwidmVyc2lvbiI6MSwicm9sZV90eXBlIjoxLCJ1c2VyX2lkZW50aXR5IjoiVXNlciBJRCBGcm9tIFB5dGhvbiBTY3JpcHQiLCJzZXNzaW9uX2tleSI6IiIsImlhdCI6MTY5MTEzNjA2MiwiZXhwIjoxNjkxMzA4ODYyLCJ0cGMiOiJ3ZWJjaHVuNjg3MSJ9.i6YbxFbcc76xV0xyeGPuLMxAWKlcp1Z9kU1aEJSsNRc";
 	//is turn off video
-	bool is_video_on = false;
+	bool is_video_on = true;
 	//is mute audio
 	bool is_mute_audio = true;
 
@@ -140,7 +140,7 @@ void CMainFrame::JoinSession()
 	session_context.userName = sUserName.c_str();
 	session_context.token = token.c_str();
 	session_context.videoOption.localVideoOn = is_video_on;
-	session_context.audioOption.connect = false;
+	session_context.audioOption.connect = true;
 	session_context.audioOption.mute = is_mute_audio;
 
 
@@ -165,8 +165,25 @@ void CMainFrame::onSessionJoin()
 
 	std::cout << "onSessionJoin()" << std::endl;
 
+	//servicequality
+	IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().getSessionInfo();
+	if (pSession)
+	{
 
-	
+		ZoomVideoSDKSessionASVStatisticInfo sendInfo;
+		ZoomVideoSDKSessionASVStatisticInfo recvInfo;
+		pSession->getSessionVideoStatisticInfo(sendInfo, recvInfo);
+
+		ZoomVideoSDKSessionAudioStatisticInfo audioSendInfo;
+		ZoomVideoSDKSessionAudioStatisticInfo audiorecvInfo;
+		pSession->getSessionAudioStatisticInfo(audioSendInfo, audiorecvInfo);
+
+		ZoomVideoSDKSessionASVStatisticInfo shareSendInfo;
+		ZoomVideoSDKSessionASVStatisticInfo shareRecvInfo;
+		pSession->getSessionShareStatisticInfo(shareSendInfo, shareRecvInfo);
+
+
+	}
 
 }
 
@@ -239,6 +256,25 @@ void CMainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZ
 	{
 		const zchar_t* user_name = send_user->getUserName();
 		const zchar_t* content = messageItem->getContent();
+
+
+	}
+
+	IZoomVideoSDKSession* pSession = ZoomVideoSDKMgr::GetInst().getSessionInfo();
+	if (pSession)
+	{
+
+		ZoomVideoSDKSessionASVStatisticInfo sendInfo;
+		ZoomVideoSDKSessionASVStatisticInfo recvInfo;
+		pSession->getSessionVideoStatisticInfo(sendInfo, recvInfo);
+
+		ZoomVideoSDKSessionAudioStatisticInfo audioSendInfo;
+		ZoomVideoSDKSessionAudioStatisticInfo audiorecvInfo;
+		pSession->getSessionAudioStatisticInfo(audioSendInfo, audiorecvInfo);
+
+		ZoomVideoSDKSessionASVStatisticInfo shareSendInfo;
+		ZoomVideoSDKSessionASVStatisticInfo shareRecvInfo;
+		pSession->getSessionShareStatisticInfo(shareSendInfo, shareRecvInfo);
 
 
 	}
