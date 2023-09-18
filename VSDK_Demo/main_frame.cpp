@@ -8,6 +8,8 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <vector>
+#include <locale>
+#include <codecvt>
 
 #include "main_frame.h";
 #include "zoom_video_sdk_api.h"
@@ -70,6 +72,11 @@ wstring sessionName;;
 wstring password;
 IZoomVideoSDK* video_sdk_obj_;
 constexpr auto CONFIG_FILE = "config.json";
+
+ wstring DEFAULT_VIDEO_SOURCE = L"Big_Buck_Bunny_720_10s_1MB.mp4"; //sendRawVideo
+ZoomVideoSDKVideoSource* virtual_camera_video_source;  //sendRawVideo
+
+
 bool isJWTWebService = true;
 
 //these are flow to show developers different features
@@ -78,11 +85,11 @@ bool languageTranscriptionAndTranslation = false; //languageTranscriptionAndTran
 bool getLTTSupportedLanguage = false; //getLTTSupportedLanguage
 bool enableCloudRecording = false; //enableCloudRecording
 bool enableCallout = false; //enableCallout
-bool previewCameraAndMicrophone = true; //work in progress, ignore this sample code for now
+bool previewCameraAndMicrophone = false; //work in progress, ignore this sample code for now
 
-bool sendRawVideo = false; //sendRawVideo work in progress, ignore this sample code for now
+bool sendRawVideo = true; //sendRawVideo 
 bool sendRawShare = false; //sendRawShare work in progress, ignore this sample code for now
-bool sendRawAudio = false; //sendRawAudio work in progress, ignore this sample code for now
+bool sendRawAudio = true; //sendRawAudio work in progress, ignore this sample code for now
 
 bool getRawVideo = false; //getRawVideo
 bool getRawShare = false; //getRawShare
@@ -331,8 +338,8 @@ void MainFrame::onSessionJoin()
 	//dreamtcs todo
 	//sendRawVideo
 	if (sendRawVideo) {
-		//TODO: do a start video here
-
+	
+		video_sdk_obj_->getVideoHelper()->startVideo();
 	}
 
 	//sendRawShare
@@ -354,6 +361,7 @@ void MainFrame::onSessionJoin()
 		//needed for audio
 		IZoomVideoSDKAudioHelper* m_pAudiohelper = video_sdk_obj_->getAudioHelper();
 		if (m_pAudiohelper) {
+		
 			// Connect User's audio.
 			printf("Starting Audio\n");
 			m_pAudiohelper->startAudio();
@@ -747,7 +755,13 @@ void MainFrame::JoinSession()
 
 		//the sdk uses a Video Source to send raw video
 		//this needs to be done before joining session
-		ZoomVideoSDKVideoSource* virtual_video_source = new ZoomVideoSDKVideoSource();
+		session_context.videoOption.localVideoOn = true;
+		
+
+		
+
+
+		ZoomVideoSDKVideoSource* virtual_video_source = new ZoomVideoSDKVideoSource(WStringToString(DEFAULT_VIDEO_SOURCE));
 		session_context.externalVideoSource = virtual_video_source;
 	}
 	//sendRawShare

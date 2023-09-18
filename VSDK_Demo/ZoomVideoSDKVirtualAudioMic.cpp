@@ -1,23 +1,57 @@
 //sendRawAudio
+#include <iostream>
+#include <cstdint>
+#include <fstream>
+#include <cstring>
+#include <cstdio>
+#include <vector>
+#include <thread>
 
 #include "ZoomVideoSDKVirtualAudioMic.h"
 #include "helpers/zoom_video_sdk_user_helper_interface.h"
 
 using namespace ZOOMVIDEOSDK;
 
-//needed for audio, applies to this entire .cpp file
+using namespace std;
+int audio_play_flag = -1;
 
-void ZoomVideoSDKVirtualAudioMic::SendRawAudio(char* data, unsigned int data_length, int sample_rate)
+
+void PlayAudioFileToVirtualMic(IZoomVideoSDKAudioSender* audio_sender, string audio_source)
 {
-    //sendRawAudio
-    if (!virtual_audio_sender_)
-    {
-        return;
+
+
+    // execute in a thread.
+    while (audio_play_flag > 0 && audio_sender) {
+
+        // Check if the file exists
+        ifstream file(audio_source, ios::binary | ios::ate);
+        if (!file.is_open()) {
+            std::cout << "Error: File not found. Tried to open " << audio_source << std::endl;
+            return;
+        }
+
+        // Get the file size
+        int file_size = file.tellg();
+
+        // Read the file into a buffer
+        vector<char> buffer(file_size);
+        file.seekg(0, ios::beg);
+        file.read(buffer.data(), file_size);
+
+        // Send the audio data to the virtual camera
+       ZoomVideoSDKErrors err = audio_sender->Send(buffer.data(), buffer.size(), 44100);
+        if (err != ZoomVideoSDKErrors::ZoomVideoSDKErrors_Success) {
+            std::cout << "Error: Failed to send audio data. Error code: " << err << std::endl;
+            return;
+        }
+        file.close();
+
+        //enables loop and no loop
+        //audio_play_flag = -1;
     }
 
-    // See zoom_video_sdk_audio_send_rawdata_interface.h for raw audio data information
-    virtual_audio_sender_->Send(data, data_length, sample_rate);
 }
+
 
 void ZoomVideoSDKVirtualAudioMic::onMicInitialize(IZoomVideoSDKAudioSender* rawdata_sender)
 {
@@ -31,20 +65,20 @@ void ZoomVideoSDKVirtualAudioMic::onMicStartSend()
 {
     //sendRawAudio
     printf("onMicStartSend\n");
-    if (!virtual_audio_sender_)
-    {
-        return;
-    }
+    std::cout << "onStartSend" << std::endl;
+    if (virtual_audio_sender_ && audio_play_flag != 1) {
+        while (audio_play_flag > -1) {}
+        audio_play_flag = 1;
+        std::string audio_source_ = "pcm1644m.wav";
+        thread(PlayAudioFileToVirtualMic, virtual_audio_sender_, audio_source_).detach();
 
-    // Virtual Mic began sending raw audio
+    }
+  
 }
 
 void ZoomVideoSDKVirtualAudioMic::onMicStopSend()
 {
-    if (!virtual_audio_sender_)
-    {
-        return;
-    }
+    audio_play_flag = 0;
 
     // Virtual Mic stopped sending raw audio
 }

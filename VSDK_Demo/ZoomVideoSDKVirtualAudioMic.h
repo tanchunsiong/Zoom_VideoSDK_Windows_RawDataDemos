@@ -1,7 +1,7 @@
 //sendRawAudio
 #include "helpers/zoom_video_sdk_audio_send_rawdata_interface.h"
 using namespace ZOOMVIDEOSDK;
-
+using namespace std;
 
 
 class ZoomVideoSDKVirtualAudioMic :
@@ -10,8 +10,7 @@ class ZoomVideoSDKVirtualAudioMic :
 public:
 
 
-    void SendRawAudio(char* data, unsigned int data_length, int sample_rate);
-
+  
 
     //IZoomVideoSDKVirtualAudioMic
     virtual void onMicInitialize(ZOOM_VIDEO_SDK_NAMESPACE::IZoomVideoSDKAudioSender* rawdata_sender);

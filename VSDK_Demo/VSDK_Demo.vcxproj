@@ -78,6 +78,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)SDK\$(Platform)\bin</OutDir>
     <IntDir>$(ProjectDir)SDK\$(Platform)\bin\objs</IntDir>
+    <CopyLocalDeploymentContent>true</CopyLocalDeploymentContent>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -174,7 +175,15 @@
     <None Include="version.md" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="example.mp3" />
+    <Media Include="Big_Buck_Bunny_720_10s_1MB.mp4">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
+    <Media Include="example.mp3">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </Media>
+    <Media Include="pcm1644m.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
