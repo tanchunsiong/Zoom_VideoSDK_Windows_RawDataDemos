@@ -1,28 +1,32 @@
 #pragma once
 
-#include "resource.h"
-
 #include "zoom_video_sdk_delegate_interface.h"
 #include "zoom_video_sdk_chat_message_interface.h"
 
+#define MAIN_FRAME_TITLE _T("demo_main_window")
+#define APP_NAME _T("video sdk demo")
+#define POPUP_EXIST_APP 1
 using namespace ZOOM_VIDEO_SDK_NAMESPACE;
 
 
 
-class MainFrame :public IZoomVideoSDKDelegate
+class CMainFrame :public IZoomVideoSDKDelegate
 {
 public:
-	MainFrame();
-	~MainFrame();
+
+	static CMainFrame& GetInstance();
 
 
 	void InitVideoSDK();
 	void UninitVideoSDK();
+	void StopShare();
+	void SendChatToAll(const zchar_t* msgContent);
+	bool IsCommandChannelConnect();
 	void JoinSession();
 	void LeaveSession(bool bEnd);
 
 
-	
+
 
 
 	//IZoomVideoSDKDelegate
@@ -37,9 +41,9 @@ public:
 	virtual void onUserVideoStatusChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList);
 	virtual void onUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList);
 	virtual void onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, ZoomVideoSDKShareStatus status, ZoomVideoSDKShareType type);
+	
 
-
-	virtual void onUserRecordingConsent(IZoomVideoSDKUser* pUser);
+	virtual void onUserRecordingConsent(IZoomVideoSDKUser* pUser) {}
 
 	virtual void onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status);
 	virtual void onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZoomVideoSDKChatMessage* messageItem);
@@ -62,7 +66,7 @@ public:
 	virtual void onCommandReceived(IZoomVideoSDKUser* sender, const zchar_t* strCmd);
 	virtual void onCommandChannelConnectResult(bool isSuccess);
 	virtual void onInviteByPhoneStatus(PhoneStatus status, PhoneFailedReason reason);
-
+	
 	virtual void onCloudRecordingStatus(RecordingStatus status, IZoomVideoSDKRecordingConsentHandler* pHandler);
 	virtual void onHostAskUnmute();
 	virtual void onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe);
@@ -78,15 +82,15 @@ public:
 	virtual void onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage);
 	virtual void onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo* messageInfo);
 
-	virtual void onChatMsgDeleteNotification(IZoomVideoSDKChatHelper* pChatHelper, const zchar_t* msgID, ZoomVideoSDKChatMessageDeleteType deleteBy);
+	virtual void onChatMsgDeleteNotification(IZoomVideoSDKChatHelper* pChatHelper, const zchar_t* msgID, ZoomVideoSDKChatMessageDeleteType deleteBy) {}
 	virtual void onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege);
 
-	virtual void onProxyDetectComplete();
-	virtual void onProxySettingNotification(IZoomVideoSDKProxySettingHandler* handler);
-	virtual void onSSLCertVerifiedFailNotification(IZoomVideoSDKSSLCertificateInfo* handler);
+	virtual void onProxyDetectComplete() {}
+	virtual void onProxySettingNotification(IZoomVideoSDKProxySettingHandler* handler) {}
+	virtual void onSSLCertVerifiedFailNotification(IZoomVideoSDKSSLCertificateInfo* handler) {}
 
-	virtual void onUserVideoNetworkStatusChanged(ZoomVideoSDKNetworkStatus status, IZoomVideoSDKUser* pUser);
-	virtual void onCallCRCDeviceStatusChanged(ZoomVideoSDKCRCCallStatus status);
+	virtual void onUserVideoNetworkStatusChanged(ZoomVideoSDKNetworkStatus status, IZoomVideoSDKUser* pUser) {}
+	virtual void onCallCRCDeviceStatusChanged(ZoomVideoSDKCRCCallStatus status) {}
 
 
 	virtual void onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle);
@@ -94,7 +98,22 @@ public:
 	virtual void onAnnotationHelperCleanUp(IZoomVideoSDKAnnotationHelper* helper);
 	virtual void onAnnotationPrivilegeChange(IZoomVideoSDKUser* pUser, bool enable);
 private:
+	CMainFrame();
+	~CMainFrame();
 	
 
+	void StartPreview();
+	void OnLeaveSessionUIUpdate();
+	void OnJoinMeetingJoinFailed(int error_code);
+	void OnInvalidParamterNotification();
+	void OnMeetingDisconnecting();
+	void SetCommandChannelConnect(bool is_connect);
+
+private:
+	
+
+	bool is_command_channel_connected_ = false;
+
+public:
 
 };

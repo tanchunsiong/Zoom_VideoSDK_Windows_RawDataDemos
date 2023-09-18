@@ -1,3 +1,8 @@
-#pragma once
+#ifndef WEBSERVICE_H
+#define WEBSERVICE_H
 
-#include "resource.h"
+#include <string>
+
+wchar_t* GetSignatureFromWebService();
+
+#endif

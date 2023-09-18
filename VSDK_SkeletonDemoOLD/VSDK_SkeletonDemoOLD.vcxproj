@@ -21,10 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7581daf6-6d1a-4845-947d-83583911ff4d}</ProjectGuid>
+    <ProjectGuid>{BE0FE3FD-1FAC-4A13-A166-42568DBE8280}</ProjectGuid>
     <RootNamespace>VSDKRawDataDemos</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>VSDK_SkeletonDemo</ProjectName>
+    <ProjectName>VSDK_SkeletonDemoOLD</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -147,13 +147,14 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="videosdk_demo_mgr.h" />
+    <ClInclude Include="videosdk_include_files.h" />
     <ClInclude Include="VSDK_SkeletonDemo.h" />
-    <ClInclude Include="WebService.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_frame.cpp" />
+    <ClCompile Include="videosdk_demo_mgr.cpp" />
     <ClCompile Include="VSDK_SkeletonDemo.cpp" />
-    <ClCompile Include="WebService.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VSDK_RawDataDemos.rc" />
