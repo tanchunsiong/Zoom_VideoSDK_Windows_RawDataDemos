@@ -281,18 +281,7 @@ void CMainFrame::onSessionPasswordWrong(IZoomVideoSDKPasswordHandler* handler)
 {
 	
 }
-//this is a helper method, and not part of the implementation
-void savePcmBufferToFile(const std::string& filename, char* pcmBuffer, std::size_t bufferSize) {
-	std::ofstream outfile(filename, std::ios::out | std::ios::binary | std::ios::app);
-	outfile.write(reinterpret_cast<char*>(pcmBuffer), bufferSize);
-	outfile.close();
-	if (!outfile) {
-		std::cerr << "Error writing PCM data to file!" << std::endl;
-	}
-	else {
-		std::cout << "PCM data saved to file: " << filename << std::endl;
-	}
-}
+
 void CMainFrame::onMixedAudioRawDataReceived(AudioRawData* data_)
 {
 	//this is the part where callback for raw audio data happens. this is the audio stream where everyone's audio has already been mixed into one channel.
