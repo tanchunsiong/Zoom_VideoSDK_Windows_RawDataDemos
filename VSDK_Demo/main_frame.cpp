@@ -80,16 +80,16 @@ ZoomVideoSDKVideoSource* virtual_camera_video_source;  //sendRawVideo
 bool isJWTWebService = true;
 
 //these are flow to show developers different features
-bool serviceQuality = false; //serviceQuality
-bool languageTranscriptionAndTranslation = false; //languageTranscriptionAndTranslation
-bool getLTTSupportedLanguage = false; //getLTTSupportedLanguage
-bool enableCloudRecording = false; //enableCloudRecording
-bool enableCallout = false; //enableCallout
-bool previewCameraAndMicrophone = false; //work in progress, ignore this sample code for now
+bool serviceQuality = false;					     //serviceQuality
+bool languageTranscriptionAndTranslation = false;	 //languageTranscriptionAndTranslation
+bool getLTTSupportedLanguage = false;				 //getLTTSupportedLanguage
+bool enableCloudRecording = false;					 //enableCloudRecording
+bool enableCallout = false;							 //enableCallout
+bool previewCameraAndMicrophone = false;			 //previewCameraAndMicrophone :work in progress, ignore this sample code for now
 
 bool sendRawVideo = true; //sendRawVideo 
-bool sendRawShare = false; //sendRawShare work in progress, ignore this sample code for now
-bool sendRawAudio = true; //sendRawAudio work in progress, ignore this sample code for now
+bool sendRawShare = false;//sendRawShare "work in progress, ignore this sample code for now, this shares code with sendRawVideo
+bool sendRawAudio = true; //sendRawAudio
 
 bool getRawVideo = false; //getRawVideo
 bool getRawShare = false; //getRawShare
