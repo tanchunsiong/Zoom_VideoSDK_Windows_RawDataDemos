@@ -410,4 +410,8 @@ void CMainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInf
 void CMainFrame::onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege)
 {
 }
+
+void CMainFrame::onSendFileStatus(IZoomVideoSDKSendFile* file, const FileTransferStatus& status) {}
+void CMainFrame::onReceiveFileStatus(IZoomVideoSDKReceiveFile* file, const FileTransferStatus& status) {}
+void CMainFrame::onAnnotationHelperActived(void* handle) {}
 ;

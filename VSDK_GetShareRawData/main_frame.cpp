@@ -398,3 +398,7 @@ void CMainFrame::onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, Zo
 {
 }
 
+void CMainFrame::onSendFileStatus(IZoomVideoSDKSendFile* file, const FileTransferStatus& status) {}
+void CMainFrame::onReceiveFileStatus(IZoomVideoSDKReceiveFile* file, const FileTransferStatus& status) {}
+void CMainFrame::onAnnotationHelperActived(void* handle) {}
+;

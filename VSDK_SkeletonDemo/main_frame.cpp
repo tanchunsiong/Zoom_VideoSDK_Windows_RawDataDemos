@@ -118,7 +118,7 @@ void LoadConfig() {
 		sdk_jwt = QuestionInput("SDK JWT: ");
 	}
 	else {
-		sdk_jwt = StringToWString( config["sdk_jwt"].asString());
+		sdk_jwt = StringToWString(config["sdk_jwt"].asString());
 		printf("Found \"SDK JWT\" from %s: \n\"%s\"\n", CONFIG_FILE, WStringToString(sdk_jwt).c_str());
 	}
 	bool toQuestionForMeetingNumber = false;
@@ -126,15 +126,15 @@ void LoadConfig() {
 		toQuestionForMeetingNumber = true;
 	else {
 		try {
-			sessionName =StringToWString(config["sessionName"].asString());
+			sessionName = StringToWString(config["sessionName"].asString());
 
 			printf("Found \"sessionName\" from %s: \"%s\"\n", CONFIG_FILE, WStringToString(sessionName).c_str());
 		}
 		catch (exception)
 		{
 			try {
-				sessionName =StringToWString( config["sessionName"].asString());
-			
+				sessionName = StringToWString(config["sessionName"].asString());
+
 				printf("Found \"sessionName\" from %s: \"%s\"\n", CONFIG_FILE, WStringToString(sessionName).c_str());
 			}
 			catch (exception)
@@ -161,7 +161,7 @@ void LoadConfig() {
 		printf("Password is empty.\n");
 	}
 	else {
-		password = StringToWString( config["password"].asString());
+		password = StringToWString(config["password"].asString());
 		printf("Found \"password\" from %s: \"%s\"\n", CONFIG_FILE, WStringToString(password).c_str());
 	}
 
@@ -259,6 +259,8 @@ void MainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo
 void MainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage) {}
 void MainFrame::onChatMsgDeleteNotification(IZoomVideoSDKChatHelper* pChatHelper, const zchar_t* msgID, ZoomVideoSDKChatMessageDeleteType deleteBy) {}
 void MainFrame::onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege) {}
+void MainFrame::onSendFileStatus(IZoomVideoSDKSendFile* file, const FileTransferStatus& status) {}
+void MainFrame::onReceiveFileStatus(IZoomVideoSDKReceiveFile* file, const FileTransferStatus& status) {}
 void MainFrame::onProxyDetectComplete() {}
 void MainFrame::onProxySettingNotification(IZoomVideoSDKProxySettingHandler* handler) {}
 void MainFrame::onSSLCertVerifiedFailNotification(IZoomVideoSDKSSLCertificateInfo* info) {}
@@ -268,15 +270,16 @@ void MainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_
 void MainFrame::onShareCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle) {}
 void MainFrame::onAnnotationHelperCleanUp(IZoomVideoSDKAnnotationHelper* helper) {}
 void MainFrame::onAnnotationPrivilegeChange(IZoomVideoSDKUser* pUser, bool enable) {}
+void MainFrame::onAnnotationHelperActived(void* handle) {}
 
 void MainFrame::InitVideoSDK()
 {
 	LoadConfig();
 
 	if (isJWTWebService) {
-	
-	sdk_jwt= StringToWString( GetSignatureFromWebService("https://asdc.cc/video",WStringToString(sessionName),"1"));
-	std::cout << "token from webservice is :" << WStringToString( sdk_jwt).c_str() << std::endl;
+
+		sdk_jwt = StringToWString(GetSignatureFromWebService("https://asdc.cc/video", WStringToString(sessionName), "1"));
+		std::cout << "token from webservice is :" << WStringToString(sdk_jwt).c_str() << std::endl;
 	}
 	std::cout << "InitVideoSDK()" << std::endl;
 	video_sdk_obj_ = ZOOMVIDEOSDK::CreateZoomVideoSDKObj();

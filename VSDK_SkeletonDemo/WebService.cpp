@@ -59,7 +59,7 @@ std::string GetSignatureFromWebService(std::string urlstr,std::string sessionNam
     std::istringstream responseStream(response);
     if (!Json::parseFromStream(reader, responseStream, &root, nullptr)) {
         std::cerr << "Failed to parse JSON response" << std::endl;
-        return nullptr;
+      
     }
 
     // Retrieve the value of the "signature" key

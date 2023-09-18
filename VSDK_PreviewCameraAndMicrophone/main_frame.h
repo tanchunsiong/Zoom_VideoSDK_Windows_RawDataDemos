@@ -90,6 +90,9 @@ public:
 	virtual void onChatMsgDeleteNotification(IZoomVideoSDKChatHelper* pChatHelper, const zchar_t* msgID, ZoomVideoSDKChatMessageDeleteType deleteBy) {}
 	virtual void onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege);
 
+	virtual void onSendFileStatus(IZoomVideoSDKSendFile* file, const FileTransferStatus& status);
+	virtual void onReceiveFileStatus(IZoomVideoSDKReceiveFile* file, const FileTransferStatus& status);
+
 	virtual void onProxyDetectComplete() {}
 	virtual void onProxySettingNotification(IZoomVideoSDKProxySettingHandler* handler) {}
 	virtual void onSSLCertVerifiedFailNotification(IZoomVideoSDKSSLCertificateInfo* handler) {}
@@ -102,6 +105,8 @@ public:
 	virtual void onShareCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle);
 	virtual void onAnnotationHelperCleanUp(IZoomVideoSDKAnnotationHelper* helper);
 	virtual void onAnnotationPrivilegeChange(IZoomVideoSDKUser* pUser, bool enable);
+
+	virtual void onAnnotationHelperActived(void* handle);
 private:
 	CMainFrame();
 	~CMainFrame();

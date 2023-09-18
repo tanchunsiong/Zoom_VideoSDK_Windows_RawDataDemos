@@ -671,7 +671,7 @@ std::wstring ZoomVideoSDKMgr::GetErrorStringByErrorCode(ZoomVideoSDKErrors err)
 		sValue = _T("ZoomVideoSDKErrors_SessionModule_Not_Found");
 		break;
 	}
-	case ZoomVideoSDKErrors_SessionService_Invaild:
+	case ZoomVideoSDKErrors_SessionService_Invalid:
 	{
 		sValue = _T("ZoomVideoSDKErrors_SessionService_Invaild");
 		break;
