@@ -172,7 +172,7 @@
     </None>
     <None Include="cpp.hint" />
     <None Include="README.md" />
-    <None Include="version.md" />
+    <None Include="version.txt" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="Big_Buck_Bunny_720_10s_1MB.mp4">
