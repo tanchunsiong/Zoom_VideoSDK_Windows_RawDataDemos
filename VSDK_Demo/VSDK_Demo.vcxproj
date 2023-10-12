@@ -79,6 +79,10 @@
     <OutDir>$(ProjectDir)SDK\$(Platform)\bin</OutDir>
     <IntDir>$(ProjectDir)SDK\$(Platform)\bin\objs</IntDir>
     <CopyLocalDeploymentContent>true</CopyLocalDeploymentContent>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>false</VcpkgEnableManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

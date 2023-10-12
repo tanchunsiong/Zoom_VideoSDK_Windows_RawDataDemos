@@ -85,11 +85,11 @@ bool languageTranscriptionAndTranslation = false;	 //languageTranscriptionAndTra
 bool getLTTSupportedLanguage = false;				 //getLTTSupportedLanguage
 bool enableCloudRecording = false;					 //enableCloudRecording
 bool enableCallout = false;							 //enableCallout
-bool previewCameraAndMicrophone = false;			 //previewCameraAndMicrophone :work in progress, ignore this sample code for now
+bool previewCameraAndMicrophone = true;			 //previewCameraAndMicrophone :work in progress, ignore this sample code for now
 
-bool sendRawVideo = true; //sendRawVideo 
+bool sendRawVideo = false; //sendRawVideo 
 bool sendRawShare = false;//sendRawShare "work in progress, ignore this sample code for now, this shares code with sendRawVideo
-bool sendRawAudio = true; //sendRawAudio
+bool sendRawAudio = false; //sendRawAudio
 
 bool getRawVideo = false; //getRawVideo
 bool getRawShare = false; //getRawShare
@@ -205,41 +205,7 @@ void savePcmBufferToFile(const std::string& filename, char* pcmBuffer, std::size
 	}
 }
 
-void StartPreview()
-{
-	//previewCameraAndMicrophone
 
-
-
-	//Get list of all cameras
-	IVideoSDKVector<IZoomVideoSDKCameraDevice*>* cameras =video_sdk_obj_->getVideoHelper()->getCameraList();
-
-	//Get ID of selected camera
-	const zchar_t* deviceID = cameras->GetItem(0)->getDeviceId();
-
-	//Start Preview, and handle the callback in a ZoomVideoSDKRawDataPipeDelegate instance
-	ZoomVideoSDKRawDataPipeDelegate* dataDelegate = new ZoomVideoSDKRawDataPipeDelegate();
-	//ZoomVideoSDKMgr::GetInst().getVideoHelper()->startVideoPreview(dataDelegate, deviceID);
-
-
-
-	//speaker test here
-	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = video_sdk_obj_->GetAudioDeviceTestHelper();
-	IVideoSDKVector<IZoomVideoSDKSpeakerDevice*>* speakers = video_sdk_obj_->getAudioHelper()->getSpeakerList(); //not verified pseudo code
-
-	IZoomVideoSDKSpeakerDevice* speaker = speakers->GetItem(0);
-	const zchar_t* deviceID3 = speaker->getDeviceId();
-	const zchar_t* deviceName3 = speaker->getDeviceName();
-
-	ZoomVideoSDKErrors err4 = video_sdk_obj_->getAudioHelper()->selectSpeaker(deviceID3, deviceName3);
-	bool selectedDevice = speaker->isSelectedDevice();
-	//ZoomVideoSDKErrors err7 = audioDeviceHelper->startSpeakerTest(deviceID3);
-
-
-	//printf("startSpeakerTest status is %d\n", err4);
-	//StartMicRecording();
-
-}
 void StartMicRecording()
 {
 	//Get list of all microphones
@@ -249,16 +215,17 @@ void StartMicRecording()
 	const zchar_t* deviceID2 = mics->GetItem(0)->getDeviceId();
 	const zchar_t* deviceName2 = mics->GetItem(0)->getDeviceName();
 
+	video_sdk_obj_->getAudioHelper()->selectMic(deviceID2, deviceName2);
+
 	//Start recording
 	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper2 = video_sdk_obj_->GetAudioDeviceTestHelper();
-
+	
 
 	//ZoomVideoSDKErrors err = audioDeviceHelper2->startMicTestRecording(deviceID2);
 	ZoomVideoSDKErrors err = audioDeviceHelper2->startMicTestRecording();
-	printf("StartRecording status is %d\n", err);
+	printf("StartMicRecording status is %d\n", err);
 
 }
-
 
 void StopMicRecording()
 {
@@ -268,7 +235,7 @@ void StopMicRecording()
 
 
 	ZoomVideoSDKErrors err = audioDeviceHelper2->stopMicTestRecording();
-	printf("StartRecording status is %d\n", err);
+	printf("StopMicRecording status is %d\n", err);
 
 }
 
@@ -279,7 +246,20 @@ void PlayMicRecording()
 
 
 	ZoomVideoSDKErrors err = audioDeviceHelper2->playMicTestRecording();
-	printf("StartRecording status is %d\n", err);
+	printf("PlayMicRecording status is %d\n", err);
+
+}
+void StartVideoTest() {
+
+	//Get list of all cameras
+	IVideoSDKVector<IZoomVideoSDKCameraDevice*>* cameras = video_sdk_obj_->getVideoHelper()->getCameraList();
+
+	//Get ID of selected camera
+	const zchar_t* deviceID = cameras->GetItem(0)->getDeviceId();
+
+	//Start Preview, and handle the callback in a ZoomVideoSDKRawDataPipeDelegate instance
+	ZoomVideoSDKRawDataPipeDelegate* dataDelegate = new ZoomVideoSDKRawDataPipeDelegate();
+	video_sdk_obj_->getVideoHelper()->startVideoPreview(dataDelegate, deviceID);
 
 }
 void StartSpeakerTest()
@@ -295,15 +275,25 @@ void StartSpeakerTest()
 
 	ZoomVideoSDKErrors err4 = video_sdk_obj_->getAudioHelper()->selectSpeaker(deviceID3, deviceName3);
 	bool selectedDevice = speaker->isSelectedDevice();
-	ZoomVideoSDKErrors err = audioDeviceHelper->startSpeakerTest(deviceID3);
-
+	//ZoomVideoSDKErrors err = audioDeviceHelper->startSpeakerTest(deviceID3);
+	//printf("startSpeakerTest status is %d\n", err4);
 }
 void StopSpeakerTest()
 {
 	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = video_sdk_obj_->GetAudioDeviceTestHelper();
 	ZoomVideoSDKErrors err = audioDeviceHelper->stopSpeakerTest();
 }
+void StartPreview()
+{
+	
+	//previewCameraAndMicrophone
 
+	//StartVideoTest();
+	StartSpeakerTest();
+
+	StartMicRecording();
+
+}
 
 MainFrame::MainFrame() {
 
@@ -500,7 +490,9 @@ void MainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector
 	}
 }
 void MainFrame::onUserLeave(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
-void MainFrame::onUserVideoStatusChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
+void MainFrame::onUserVideoStatusChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {
+	printf("onUserVideoStatusChanged\n");
+}
 void MainFrame::onUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
 void MainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, ZoomVideoSDKShareStatus status, ZoomVideoSDKShareType type) {
 	//getting share or share screen is handled here
@@ -611,7 +603,29 @@ void MainFrame::onHostAskUnmute() {}
 void MainFrame::onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe) {}
 void MainFrame::onMicSpeakerVolumeChanged(unsigned int micVolume, unsigned int speakerVolume) {}
 void MainFrame::onAudioDeviceStatusChanged(ZoomVideoSDKAudioDeviceType type, ZoomVideoSDKAudioDeviceStatus status) {}
-void MainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status) {}
+void MainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status) {
+	//printf("onTestMicStatusChanged status Received is %s\n", status);
+
+
+	if (status == 0) {
+
+		//StopMicRecording();
+		//PlayMicRecording();
+	}
+
+	if (status == 1) {
+
+		//StopMicRecording();
+		//PlayMicRecording();
+	}
+	if (status == 2) {
+	
+		StopMicRecording();
+		PlayMicRecording();
+	}
+
+
+}
 void MainFrame::onSelectedAudioDeviceChanged() {}
 void MainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status) {
 	if (languageTranscriptionAndTranslation) {
