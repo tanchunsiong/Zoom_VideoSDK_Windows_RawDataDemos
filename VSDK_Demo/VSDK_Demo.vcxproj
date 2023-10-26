@@ -135,7 +135,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)SDK\$(Platform)\h</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDK\$(Platform)\h;C:\vcpkg\packages\opencv4_x64-windows\include;C:\vcpkg\packages\curl_x64-windows\include;C:\vcpkg\packages\jsoncpp_x64-windows\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

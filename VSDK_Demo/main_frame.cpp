@@ -26,6 +26,7 @@
 #include "zoom_video_sdk_platform.h"
 
 
+
 //needed for sendRawAudio
 #include "ZoomVideoSDKVirtualAudioMic.h" 
 #include "helpers/zoom_video_sdk_audio_send_rawdata_interface.h"
@@ -60,7 +61,7 @@
 #include "helpers/zoom_video_sdk_video_helper_interface.h"
 #include "helpers/zoom_video_sdk_audio_helper_interface.h"
 
-#include "json\json.h"
+#include <json/json.h>
 #include "WebService.h"
 
 USING_ZOOM_VIDEO_SDK_NAMESPACE
@@ -85,7 +86,7 @@ bool languageTranscriptionAndTranslation = false;	 //languageTranscriptionAndTra
 bool getLTTSupportedLanguage = false;				 //getLTTSupportedLanguage
 bool enableCloudRecording = false;					 //enableCloudRecording
 bool enableCallout = false;							 //enableCallout
-bool previewCameraAndMicrophone = true;			 //previewCameraAndMicrophone :work in progress, ignore this sample code for now
+bool previewCameraAndMicrophone = false;			 //previewCameraAndMicrophone :work in progress, ignore this sample code for now
 
 bool sendRawVideo = false; //sendRawVideo 
 bool sendRawShare = false;//sendRawShare "work in progress, ignore this sample code for now, this shares code with sendRawVideo
@@ -283,6 +284,7 @@ void StopSpeakerTest()
 	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = video_sdk_obj_->GetAudioDeviceTestHelper();
 	ZoomVideoSDKErrors err = audioDeviceHelper->stopSpeakerTest();
 }
+
 void StartPreview()
 {
 	
