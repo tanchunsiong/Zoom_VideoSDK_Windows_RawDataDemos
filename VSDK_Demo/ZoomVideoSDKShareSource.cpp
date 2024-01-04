@@ -7,6 +7,7 @@ using namespace ZOOMVIDEOSDK;
 
 void ZoomVideoSDKShareSource::onShareSendStarted(IZoomVideoSDKShareSender* pSender) {
     //sendRawShare
+   //pSender->sendShareFrame();
     printf("onShareSendStarted() invoked \n");
 
 };
