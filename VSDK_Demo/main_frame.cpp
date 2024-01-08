@@ -65,6 +65,7 @@
 #include "WebService.h"
 
 //testing for framerates
+#include "ZoomVideoSDKRawDataPipeDelegateMain.h"
 #include "ZoomVideoSDKRawDataPipeDelegateMultiStream.h"
 #include "ZoomVideoSDKRawDataPipeDelegateShare.h"
 
@@ -78,7 +79,7 @@ wstring password;
 IZoomVideoSDK* video_sdk_obj_;
 constexpr auto CONFIG_FILE = "config.json";
 
- wstring DEFAULT_VIDEO_SOURCE = L"Big_Buck_Bunny_720_10s_1MB.mp4"; //sendRawVideo
+wstring DEFAULT_VIDEO_SOURCE = L"Big_Buck_Bunny_720_10s_1MB.mp4"; //sendRawVideo
 ZoomVideoSDKVideoSource* virtual_camera_video_source;  //sendRawVideo
 
 
@@ -100,9 +101,12 @@ bool getRawVideo = true; //getRawVideo
 bool getRawShare = false; //getRawShare
 bool getRawAudio = false; //getRawAudio
 
-bool sendVideo = true;
-bool multiStreamVideo = true; 
+//testing for sending raw videos
+bool sendVideo = false;
+bool sendMultiStreamVideo = false;
+bool subscribeMainVideo = true;
 bool subscribeMultiCameraStream = false;
+bool subscribeshare2ndCameraStream = true;
 
 wstring StringToWString(string input)
 {
@@ -226,7 +230,7 @@ void StartMicRecording()
 
 	//Start recording
 	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper2 = video_sdk_obj_->GetAudioDeviceTestHelper();
-	
+
 
 	//ZoomVideoSDKErrors err = audioDeviceHelper2->startMicTestRecording(deviceID2);
 	ZoomVideoSDKErrors err = audioDeviceHelper2->startMicTestRecording();
@@ -274,7 +278,7 @@ void StartSpeakerTest()
 
 	//speaker test here
 	IZoomVideoSDKTestAudioDeviceHelper* audioDeviceHelper = video_sdk_obj_->GetAudioDeviceTestHelper();
-	IVideoSDKVector<IZoomVideoSDKSpeakerDevice*>* speakers =video_sdk_obj_->getAudioHelper()->getSpeakerList(); //not verified pseudo code
+	IVideoSDKVector<IZoomVideoSDKSpeakerDevice*>* speakers = video_sdk_obj_->getAudioHelper()->getSpeakerList(); //not verified pseudo code
 
 	IZoomVideoSDKSpeakerDevice* speaker = speakers->GetItem(0);
 	const zchar_t* deviceID3 = speaker->getDeviceId();
@@ -293,7 +297,7 @@ void StopSpeakerTest()
 
 void StartPreview()
 {
-	
+
 	//previewCameraAndMicrophone
 
 	//StartVideoTest();
@@ -336,7 +340,7 @@ void MainFrame::onSessionJoin()
 	//dreamtcs todo
 	//sendRawVideo
 	if (sendRawVideo) {
-	
+
 		video_sdk_obj_->getVideoHelper()->startVideo();
 	}
 
@@ -359,7 +363,7 @@ void MainFrame::onSessionJoin()
 		//needed for audio
 		IZoomVideoSDKAudioHelper* m_pAudiohelper = video_sdk_obj_->getAudioHelper();
 		if (m_pAudiohelper) {
-		
+
 			// Connect User's audio.
 			printf("Starting Audio\n");
 			m_pAudiohelper->startAudio();
@@ -465,19 +469,19 @@ void MainFrame::onSessionJoin()
 	}
 
 
-	if (multiStreamVideo) {
-	IZoomVideoSDKVideoHelper* videohelper=	video_sdk_obj_->getVideoHelper();
+	if (sendMultiStreamVideo) {
+		IZoomVideoSDKVideoHelper* videohelper = video_sdk_obj_->getVideoHelper();
 
 
-	ZoomVideoSDKVideoPreferenceSetting setting;
-	setting.mode = ZoomVideoSDKVideoPreferenceMode_Custom;
-	setting.minimum_frame_rate = 20;
-	setting.maximum_frame_rate = 30;
-	videohelper->setVideoQualityPreference(setting);
+		ZoomVideoSDKVideoPreferenceSetting setting;
+		setting.mode = ZoomVideoSDKVideoPreferenceMode_Custom;
+		setting.minimum_frame_rate = 20;
+		setting.maximum_frame_rate = 30;
+		videohelper->setVideoQualityPreference(setting);
 
 
-	bool isSuccess=videohelper->enableMultiStreamVideo(videohelper->getCameraList()->GetItem(1)->getDeviceId(), videohelper->getCameraList()->GetItem(1)->getDeviceName());
-	std::cout << "enableMultiStreamVideo: " << isSuccess  << std::endl;
+		bool isSuccess = videohelper->enableMultiStreamVideo(videohelper->getCameraList()->GetItem(1)->getDeviceId(), videohelper->getCameraList()->GetItem(1)->getDeviceName());
+		std::cout << "enableMultiStreamVideo: " << isSuccess << std::endl;
 	}
 	if (sendVideo) {
 
@@ -486,7 +490,7 @@ void MainFrame::onSessionJoin()
 		videohelper->startVideo();
 
 
-	
+
 	}
 
 }
@@ -525,6 +529,10 @@ void MainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector
 void MainFrame::onUserLeave(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
 void MainFrame::onUserVideoStatusChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {
 	printf("onUserVideoStatusChanged\n");
+	if (subscribeMainVideo) {
+		ZoomVideoSDKRawDataPipeDelegateMain* pvideo = new ZoomVideoSDKRawDataPipeDelegateMain();
+		userList->GetItem(0)->GetVideoPipe()->subscribe(ZoomVideoSDKResolution_720P, pvideo);
+	}
 
 }
 void MainFrame::onUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
@@ -664,7 +672,7 @@ void MainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status) {
 		//PlayMicRecording();
 	}
 	if (status == 2) {
-	
+
 		StopMicRecording();
 		PlayMicRecording();
 	}
@@ -818,9 +826,9 @@ void MainFrame::JoinSession()
 		//the sdk uses a Video Source to send raw video
 		//this needs to be done before joining session
 		session_context.videoOption.localVideoOn = true;
-		
 
-		
+
+
 
 
 		ZoomVideoSDKVideoSource* virtual_video_source = new ZoomVideoSDKVideoSource(WStringToString(DEFAULT_VIDEO_SOURCE));
@@ -863,11 +871,11 @@ void MainFrame::JoinSession()
 		StartPreview();
 	}
 	else {
-	IZoomVideoSDKSession* pSession = video_sdk_obj_->joinSession(session_context);
-	if (pSession)
-	{
-		pSession->getMyself()->GetVideoPipe();
-	}
+		IZoomVideoSDKSession* pSession = video_sdk_obj_->joinSession(session_context);
+		if (pSession)
+		{
+			pSession->getMyself()->GetVideoPipe();
+		}
 	}
 }
 
