@@ -100,10 +100,9 @@ bool getRawVideo = true; //getRawVideo
 bool getRawShare = false; //getRawShare
 bool getRawAudio = false; //getRawAudio
 
-bool sendVideo = false;
-bool multiStreamVideo = false; 
+bool sendVideo = true;
+bool multiStreamVideo = true; 
 bool subscribeMultiCameraStream = false;
-bool subscribeshare2ndCameraStream = true;
 
 wstring StringToWString(string input)
 {
@@ -490,18 +489,6 @@ void MainFrame::onSessionJoin()
 	
 	}
 
-	if (subscribeMultiCameraStream) {
-		IZoomVideoSDKVideoHelper* videohelper = video_sdk_obj_->getVideoHelper();
-		ZoomVideoSDKVideoPreferenceSetting setting;
-		setting.mode =ZoomVideoSDKVideoPreferenceMode_Custom;
-		setting.minimum_frame_rate = 15;
-		setting.maximum_frame_rate = 20;
-		videohelper->setVideoQualityPreference(setting);
-	}
-
-
-
-
 }
 void MainFrame::onSessionLeave() {}
 void MainFrame::onError(ZoomVideoSDKErrors errorCode, int detailErrorCode)
@@ -574,39 +561,6 @@ void  MainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveS
 void MainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZoomVideoSDKChatMessage* messageItem)
 {
 	std::cout << "onChatNewMessageNotify()" << std::endl;
-
-	
-
-	IZoomVideoSDKSession* pSession = video_sdk_obj_->getSessionInfo();
-	if (pSession)
-	{
-
-		ZoomVideoSDKSessionASVStatisticInfo sendInfo;
-		ZoomVideoSDKSessionASVStatisticInfo recvInfo;
-		pSession->getSessionVideoStatisticInfo(sendInfo, recvInfo);
-
-		std::cout << "Video Stats Send: " << sendInfo.frame_width  << ":" << sendInfo.frame_height <<":" << sendInfo.fps << std::endl;
-		std::cout << "Video Stats Recv: " << recvInfo.frame_width << ":" << recvInfo.frame_height << ":" << recvInfo.fps << std::endl;
-		
-
-		ZoomVideoSDKSessionAudioStatisticInfo audioSendInfo;
-		ZoomVideoSDKSessionAudioStatisticInfo audiorecvInfo;
-		pSession->getSessionAudioStatisticInfo(audioSendInfo, audiorecvInfo);
-
-		std::cout << "Audio Stats Send: " << audioSendInfo.latency << ":" << audioSendInfo.frequency << ":" << audioSendInfo.Jitter << std::endl;
-		std::cout << "Audio Stats Recv: " << audiorecvInfo.latency << ":" << audiorecvInfo.frequency << ":" << audiorecvInfo.Jitter << std::endl;
-
-	
-
-		ZoomVideoSDKSessionASVStatisticInfo shareSendInfo;
-		ZoomVideoSDKSessionASVStatisticInfo shareRecvInfo;
-		pSession->getSessionShareStatisticInfo(shareSendInfo, shareRecvInfo);
-
-		std::cout << "Share Stats Send: " << shareSendInfo.frame_width << ":" << shareSendInfo.frame_height << ":" << shareSendInfo.fps << std::endl;
-		std::cout << "Share Stats Recv: " << shareRecvInfo.frame_width << ":" << shareRecvInfo.frame_height << ":" << shareRecvInfo.fps << std::endl;
-
-	}
-
 	if (!messageItem)
 		return;
 	IZoomVideoSDKUser* send_user = messageItem->getSendUser();
@@ -691,12 +645,7 @@ void MainFrame::onCloudRecordingStatus(RecordingStatus status, IZoomVideoSDKReco
 	}
 }
 void MainFrame::onHostAskUnmute() {}
-void MainFrame::onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe) {
-	if (subscribeMultiCameraStream) {
-		ZoomVideoSDKRawDataPipeDelegateMultiStream* encoder = new ZoomVideoSDKRawDataPipeDelegateMultiStream();
-		pVideoPipe->subscribe(ZoomVideoSDKResolution_720P, encoder);
-	}
-}
+void MainFrame::onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe) {}
 void MainFrame::onMicSpeakerVolumeChanged(unsigned int micVolume, unsigned int speakerVolume) {}
 void MainFrame::onAudioDeviceStatusChanged(ZoomVideoSDKAudioDeviceType type, ZoomVideoSDKAudioDeviceStatus status) {}
 void MainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status) {
