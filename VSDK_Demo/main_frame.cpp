@@ -64,6 +64,10 @@
 #include <json/json.h>
 #include "WebService.h"
 
+//testing for framerates
+#include "ZoomVideoSDKRawDataPipeDelegateMultiStream.h"
+#include "ZoomVideoSDKRawDataPipeDelegateShare.h"
+
 USING_ZOOM_VIDEO_SDK_NAMESPACE
 using namespace Json;
 using namespace std;
@@ -81,7 +85,7 @@ ZoomVideoSDKVideoSource* virtual_camera_video_source;  //sendRawVideo
 bool isJWTWebService = true;
 
 //these are flow to show developers different features
-bool serviceQuality = false;					     //serviceQuality
+bool serviceQuality = true;					     //serviceQuality
 bool languageTranscriptionAndTranslation = false;	 //languageTranscriptionAndTranslation
 bool getLTTSupportedLanguage = false;				 //getLTTSupportedLanguage
 bool enableCloudRecording = false;					 //enableCloudRecording
@@ -92,11 +96,14 @@ bool sendRawVideo = false; //sendRawVideo
 bool sendRawShare = false;//sendRawShare "work in progress, ignore this sample code for now, this shares code with sendRawVideo
 bool sendRawAudio = false; //sendRawAudio
 
-bool getRawVideo = false; //getRawVideo
+bool getRawVideo = true; //getRawVideo
 bool getRawShare = false; //getRawShare
 bool getRawAudio = false; //getRawAudio
 
-
+bool sendVideo = false;
+bool multiStreamVideo = false; 
+bool subscribeMultiCameraStream = false;
+bool subscribeshare2ndCameraStream = true;
 
 wstring StringToWString(string input)
 {
@@ -458,6 +465,43 @@ void MainFrame::onSessionJoin()
 		}
 	}
 
+
+	if (multiStreamVideo) {
+	IZoomVideoSDKVideoHelper* videohelper=	video_sdk_obj_->getVideoHelper();
+
+
+	ZoomVideoSDKVideoPreferenceSetting setting;
+	setting.mode = ZoomVideoSDKVideoPreferenceMode_Custom;
+	setting.minimum_frame_rate = 20;
+	setting.maximum_frame_rate = 30;
+	videohelper->setVideoQualityPreference(setting);
+
+
+	bool isSuccess=videohelper->enableMultiStreamVideo(videohelper->getCameraList()->GetItem(1)->getDeviceId(), videohelper->getCameraList()->GetItem(1)->getDeviceName());
+	std::cout << "enableMultiStreamVideo: " << isSuccess  << std::endl;
+	}
+	if (sendVideo) {
+
+		IZoomVideoSDKVideoHelper* videohelper = video_sdk_obj_->getVideoHelper();
+		videohelper->selectCamera(videohelper->getCameraList()->GetItem(0)->getDeviceId());
+		videohelper->startVideo();
+
+
+	
+	}
+
+	if (subscribeMultiCameraStream) {
+		IZoomVideoSDKVideoHelper* videohelper = video_sdk_obj_->getVideoHelper();
+		ZoomVideoSDKVideoPreferenceSetting setting;
+		setting.mode =ZoomVideoSDKVideoPreferenceMode_Custom;
+		setting.minimum_frame_rate = 15;
+		setting.maximum_frame_rate = 20;
+		videohelper->setVideoQualityPreference(setting);
+	}
+
+
+
+
 }
 void MainFrame::onSessionLeave() {}
 void MainFrame::onError(ZoomVideoSDKErrors errorCode, int detailErrorCode)
@@ -494,9 +538,11 @@ void MainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector
 void MainFrame::onUserLeave(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
 void MainFrame::onUserVideoStatusChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {
 	printf("onUserVideoStatusChanged\n");
+
 }
 void MainFrame::onUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
 void MainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, ZoomVideoSDKShareStatus status, ZoomVideoSDKShareType type) {
+	std::cout << "onUserShareStatusChanged()" << std::endl;
 	//getting share or share screen is handled here
 	//the method of getting raw share is similar to getting raw video, as it uses the same delegate ZoomVideoSDKRawDataPipeDelegate
 	//getRawShare
@@ -512,12 +558,55 @@ void MainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper,
 		}
 
 	}
+
+	if (subscribeshare2ndCameraStream) {
+
+		ZoomVideoSDKRawDataPipeDelegateShare* sharePipe = new ZoomVideoSDKRawDataPipeDelegateShare();
+		pUser->GetSharePipe()->subscribe(ZoomVideoSDKResolution_720P, sharePipe);
+		//ZoomVideoSDKRawDataPipeDelegateShare * sharePipe2 = new ZoomVideoSDKRawDataPipeDelegateShare();
+		//pShareHelper->subscribeMyShareCamera(sharePipe2);
+
+	}
+
 }
 void MainFrame::onUserRecordingConsent(IZoomVideoSDKUser* pUser) {}
 void  MainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status) {}
 void MainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZoomVideoSDKChatMessage* messageItem)
 {
 	std::cout << "onChatNewMessageNotify()" << std::endl;
+
+	
+
+	IZoomVideoSDKSession* pSession = video_sdk_obj_->getSessionInfo();
+	if (pSession)
+	{
+
+		ZoomVideoSDKSessionASVStatisticInfo sendInfo;
+		ZoomVideoSDKSessionASVStatisticInfo recvInfo;
+		pSession->getSessionVideoStatisticInfo(sendInfo, recvInfo);
+
+		std::cout << "Video Stats Send: " << sendInfo.frame_width  << ":" << sendInfo.frame_height <<":" << sendInfo.fps << std::endl;
+		std::cout << "Video Stats Recv: " << recvInfo.frame_width << ":" << recvInfo.frame_height << ":" << recvInfo.fps << std::endl;
+		
+
+		ZoomVideoSDKSessionAudioStatisticInfo audioSendInfo;
+		ZoomVideoSDKSessionAudioStatisticInfo audiorecvInfo;
+		pSession->getSessionAudioStatisticInfo(audioSendInfo, audiorecvInfo);
+
+		std::cout << "Audio Stats Send: " << audioSendInfo.latency << ":" << audioSendInfo.frequency << ":" << audioSendInfo.Jitter << std::endl;
+		std::cout << "Audio Stats Recv: " << audiorecvInfo.latency << ":" << audiorecvInfo.frequency << ":" << audiorecvInfo.Jitter << std::endl;
+
+	
+
+		ZoomVideoSDKSessionASVStatisticInfo shareSendInfo;
+		ZoomVideoSDKSessionASVStatisticInfo shareRecvInfo;
+		pSession->getSessionShareStatisticInfo(shareSendInfo, shareRecvInfo);
+
+		std::cout << "Share Stats Send: " << shareSendInfo.frame_width << ":" << shareSendInfo.frame_height << ":" << shareSendInfo.fps << std::endl;
+		std::cout << "Share Stats Recv: " << shareRecvInfo.frame_width << ":" << shareRecvInfo.frame_height << ":" << shareRecvInfo.fps << std::endl;
+
+	}
+
 	if (!messageItem)
 		return;
 	IZoomVideoSDKUser* send_user = messageItem->getSendUser();
@@ -602,7 +691,12 @@ void MainFrame::onCloudRecordingStatus(RecordingStatus status, IZoomVideoSDKReco
 	}
 }
 void MainFrame::onHostAskUnmute() {}
-void MainFrame::onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe) {}
+void MainFrame::onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe) {
+	if (subscribeMultiCameraStream) {
+		ZoomVideoSDKRawDataPipeDelegateMultiStream* encoder = new ZoomVideoSDKRawDataPipeDelegateMultiStream();
+		pVideoPipe->subscribe(ZoomVideoSDKResolution_720P, encoder);
+	}
+}
 void MainFrame::onMicSpeakerVolumeChanged(unsigned int micVolume, unsigned int speakerVolume) {}
 void MainFrame::onAudioDeviceStatusChanged(ZoomVideoSDKAudioDeviceType type, ZoomVideoSDKAudioDeviceStatus status) {}
 void MainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status) {
@@ -629,6 +723,9 @@ void MainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status) {
 
 }
 void MainFrame::onSelectedAudioDeviceChanged() {}
+void MainFrame::onCameraListChanged()
+{
+}
 void MainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status) {
 	if (languageTranscriptionAndTranslation) {
 		char buffer[256];
@@ -747,7 +844,7 @@ void MainFrame::JoinSession()
 	std::cout << "JoinSession()" << std::endl;
 	//credentials to auth and password & topic name to join specific session
 	std::wstring session_name = sessionName;
-	std::wstring sUserName = L"vsdk_skeletondemo";
+	std::wstring sUserName = L"vsdk_skeletondemo_receiver";
 	std::wstring session_password_ = password;
 	std::wstring token = sdk_jwt;
 
