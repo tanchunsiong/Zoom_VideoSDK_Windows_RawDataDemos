@@ -104,8 +104,10 @@ bool getRawAudio = false; //getRawAudio
 //testing for sending raw videos
 bool sendVideo = false;
 bool sendMultiStreamVideo = false;
+bool send2ndCameraSharescreen = false;
+
 bool subscribeMainVideo = true;
-bool subscribeMultiCameraStream = false;
+bool subscribeMultiCameraStream = true;
 bool subscribeshare2ndCameraStream = true;
 
 wstring StringToWString(string input)
@@ -483,15 +485,37 @@ void MainFrame::onSessionJoin()
 		bool isSuccess = videohelper->enableMultiStreamVideo(videohelper->getCameraList()->GetItem(1)->getDeviceId(), videohelper->getCameraList()->GetItem(1)->getDeviceName());
 		std::cout << "enableMultiStreamVideo: " << isSuccess << std::endl;
 	}
-	if (sendVideo) {
 
+	if (sendVideo) {
+		int index = 2;
 		IZoomVideoSDKVideoHelper* videohelper = video_sdk_obj_->getVideoHelper();
-		videohelper->selectCamera(videohelper->getCameraList()->GetItem(0)->getDeviceId());
+		videohelper->selectCamera(videohelper->getCameraList()->GetItem(index)->getDeviceId());
 		videohelper->startVideo();
 
-
+		std::cout << "sendVideo: " << videohelper->getCameraList()->GetItem(index)->getDeviceName() << std::endl;
 
 	}
+	if (sendMultiStreamVideo) {
+		int index = 0;
+		IZoomVideoSDKVideoHelper* videohelper = video_sdk_obj_->getVideoHelper();
+
+		ZoomVideoSDKVideoPreferenceSetting setting;
+		setting.mode = ZoomVideoSDKVideoPreferenceMode_Smoothness;
+		videohelper->setVideoQualityPreference(setting);
+
+		bool isSuccess = videohelper->enableMultiStreamVideo(videohelper->getCameraList()->GetItem(index)->getDeviceId(), videohelper->getCameraList()->GetItem(index)->getDeviceName());
+		std::cout << "enableMultiStreamVideo: " << isSuccess << std::endl;
+	}
+	if (send2ndCameraSharescreen) {
+
+		int index = 0;
+		IZoomVideoSDKShareHelper* sharehelper = video_sdk_obj_->getShareHelper();
+		IZoomVideoSDKVideoHelper* videohelper = video_sdk_obj_->getVideoHelper();
+		ZoomVideoSDKErrors isSuccess = sharehelper->startShare2ndCamera(videohelper->getCameraList()->GetItem(index)->getDeviceId());
+
+		std::cout << "share2ndCamera: " << videohelper->getCameraList()->GetItem(index)->getDeviceName() << " : " << isSuccess << std::endl;
+	}
+
 
 }
 void MainFrame::onSessionLeave() {}
@@ -530,8 +554,23 @@ void MainFrame::onUserLeave(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVecto
 void MainFrame::onUserVideoStatusChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {
 	printf("onUserVideoStatusChanged\n");
 	if (subscribeMainVideo) {
-		ZoomVideoSDKRawDataPipeDelegateMain* pvideo = new ZoomVideoSDKRawDataPipeDelegateMain();
-		userList->GetItem(0)->GetVideoPipe()->subscribe(ZoomVideoSDKResolution_720P, pvideo);
+
+		if (userList)
+		{
+			int count = userList->GetCount();
+			for (int index = 0; index < count; index++)
+			{
+				IZoomVideoSDKUser* user = userList->GetItem(index);
+				if (user)
+				{
+					ZoomVideoSDKRawDataPipeDelegateMain* pvideo = new ZoomVideoSDKRawDataPipeDelegateMain();
+				    user->GetVideoPipe()->subscribe(ZoomVideoSDKResolution_720P, pvideo);
+				}
+
+			}
+		}
+
+	
 	}
 
 }
@@ -653,7 +692,16 @@ void MainFrame::onCloudRecordingStatus(RecordingStatus status, IZoomVideoSDKReco
 	}
 }
 void MainFrame::onHostAskUnmute() {}
-void MainFrame::onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe) {}
+void MainFrame::onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe) {
+
+
+	if (subscribeMultiCameraStream) {
+		ZoomVideoSDKRawDataPipeDelegateMultiStream* pvideo = new ZoomVideoSDKRawDataPipeDelegateMultiStream();
+
+		pVideoPipe->subscribe(ZoomVideoSDKResolution_720P, pvideo);
+	
+	}
+}
 void MainFrame::onMicSpeakerVolumeChanged(unsigned int micVolume, unsigned int speakerVolume) {}
 void MainFrame::onAudioDeviceStatusChanged(ZoomVideoSDKAudioDeviceType type, ZoomVideoSDKAudioDeviceStatus status) {}
 void MainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status) {
