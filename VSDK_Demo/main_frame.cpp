@@ -103,8 +103,8 @@ bool getRawShare = false; //getRawShare
 bool getRawAudio = false; //getRawAudio
 
 //testing for sending raw videos
-bool sendVideo = true;
-bool sendMultiStreamVideo = true;
+bool sendVideo = false;
+bool sendMultiStreamVideo = false;
 bool send2ndCameraSharescreen = false;
 
 bool subscribeMainVideo = false;

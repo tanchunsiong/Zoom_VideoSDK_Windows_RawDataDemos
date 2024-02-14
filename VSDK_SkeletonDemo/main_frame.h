@@ -71,7 +71,7 @@ public:
 	virtual void onAudioDeviceStatusChanged(ZoomVideoSDKAudioDeviceType type, ZoomVideoSDKAudioDeviceStatus status);
 	virtual void onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status);
 	virtual void onSelectedAudioDeviceChanged();
-
+	virtual void onCameraListChanged();
 	virtual void onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status);
 	virtual void onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideoSDKUser* pUser, ZoomVideoSDKLiveTranscriptionOperationType type);
 	virtual void onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo);

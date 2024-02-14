@@ -171,6 +171,10 @@ MainFrame::MainFrame() {
 
 }
 
+MainFrame::~MainFrame()
+{
+}
+
 // this callback happens when sdk / use has successfully joined the session
 void MainFrame::onSessionJoin()
 {
@@ -252,6 +256,7 @@ void MainFrame::onMicSpeakerVolumeChanged(unsigned int micVolume, unsigned int s
 void MainFrame::onAudioDeviceStatusChanged(ZoomVideoSDKAudioDeviceType type, ZoomVideoSDKAudioDeviceStatus status) {}
 void MainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status) {}
 void MainFrame::onSelectedAudioDeviceChanged() {}
+void MainFrame::onCameraListChanged() {}
 void MainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status) {}
 void MainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideoSDKUser* pUser, ZoomVideoSDKLiveTranscriptionOperationType type) {}
 void MainFrame::onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo) {}
