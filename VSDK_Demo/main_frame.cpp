@@ -478,12 +478,14 @@ void MainFrame::onSessionJoin()
 
 		IZoomVideoSDKShareHelper* sharehelper = video_sdk_obj_->getShareHelper();
 		IZoomVideoSDKVideoHelper* videohelper = video_sdk_obj_->getVideoHelper();
-		IZoomVideoSDKCameraDevice* usbCaptureDevice{};
+		
 
 		IVideoSDKVector<IZoomVideoSDKCameraDevice*>* pCameraList = videohelper->getCameraList();
 
 		ZoomVideoSDKErrors isSuccess = ZoomVideoSDKErrors_Unknown;
 
+
+		IZoomVideoSDKCameraDevice* usbCaptureDevice{};
 		//find USB Capture Device
 		for (int i = 0; i < pCameraList->GetCount(); i++)
 		{
@@ -504,24 +506,24 @@ void MainFrame::onSessionJoin()
 			}
 		}
 
+
+		ZoomVideoSDKVideoPreferenceSetting setting;
+		setting.mode = ZoomVideoSDKVideoPreferenceMode_Balance;
+		//videohelper->setVideoQualityPreference(setting);
+
 		if (sendVideo) {
+			//int index = 0;
+			//IZoomVideoSDKCameraDevice* cam = videohelper->getCameraList()->GetItem(index);
+			
 			videohelper->selectCamera(usbCaptureDevice->getDeviceId());
 			videohelper->startVideo();
-			std::cout << "sendVideo: " << usbCaptureDevice->getDeviceName() << std::endl;
-
+			//std::cout << "sendVideo: " << cam->getDeviceName() << std::endl;
 		}
 
 
 		if (sendMultiStreamVideo) {
-			int index = 0;
-			IZoomVideoSDKVideoHelper* videohelper = video_sdk_obj_->getVideoHelper();
-
-			ZoomVideoSDKVideoPreferenceSetting setting;
-			setting.mode = ZoomVideoSDKVideoPreferenceMode_Smoothness;
-			videohelper->setVideoQualityPreference(setting);
-
+			int index = 1;
 			IZoomVideoSDKCameraDevice* cam = videohelper->getCameraList()->GetItem(index);
-
 			bool isSuccess = videohelper->enableMultiStreamVideo(cam->getDeviceId(), cam->getDeviceName());
 			std::cout << "enableMultiStreamVideo: " << isSuccess << std::endl;
 		}
@@ -529,17 +531,10 @@ void MainFrame::onSessionJoin()
 		if (send2ndCameraSharescreen) {
 
 			int index = 0;
-			IZoomVideoSDKShareHelper* sharehelper = video_sdk_obj_->getShareHelper();
-			IZoomVideoSDKVideoHelper* videohelper = video_sdk_obj_->getVideoHelper();
-
 			IZoomVideoSDKCameraDevice* cam = videohelper->getCameraList()->GetItem(index);
-
 			ZoomVideoSDKErrors isSuccess = sharehelper->startShare2ndCamera(cam->getDeviceId());
-
 			std::cout << "share2ndCamera: " << cam->getDeviceName() << " : " << isSuccess << std::endl;
 		}
-
-
 	}
 
 
