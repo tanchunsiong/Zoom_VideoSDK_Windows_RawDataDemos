@@ -2,7 +2,6 @@
 //
 
 #include "framework.h"
-#include "VSDK_SkeletonDemo.h"
 #include "main_frame.h"
 #include <string>
 
