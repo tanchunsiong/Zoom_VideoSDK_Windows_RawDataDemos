@@ -12,3 +12,9 @@ x86/
 #*.wav
 *.yuv
 #*.mp4
+/VSDK_getRawAVSToAWS/chrome-combined.mkv
+/VSDK_getRawAVSToAWS/chrome.mp4
+/VSDK_getRawAVSToAWS/chrome.pcm
+/VSDK_getRawAVSToAWS/chrome.wav
+/1_16779264_C_640x360_to_1280x720.mkv
+/1_16779264_C_640x360_to_640x480.mkv
