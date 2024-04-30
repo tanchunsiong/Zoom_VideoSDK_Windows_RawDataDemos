@@ -148,19 +148,6 @@ void LoadConfig() {
 
 }
 
-//getRawAudio
-//this is a helper method, and not part of the implementation
-void savePcmBufferToFile(const std::string& filename, char* pcmBuffer, std::size_t bufferSize) {
-	std::ofstream outfile(filename, std::ios::out | std::ios::binary | std::ios::app);
-	outfile.write(reinterpret_cast<char*>(pcmBuffer), bufferSize);
-	outfile.close();
-	if (!outfile) {
-		std::cerr << "Error writing PCM data to file!" << std::endl;
-	}
-	else {
-		std::cout << "PCM data saved to file: " << filename << std::endl;
-	}
-}
 
 void StartPreview()
 {
@@ -230,8 +217,9 @@ void MainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper,
 	}
 
 }
+void MainFrame::onCalloutJoinSuccess(IZoomVideoSDKUser* pUser, const zchar_t* phoneNumber) {}
 void MainFrame::onUserRecordingConsent(IZoomVideoSDKUser* pUser) {}
-void  MainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status) {}
+void MainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status) {}
 void MainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZoomVideoSDKChatMessage* messageItem)
 {
 	std::cout << "onChatNewMessageNotify()" << std::endl;

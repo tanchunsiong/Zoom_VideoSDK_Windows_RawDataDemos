@@ -41,7 +41,7 @@ wstring sessionName;;
 wstring password;
 IZoomVideoSDK* video_sdk_obj_;
 constexpr auto CONFIG_FILE = "config.json";
-*virtual_camera_video_source;  //sendRawVideo
+
 
 
 bool isJWTWebService = true;
@@ -201,8 +201,9 @@ void MainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper,
 	std::cout << "onUserShareStatusChanged()" << std::endl;
 
 }
+void MainFrame::onCalloutJoinSuccess(IZoomVideoSDKUser* pUser, const zchar_t* phoneNumber) {}
 void MainFrame::onUserRecordingConsent(IZoomVideoSDKUser* pUser) {}
-void  MainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status) {}
+void MainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status) {}
 void MainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZoomVideoSDKChatMessage* messageItem)
 {
 	std::cout << "onChatNewMessageNotify()" << std::endl;

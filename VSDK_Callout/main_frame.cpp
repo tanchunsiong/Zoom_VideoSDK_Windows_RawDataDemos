@@ -151,7 +151,13 @@ void MainFrame::onSessionJoin()
 
 		IZoomVideoSDKPhoneHelper* m_phonehelper = video_sdk_obj_->getPhoneHelper();
 		if (m_phonehelper->isSupportPhoneFeature()) {
-			m_phonehelper->inviteByPhone(L"+65", L"91234567", L"Alice");
+		//ZoomVideoSDKErrors err=	m_phonehelper->inviteByPhone(L"+65", L"93632452", L"Alice");
+		IVideoSDKVector<IZoomVideoSDKSessionDialInNumberInfo*>* dialin =m_phonehelper->getSessionDialInNumbers();
+		std::cout << dialin->GetItem(0)->getNumber() << std::endl;
+		//std::cout << dialin->GetItem(0)->getCountryName() << std::endl;
+		std::cout << dialin->GetItem(0)->getDisplayNumber() << std::endl;
+
+
 		}
 	}
 
@@ -167,6 +173,7 @@ void MainFrame::onUserLeave(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVecto
 void MainFrame::onUserVideoStatusChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
 void MainFrame::onUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
 void MainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, ZoomVideoSDKShareStatus status, ZoomVideoSDKShareType type) {}
+void MainFrame::onCalloutJoinSuccess(IZoomVideoSDKUser* pUser, const zchar_t* phoneNumber) {}
 void MainFrame::onUserRecordingConsent(IZoomVideoSDKUser* pUser) {}
 void MainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status) {}
 void MainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZoomVideoSDKChatMessage* messageItem){}

@@ -63,6 +63,8 @@ public:
 	virtual void onCommandChannelConnectResult(bool isSuccess);
 	virtual void onInviteByPhoneStatus(PhoneStatus status, PhoneFailedReason reason);
 
+	virtual void onCalloutJoinSuccess(IZoomVideoSDKUser* pUser, const zchar_t* phoneNumber);
+
 	virtual void onCloudRecordingStatus(RecordingStatus status, IZoomVideoSDKRecordingConsentHandler* pHandler);
 	virtual void onHostAskUnmute();
 	virtual void onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe);
