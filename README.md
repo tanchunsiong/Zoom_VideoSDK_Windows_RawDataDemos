@@ -1,6 +1,6 @@
 # VSDK_RawDataDemos
 
-This current sample app is based on version 1.8.10
+This current sample app is based on version.txt
 A Windows C++ Application demonstrate Zoom Video SDK raw data access in Session
 
 # Install vcpkg for adding dependency libs.

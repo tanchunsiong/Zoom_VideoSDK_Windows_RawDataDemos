@@ -404,7 +404,7 @@ void MainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector
 	void MainFrame::onAnnotationHelperCleanUp(IZoomVideoSDKAnnotationHelper * helper) {}
 	void MainFrame::onAnnotationPrivilegeChange(IZoomVideoSDKUser * pUser, bool enable) {}
 	void MainFrame::onAnnotationHelperActived(void* handle) {}
-
+	void MainFrame::onVideoAlphaChannelStatusChanged(bool isAlphaModeOn) {}
 	void MainFrame::InitVideoSDK()
 	{
 		LoadConfig();

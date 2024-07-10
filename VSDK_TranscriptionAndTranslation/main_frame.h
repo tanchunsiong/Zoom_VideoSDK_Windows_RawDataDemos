@@ -99,7 +99,9 @@ public:
 	virtual void onAnnotationHelperCleanUp(IZoomVideoSDKAnnotationHelper* helper);
 	virtual void onAnnotationPrivilegeChange(IZoomVideoSDKUser* pUser, bool enable);
 
-	virtual void onAnnotationHelperActived(void* handle); private:
+	virtual void onAnnotationHelperActived(void* handle); 
+
+	virtual void onVideoAlphaChannelStatusChanged(bool isAlphaModeOn);
 private:
 
 	

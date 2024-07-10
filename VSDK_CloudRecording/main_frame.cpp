@@ -286,7 +286,7 @@ void MainFrame::onShareCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_
 void MainFrame::onAnnotationHelperCleanUp(IZoomVideoSDKAnnotationHelper* helper) {}
 void MainFrame::onAnnotationPrivilegeChange(IZoomVideoSDKUser* pUser, bool enable) {}
 void MainFrame::onAnnotationHelperActived(void* handle) {}
-
+void MainFrame::onVideoAlphaChannelStatusChanged(bool isAlphaModeOn) {}
 void MainFrame::InitVideoSDK()
 {
 	LoadConfig();
