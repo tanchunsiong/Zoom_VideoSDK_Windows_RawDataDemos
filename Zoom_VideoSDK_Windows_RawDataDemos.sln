@@ -42,6 +42,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VSDK_getRawAVSToAWS", "VSDK
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VSDK_getRawAVSToAWSMP4", "VSDK_getRawAVSToAWSMP4\VSDK_getRawAVSToAWSMP4.vcxproj", "{6C77E4AE-D342-4971-9D96-E0A75F12AD55}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VSDK_Share2ndCameraAsMultiCam", "VSDK_Share2ndCameraAsMultiCam\VSDK_Share2ndCameraAsMultiCam.vcxproj", "{92E28923-C29F-4050-9315-D6AE3CE86689}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VSDK_Share2ndCameraAsShareScreenDemo", "VSDK_Share2ndCameraAsShareScreenDemo\VSDK_Share2ndCameraAsShareScreenDemo.vcxproj", "{49759D2A-A4D9-42DD-91FC-2614685ABA0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -186,6 +190,22 @@ Global
 		{6C77E4AE-D342-4971-9D96-E0A75F12AD55}.Release|x64.Build.0 = Release|x64
 		{6C77E4AE-D342-4971-9D96-E0A75F12AD55}.Release|x86.ActiveCfg = Release|Win32
 		{6C77E4AE-D342-4971-9D96-E0A75F12AD55}.Release|x86.Build.0 = Release|Win32
+		{92E28923-C29F-4050-9315-D6AE3CE86689}.Debug|x64.ActiveCfg = Debug|x64
+		{92E28923-C29F-4050-9315-D6AE3CE86689}.Debug|x64.Build.0 = Debug|x64
+		{92E28923-C29F-4050-9315-D6AE3CE86689}.Debug|x86.ActiveCfg = Debug|Win32
+		{92E28923-C29F-4050-9315-D6AE3CE86689}.Debug|x86.Build.0 = Debug|Win32
+		{92E28923-C29F-4050-9315-D6AE3CE86689}.Release|x64.ActiveCfg = Release|x64
+		{92E28923-C29F-4050-9315-D6AE3CE86689}.Release|x64.Build.0 = Release|x64
+		{92E28923-C29F-4050-9315-D6AE3CE86689}.Release|x86.ActiveCfg = Release|Win32
+		{92E28923-C29F-4050-9315-D6AE3CE86689}.Release|x86.Build.0 = Release|Win32
+		{49759D2A-A4D9-42DD-91FC-2614685ABA0C}.Debug|x64.ActiveCfg = Debug|x64
+		{49759D2A-A4D9-42DD-91FC-2614685ABA0C}.Debug|x64.Build.0 = Debug|x64
+		{49759D2A-A4D9-42DD-91FC-2614685ABA0C}.Debug|x86.ActiveCfg = Debug|Win32
+		{49759D2A-A4D9-42DD-91FC-2614685ABA0C}.Debug|x86.Build.0 = Debug|Win32
+		{49759D2A-A4D9-42DD-91FC-2614685ABA0C}.Release|x64.ActiveCfg = Release|x64
+		{49759D2A-A4D9-42DD-91FC-2614685ABA0C}.Release|x64.Build.0 = Release|x64
+		{49759D2A-A4D9-42DD-91FC-2614685ABA0C}.Release|x86.ActiveCfg = Release|Win32
+		{49759D2A-A4D9-42DD-91FC-2614685ABA0C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
