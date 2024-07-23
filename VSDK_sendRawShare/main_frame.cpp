@@ -37,8 +37,9 @@ using namespace Json;
 using namespace std;
 
 wstring sdk_jwt;
-wstring sessionName;;
+wstring sessionName;
 wstring password;
+wstring jwt_webservice_url;
 IZoomVideoSDK* video_sdk_obj_;
 constexpr auto CONFIG_FILE = "config.json";
 
@@ -91,6 +92,7 @@ void LoadConfig() {
 	else {
 		printf("Didn't find config.json file.\n");
 	}
+
 	if (!isConfigFileOpened || config["sdk_jwt"].empty() || config["sdk_jwt"].asString() == "") {
 		sdk_jwt = QuestionInput("SDK JWT: ");
 	}
@@ -98,24 +100,29 @@ void LoadConfig() {
 		sdk_jwt = StringToWString(config["sdk_jwt"].asString());
 		printf("Found \"SDK JWT\" from %s: \n\"%s\"\n", CONFIG_FILE, WStringToString(sdk_jwt).c_str());
 	}
+
+	if (!isConfigFileOpened || config["jwt_webservice_url"].empty() || config["jwt_webservice_url"].asString() == "") {
+		jwt_webservice_url = QuestionInput("JWT Webservice URL: ");
+	}
+	else {
+		jwt_webservice_url = StringToWString(config["jwt_webservice_url"].asString());
+		printf("Found \"JWT Webservice URL\" from %s: \n\"%s\"\n", CONFIG_FILE, WStringToString(jwt_webservice_url).c_str());
+	}
+
 	bool toQuestionForMeetingNumber = false;
 	if (!isConfigFileOpened || config["sessionName"].empty() || config["sessionName"].asString() == "")
 		toQuestionForMeetingNumber = true;
 	else {
 		try {
 			sessionName = StringToWString(config["sessionName"].asString());
-
 			printf("Found \"sessionName\" from %s: \"%s\"\n", CONFIG_FILE, WStringToString(sessionName).c_str());
 		}
-		catch (exception)
-		{
+		catch (exception) {
 			try {
 				sessionName = StringToWString(config["sessionName"].asString());
-
 				printf("Found \"sessionName\" from %s: \"%s\"\n", CONFIG_FILE, WStringToString(sessionName).c_str());
 			}
-			catch (exception)
-			{
+			catch (exception) {
 				printf("Failed to read \"sessionName\" from config.json, it should include only numbers.\n");
 				toQuestionForMeetingNumber = true;
 			}
@@ -129,11 +136,11 @@ void LoadConfig() {
 			sessionName = stoull(input, nullptr, 10);
 			toQuestionForMeetingNumber = false;
 		}
-		catch (exception)
-		{
+		catch (exception) {
 			printf("Session Name should include numbers.\n");
 		}
 	}
+
 	if (!isConfigFileOpened || config["password"].empty() || config["password"].asString() == "") {
 		printf("Password is empty.\n");
 	}
@@ -141,9 +148,7 @@ void LoadConfig() {
 		password = StringToWString(config["password"].asString());
 		printf("Found \"password\" from %s: \"%s\"\n", CONFIG_FILE, WStringToString(password).c_str());
 	}
-
 }
-
 
 void StartPreview()
 {
@@ -313,7 +318,7 @@ void MainFrame::InitVideoSDK()
 
 	if (isJWTWebService) {
 
-		sdk_jwt = StringToWString(GetSignatureFromWebService("https://asdc.cc/video", WStringToString(sessionName), "1"));
+		sdk_jwt = StringToWString(GetSignatureFromWebService(WStringToString(jwt_webservice_url), WStringToString(sessionName), "1"));
 		std::cout << "token from webservice is :" << WStringToString(sdk_jwt).c_str() << std::endl;
 	}
 	std::cout << "InitVideoSDK()" << std::endl;
