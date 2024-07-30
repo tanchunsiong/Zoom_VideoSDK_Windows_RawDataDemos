@@ -43,7 +43,7 @@ constexpr auto CONFIG_FILE = "config.json";
 
 
 
-bool isJWTWebService = true;
+bool isJWTWebService = false;
 
 //these are flow to show developers different features
 bool EnableCommandChannel = true;
@@ -91,6 +91,7 @@ void LoadConfig() {
 		printf("Didn't find config.json file.\n");
 	}
 
+	//JWT Token
 	if (!isConfigFileOpened || config["sdk_jwt"].empty() || config["sdk_jwt"].asString() == "") {
 		sdk_jwt = QuestionInput("SDK JWT: ");
 	}
@@ -99,6 +100,7 @@ void LoadConfig() {
 		printf("Found \"SDK JWT\" from %s: \n\"%s\"\n", CONFIG_FILE, WStringToString(sdk_jwt).c_str());
 	}
 
+	//WS URL
 	if (!isConfigFileOpened || config["jwt_webservice_url"].empty() || config["jwt_webservice_url"].asString() == "") {
 		jwt_webservice_url = QuestionInput("JWT Webservice URL: ");
 	}
@@ -106,7 +108,7 @@ void LoadConfig() {
 		jwt_webservice_url = StringToWString(config["jwt_webservice_url"].asString());
 		printf("Found \"JWT Webservice URL\" from %s: \n\"%s\"\n", CONFIG_FILE, WStringToString(jwt_webservice_url).c_str());
 	}
-
+	//Session Name
 	bool toQuestionForMeetingNumber = false;
 	if (!isConfigFileOpened || config["sessionName"].empty() || config["sessionName"].asString() == "")
 		toQuestionForMeetingNumber = true;
@@ -139,6 +141,7 @@ void LoadConfig() {
 		}
 	}
 
+	//Password
 	if (!isConfigFileOpened || config["password"].empty() || config["password"].asString() == "") {
 		printf("Password is empty.\n");
 	}
@@ -146,6 +149,26 @@ void LoadConfig() {
 		password = StringToWString(config["password"].asString());
 		printf("Found \"password\" from %s: \"%s\"\n", CONFIG_FILE, WStringToString(password).c_str());
 	}
+
+	if (!isConfigFileOpened || config["useJWTTokenFromWebService"].empty() || config["useJWTTokenFromWebService"].asString() == "") {
+		printf("useJWTTokenFromWebService is invalid, should be true or false.\n");
+	}
+	else {
+		string wStrUseJWTTokenFromWebService = config["useJWTTokenFromWebService"].asString();
+		if (wStrUseJWTTokenFromWebService == "true") {
+			isJWTWebService = true;
+			printf("Found \"isJWTWebService\" from %s: \"%s\"\n", CONFIG_FILE, "true");
+		}
+
+		else {
+			isJWTWebService = false;
+			printf("Found \"isJWTWebService\" from %s: \"%s\"\n", CONFIG_FILE, "false");
+		}
+	}
+
+
+
+
 }
 
 void StartPreview()

@@ -1,7 +1,7 @@
-# VSDK_RawDataDemos
+# Zoom Video SDK Windows Skeleton Demo
 
-This current sample app is based on version 1.8.10
-A Windows C++ Application demonstrate Zoom Video SDK raw data access in Session
+This current sample app is based on version.txt
+A Windows C++ Application demonstrate Zoom Video SDK's basic flow to join a session. This is the scaffolding or skeleton demo which other projects are based on.
 
 # Install vcpkg for adding dependency libs.
 You might need to use Powershell (as administrator) or Windows Terminal to execute the sh script files
@@ -24,7 +24,20 @@ opencv will take a while (10 mins) to complete
 ```
 
 
-This project is in the VSDK_SkeletonDemo folder
+This project is in the VSDK_xxxxxxxx folder
+
+You will need to create a config.json with the below parameters
+
+```
+{
+  "sdk_jwt": "xxxxxx.yyyyyy.zzzzzzz",
+  "sessionName": "yoursessionname",
+  "password": "12345678",
+  "jwt_webservice_url": "https://yourdomain.com/videoSDKAuthJWTTokenGenerator",
+  "useJWTTokenFromWebService": "false"
+}
+
+```
 
 Within `main_frame.cpp` you will need to enter your credentials in the `JoinSession` method
 
@@ -98,22 +111,6 @@ Example searching for "control keyword" `getRawAudio` will highlight bookmark on
  - the session context options needed before joining a session, 
  - the methods to call after successfully joining a session and 
  - the callbacks to handle the raw audio frame
-
-```
-//these are list of "controls keywords' to demonstrate the flow
-bool getRawAudio = false;
-bool getRawVideo = false;
-bool getRawShare = false;
-bool sendRawVideo = false;
-bool sendRawAudio = false;
-bool sendRawShare = false;
-bool enableLTT = false;
-bool getLang = false;
-bool enableCloudRecording = false;
-bool enableCallout = false;
-bool previewCameraAndMicrophone = true;
-```
-
 
 
 # Upgrading Guide
