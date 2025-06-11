@@ -34,7 +34,8 @@ public:
 	//this is for preview only, doesn't need user
 	ZoomVideoSDKRawDataPipeDelegate();
 	ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user);
-	ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user, bool isShareScreen);
+
+	ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user, IZoomVideoSDKShareAction* shareAction, bool isShareScreen);
 	~ZoomVideoSDKRawDataPipeDelegate();
 
 	static void stop_encoding_for(IZoomVideoSDKUser* user);

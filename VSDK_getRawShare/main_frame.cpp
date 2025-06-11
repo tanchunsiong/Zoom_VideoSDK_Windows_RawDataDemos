@@ -213,7 +213,7 @@ void MainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper,
 		ZoomVideoSDKShareStatus status = pShareAction->getShareStatus();
 		if (status == ZoomVideoSDKShareStatus::ZoomVideoSDKShareStatus_Start)
 		{
-			ZoomVideoSDKRawDataPipeDelegate* pVideoPipe = new ZoomVideoSDKRawDataPipeDelegate(pUser, true);
+			ZoomVideoSDKRawDataPipeDelegate* pVideoPipe = new ZoomVideoSDKRawDataPipeDelegate(pUser, pShareAction, true);
 
 		}
 		else if (status == ZoomVideoSDKShareStatus::ZoomVideoSDKShareStatus_Stop)

@@ -234,7 +234,7 @@ void MainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper,
 		//pShareHelper->subscribeMyShareCamera(sharePipe2);
 	}
 }
-
+void MainFrame::onShareContentChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, IZoomVideoSDKShareAction* pShareAction) {}
 void MainFrame::onCalloutJoinSuccess(IZoomVideoSDKUser* pUser, const zchar_t* phoneNumber) {}
 void MainFrame::onUserRecordingConsent(IZoomVideoSDKUser* pUser) {}
 void MainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status) {}
@@ -313,7 +313,7 @@ void MainFrame::onIncomingLiveStreamStatusResponse(bool bSuccess, IVideoSDKVecto
 void MainFrame::onStartIncomingLiveStreamResponse(bool bSuccess, const zchar_t* strStreamKeyID) {}
 void MainFrame::onStopIncomingLiveStreamResponse(bool bSuccess, const zchar_t* strStreamKeyID) {}
 void MainFrame::onShareContentSizeChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, IZoomVideoSDKShareAction* pShareAction) {}
-
+void MainFrame::onFailedToStartShare(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser) {}
 
 void MainFrame::InitVideoSDK()
 {

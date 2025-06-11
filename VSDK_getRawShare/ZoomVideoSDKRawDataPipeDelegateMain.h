@@ -31,8 +31,6 @@ class ZoomVideoSDKRawDataPipeDelegateMain :
 public:
 	//this is for preview only, doesn't need user
 	ZoomVideoSDKRawDataPipeDelegateMain();
-	ZoomVideoSDKRawDataPipeDelegateMain(IZoomVideoSDKUser* user);
-	ZoomVideoSDKRawDataPipeDelegateMain(IZoomVideoSDKUser* user, bool isShareScreen);
 	~ZoomVideoSDKRawDataPipeDelegateMain();
 
 

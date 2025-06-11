@@ -33,11 +33,9 @@ public:
 	//this is for preview only, doesn't need user
 	ZoomVideoSDKRawDataPipeDelegate();
 	ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user);
-	ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user, bool isShareScreen);
 	~ZoomVideoSDKRawDataPipeDelegate();
 
 	static void stop_encoding_for(IZoomVideoSDKUser* user);
-	static void stop_encoding_for(IZoomVideoSDKUser* user, bool isShareScreen);
 	static void log(const wchar_t* format, ...);
 	static void err_msg(int code);
 };

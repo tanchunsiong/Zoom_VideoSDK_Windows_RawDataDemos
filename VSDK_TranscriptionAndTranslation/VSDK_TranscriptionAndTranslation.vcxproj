@@ -153,27 +153,11 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WebService.h" />
-    <ClInclude Include="ZoomVideoSDKRawDataPipeDelegate.h" />
-    <ClInclude Include="ZoomVideoSDKRawDataPipeDelegateMain.h" />
-    <ClInclude Include="ZoomVideoSDKRawDataPipeDelegateMultiStream.h" />
-    <ClInclude Include="ZoomVideoSDKRawDataPipeDelegateShare.h" />
-    <ClInclude Include="ZoomVideoSDKShareSource.h" />
-    <ClInclude Include="ZoomVideoSDKVideoSource.h" />
-    <ClInclude Include="ZoomVideoSDKVirtualAudioMic.h" />
-    <ClInclude Include="ZoomVideoSDKVirtualAudioSpeaker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_frame.cpp" />
     <ClCompile Include="VSDK_TranscriptionAndTranslation.cpp" />
     <ClCompile Include="WebService.cpp" />
-    <ClCompile Include="ZoomVideoSDKRawDataPipeDelegate.cpp" />
-    <ClCompile Include="ZoomVideoSDKRawDataPipeDelegateMain.cpp" />
-    <ClCompile Include="ZoomVideoSDKRawDataPipeDelegateMultiStream.cpp" />
-    <ClCompile Include="ZoomVideoSDKRawDataPipeDelegateShare.cpp" />
-    <ClCompile Include="ZoomVideoSDKShareSource.cpp" />
-    <ClCompile Include="ZoomVideoSDKVideoSource.cpp" />
-    <ClCompile Include="ZoomVideoSDKVirtualAudioMic.cpp" />
-    <ClCompile Include="ZoomVideoSDKVirtualAudioSpeaker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json">

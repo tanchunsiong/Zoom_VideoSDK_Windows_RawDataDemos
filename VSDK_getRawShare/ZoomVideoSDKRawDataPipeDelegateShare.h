@@ -31,7 +31,6 @@ class ZoomVideoSDKRawDataPipeDelegateShare :
 public:
 	//this is for preview only, doesn't need user
 	ZoomVideoSDKRawDataPipeDelegateShare();
-
 	~ZoomVideoSDKRawDataPipeDelegateShare();
 
 	static void log(const wchar_t* format, ...);

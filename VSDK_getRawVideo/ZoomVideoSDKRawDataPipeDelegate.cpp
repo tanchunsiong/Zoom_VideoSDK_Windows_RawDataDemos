@@ -27,15 +27,6 @@ ZoomVideoSDKRawDataPipeDelegate::ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUs
 	list_.push_back(this);
 }
 
-ZoomVideoSDKRawDataPipeDelegate::ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user, bool isShareScreen)
-{
-	//getRawShare
-	isShareScreen_ = true;
-	instance_id_ = instance_count++;
-	user_ = user;
-	user_->GetSharePipe()->subscribe(ZoomVideoSDKResolution_360P, this);
-	list_.push_back(this);
-}
 
 ZoomVideoSDKRawDataPipeDelegate::~ZoomVideoSDKRawDataPipeDelegate()
 {
@@ -73,14 +64,7 @@ void ZoomVideoSDKRawDataPipeDelegate::stop_encoding_for(IZoomVideoSDKUser* user)
 }
 
 
-void ZoomVideoSDKRawDataPipeDelegate::stop_encoding_for(IZoomVideoSDKUser* user, bool isShareScreen)
-{
-	ZoomVideoSDKRawDataPipeDelegate* encoder = ZoomVideoSDKRawDataPipeDelegate::find_instance(user);
-	if (encoder)
-	{
-		encoder->~ZoomVideoSDKRawDataPipeDelegate();
-	}
-}
+
 
 
 void ZoomVideoSDKRawDataPipeDelegate::onRawDataFrameReceived(YUVRawDataI420* data)
@@ -151,6 +135,8 @@ void ZoomVideoSDKRawDataPipeDelegate::onRawDataStatusChanged(RawDataStatus statu
 	{
 	}
 }
+
+void ZoomVideoSDKRawDataPipeDelegate::onShareCursorDataReceived(ZoomVideoSDKShareCursorData info) {}
 
 void ZoomVideoSDKRawDataPipeDelegate::err_msg(int code)
 {

@@ -2,6 +2,7 @@
 //getRawVideo
 #include "ZoomVideoSDKRawDataPipeDelegate.h"
 #include "helpers/zoom_video_sdk_user_helper_interface.h"
+#include "helpers/zoom_video_sdk_share_helper_interface.h"
 #include <iostream>
 #include <cstdint>
 #include <fstream>
@@ -27,14 +28,15 @@ ZoomVideoSDKRawDataPipeDelegate::ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUs
 	list_.push_back(this);
 }
 
-ZoomVideoSDKRawDataPipeDelegate::ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user, bool isShareScreen)
+ZoomVideoSDKRawDataPipeDelegate::ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUser* user, IZoomVideoSDKShareAction* shareAction, bool isShareScreen)
 {
 	//getRawShare
 	isShareScreen_ = true;
 	instance_id_ = instance_count++;
 	user_ = user;
-	user_->GetSharePipe()->subscribe(ZoomVideoSDKResolution_360P, this);
+	shareAction->getSharePipe()->subscribe(ZoomVideoSDKResolution_360P, this);
 	list_.push_back(this);
+
 }
 
 ZoomVideoSDKRawDataPipeDelegate::~ZoomVideoSDKRawDataPipeDelegate()

@@ -31,8 +31,6 @@ class ZoomVideoSDKRawDataPipeDelegateMultiStream :
 public:
 	//this is for preview only, doesn't need user
 	ZoomVideoSDKRawDataPipeDelegateMultiStream();
-	ZoomVideoSDKRawDataPipeDelegateMultiStream(IZoomVideoSDKUser* user);
-	ZoomVideoSDKRawDataPipeDelegateMultiStream(IZoomVideoSDKUser* user, bool isShareScreen);
 	~ZoomVideoSDKRawDataPipeDelegateMultiStream();
 
 
