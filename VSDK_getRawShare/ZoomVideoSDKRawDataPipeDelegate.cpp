@@ -152,6 +152,10 @@ void ZoomVideoSDKRawDataPipeDelegate::onRawDataStatusChanged(RawDataStatus statu
 	}
 }
 
+void ZoomVideoSDKRawDataPipeDelegate::onShareCursorDataReceived(ZoomVideoSDKShareCursorData info)
+{
+}
+
 void ZoomVideoSDKRawDataPipeDelegate::err_msg(int code)
 {
 	char errbuf[100];

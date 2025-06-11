@@ -33,6 +33,7 @@ ZoomVideoSDKRawDataPipeDelegate::ZoomVideoSDKRawDataPipeDelegate(IZoomVideoSDKUs
 	isShareScreen_ = true;
 	instance_id_ = instance_count++;
 	user_ = user;
+
 	user_->GetSharePipe()->subscribe(ZoomVideoSDKResolution_360P, this);
 	list_.push_back(this);
 }

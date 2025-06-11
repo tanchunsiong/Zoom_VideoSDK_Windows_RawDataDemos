@@ -35,7 +35,8 @@ wstring jwt_webservice_url;
 IZoomVideoSDK* video_sdk_obj_;
 constexpr auto CONFIG_FILE = "config.json";
 
-bool isJWTWebService = bool isJWTWebService = true;;
+
+bool isJWTWebService = true;
 
 //these are flow to show developers different features
 
@@ -192,36 +193,26 @@ void MainFrame::onSessionJoin()
 
 	}
 
-
-
-
-
 }
 void MainFrame::onSessionLeave() {}
+void MainFrame::onSessionLeave(ZoomVideoSDKSessionLeaveReason eReason) {}
+
 void MainFrame::onError(ZoomVideoSDKErrors errorCode, int detailErrorCode)
 {
 	std::cout << "onError(), errorCode " << errorCode << " detailedErrorCode: " << detailErrorCode << std::endl;
-
 }
-void MainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList)
-{
 
-}
+void MainFrame::onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
 void MainFrame::onUserLeave(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
-void MainFrame::onUserVideoStatusChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {
-	printf("onUserVideoStatusChanged\n");
-
-
-}
+void MainFrame::onUserVideoStatusChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
 void MainFrame::onUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
-void MainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, ZoomVideoSDKShareStatus status, ZoomVideoSDKShareType type) {
-	std::cout << "onUserShareStatusChanged()" << std::endl;
-
-
-}
+ void MainFrame::onUserShareStatusChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, IZoomVideoSDKShareAction* pShareAction){}
+void MainFrame::onShareContentChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, IZoomVideoSDKShareAction* pShareAction) {}
+void MainFrame::onFailedToStartShare(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser) {}
 void MainFrame::onCalloutJoinSuccess(IZoomVideoSDKUser* pUser, const zchar_t* phoneNumber) {}
 void MainFrame::onUserRecordingConsent(IZoomVideoSDKUser* pUser) {}
-void  MainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status) {}
+void MainFrame::onLiveStreamStatusChanged(IZoomVideoSDKLiveStreamHelper* pLiveStreamHelper, ZoomVideoSDKLiveStreamStatus status) {}
+
 void MainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZoomVideoSDKChatMessage* messageItem)
 {
 	std::cout << "onChatNewMessageNotify()" << std::endl;
@@ -232,70 +223,45 @@ void MainFrame::onChatNewMessageNotify(IZoomVideoSDKChatHelper* pChatHelper, IZo
 	{
 		const zchar_t* user_name = send_user->getUserName();
 		const zchar_t* content = messageItem->getContent();
-
-
 	}
 }
+
 void MainFrame::onUserHostChanged(IZoomVideoSDKUserHelper* pUserHelper, IZoomVideoSDKUser* pUser) {}
 void MainFrame::onUserActiveAudioChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* list) {}
 void MainFrame::onSessionNeedPassword(IZoomVideoSDKPasswordHandler* handler) {}
 void MainFrame::onSessionPasswordWrong(IZoomVideoSDKPasswordHandler* handler) {}
-void MainFrame::onMixedAudioRawDataReceived(AudioRawData* data_) {
-
-}
-void MainFrame::onOneWayAudioRawDataReceived(AudioRawData* data_, IZoomVideoSDKUser* pUser) {
-
-}
-void MainFrame::onSharedAudioRawDataReceived(AudioRawData* data_) {
-
-}
+void MainFrame::onMixedAudioRawDataReceived(AudioRawData* data_) {}
+void MainFrame::onOneWayAudioRawDataReceived(AudioRawData* data_, IZoomVideoSDKUser* pUser) {}
+void MainFrame::onSharedAudioRawDataReceived(AudioRawData* data_) {}
 void MainFrame::onUserManagerChanged(IZoomVideoSDKUser* pUser) {}
 void MainFrame::onUserNameChanged(IZoomVideoSDKUser* pUser) {}
 void MainFrame::onCameraControlRequestResult(IZoomVideoSDKUser* pUser, bool isApproved) {}
 void MainFrame::onCameraControlRequestReceived(IZoomVideoSDKUser* pUser, ZoomVideoSDKCameraControlRequestType requestType, IZoomVideoSDKCameraControlRequestHandler* pCameraControlRequestHandler) {}
-void MainFrame::onCommandReceived(IZoomVideoSDKUser* pSender, const zchar_t* strCmd)
-{
-
-}
-
+void MainFrame::onRemoteControlStatus(IZoomVideoSDKUser* pUser, IZoomVideoSDKShareAction* pShareAction, ZoomVideoSDKRemoteControlStatus status) {}
+void MainFrame::onRemoteControlRequestReceived(IZoomVideoSDKUser* pUser, IZoomVideoSDKShareAction* pShareAction, IZoomVideoSDKRemoteControlRequestHandler* pRemoteControlRequestHandler) {}
+void MainFrame::onRemoteControlServiceInstallResult(bool bSuccess) {}
+void MainFrame::onCommandReceived(IZoomVideoSDKUser* pSender, const zchar_t* strCmd) {}
 void MainFrame::onCommandChannelConnectResult(bool isSuccess) {}
 void MainFrame::onInviteByPhoneStatus(PhoneStatus status, PhoneFailedReason reason) {}
+
 void MainFrame::onCloudRecordingStatus(RecordingStatus status, IZoomVideoSDKRecordingConsentHandler* pHandler) {
 	//enableCloudRecording
 	if (enableCloudRecording) {
 
 	}
 }
+
 void MainFrame::onHostAskUnmute() {}
-void MainFrame::onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe) {
-
-
-}
+void MainFrame::onMultiCameraStreamStatusChanged(ZoomVideoSDKMultiCameraStreamStatus status, IZoomVideoSDKUser* pUser, IZoomVideoSDKRawDataPipe* pVideoPipe) {}
 void MainFrame::onMicSpeakerVolumeChanged(unsigned int micVolume, unsigned int speakerVolume) {}
 void MainFrame::onAudioDeviceStatusChanged(ZoomVideoSDKAudioDeviceType type, ZoomVideoSDKAudioDeviceStatus status) {}
-void MainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status) {
-
-
-}
+void MainFrame::onTestMicStatusChanged(ZoomVideoSDK_TESTMIC_STATUS status) {}
 void MainFrame::onSelectedAudioDeviceChanged() {}
-void MainFrame::onCameraListChanged()
-{
-}
-void MainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status) {
-
-}
-void MainFrame::onLiveTranscriptionMsgReceived(const zchar_t* ltMsg, IZoomVideoSDKUser* pUser, ZoomVideoSDKLiveTranscriptionOperationType type) {
-
-}
-void MainFrame::onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo) {
-
-}
-void MainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo* messageInfo) {
-
-}
-void MainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage) {
-
-}
+void MainFrame::onCameraListChanged() {}
+void MainFrame::onLiveTranscriptionStatus(ZoomVideoSDKLiveTranscriptionStatus status) {}
+void MainFrame::onOriginalLanguageMsgReceived(ILiveTranscriptionMessageInfo* messageInfo) {}
+void MainFrame::onLiveTranscriptionMsgInfoReceived(ILiveTranscriptionMessageInfo* messageInfo) {}
+void MainFrame::onLiveTranscriptionMsgError(ILiveTranscriptionLanguage* spokenLanguage, ILiveTranscriptionLanguage* transcriptLanguage) {}
 void MainFrame::onChatMsgDeleteNotification(IZoomVideoSDKChatHelper* pChatHelper, const zchar_t* msgID, ZoomVideoSDKChatMessageDeleteType deleteBy) {}
 void MainFrame::onChatPrivilegeChanged(IZoomVideoSDKChatHelper* pChatHelper, ZoomVideoSDKChatPrivilegeType privilege) {}
 void MainFrame::onSendFileStatus(IZoomVideoSDKSendFile* file, const FileTransferStatus& status) {}
@@ -306,11 +272,21 @@ void MainFrame::onSSLCertVerifiedFailNotification(IZoomVideoSDKSSLCertificateInf
 void MainFrame::onUserVideoNetworkStatusChanged(ZoomVideoSDKNetworkStatus status, IZoomVideoSDKUser* pUser) {}
 void MainFrame::onCallCRCDeviceStatusChanged(ZoomVideoSDKCRCCallStatus status) {}
 void MainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle) {}
-void MainFrame::onShareCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle) {}
+void MainFrame::onShareCanvasSubscribeFail(IZoomVideoSDKUser* pUser, void* handle, IZoomVideoSDKShareAction* pShareAction) {}
 void MainFrame::onAnnotationHelperCleanUp(IZoomVideoSDKAnnotationHelper* helper) {}
-void MainFrame::onAnnotationPrivilegeChange(IZoomVideoSDKUser* pUser, bool enable) {}
+void MainFrame::onAnnotationPrivilegeChange(IZoomVideoSDKUser* pUser, IZoomVideoSDKShareAction* pShareAction) {}
 void MainFrame::onAnnotationHelperActived(void* handle) {}
 void MainFrame::onVideoAlphaChannelStatusChanged(bool isAlphaModeOn) {}
+void MainFrame::onSpotlightVideoChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) {}
+void MainFrame::onBindIncomingLiveStreamResponse(bool bSuccess, const zchar_t* strStreamKeyID) {}
+void MainFrame::onUnbindIncomingLiveStreamResponse(bool bSuccess, const zchar_t* strStreamKeyID) {}
+void MainFrame::onIncomingLiveStreamStatusResponse(bool bSuccess, IVideoSDKVector<IncomingLiveStreamStatus>* pStreamsStatusList) {}
+void MainFrame::onStartIncomingLiveStreamResponse(bool bSuccess, const zchar_t* strStreamKeyID) {}
+void MainFrame::onStopIncomingLiveStreamResponse(bool bSuccess, const zchar_t* strStreamKeyID) {}
+void MainFrame::onShareContentSizeChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, IZoomVideoSDKShareAction* pShareAction) {}
+
+
+
 void MainFrame::InitVideoSDK()
 {
 	LoadConfig();

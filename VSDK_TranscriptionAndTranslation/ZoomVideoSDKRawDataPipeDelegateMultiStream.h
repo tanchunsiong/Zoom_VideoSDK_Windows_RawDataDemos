@@ -14,7 +14,7 @@ class ZoomVideoSDKRawDataPipeDelegateMultiStream :
 {
 	virtual void onRawDataFrameReceived(YUVRawDataI420* data);
 	virtual void onRawDataStatusChanged(RawDataStatus status);
-
+	virtual void onShareCursorDataReceived(ZoomVideoSDKShareCursorData info);
 
 	bool isShareScreen_;
 	int instance_id_;

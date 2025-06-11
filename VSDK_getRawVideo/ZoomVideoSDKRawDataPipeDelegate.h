@@ -14,6 +14,7 @@ class ZoomVideoSDKRawDataPipeDelegate :
 {
 	virtual void onRawDataFrameReceived(YUVRawDataI420* data);
 	virtual void onRawDataStatusChanged(RawDataStatus status);
+	virtual void onShareCursorDataReceived(ZoomVideoSDKShareCursorData info);
 	static ZoomVideoSDKRawDataPipeDelegate* find_instance(IZoomVideoSDKUser* user);
 
 	bool isShareScreen_;
