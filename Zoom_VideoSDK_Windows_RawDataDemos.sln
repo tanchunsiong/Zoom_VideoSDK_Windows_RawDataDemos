@@ -43,6 +43,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VSDK_Share2ndCameraAsShareS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VSDK_CallIn", "VSDK_CallIn\VSDK_CallIn.vcxproj", "{906EA758-3379-4CD5-994D-8C03F87F6A37}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VSDK_ShareScreenPreprocessorDemo", "VSDK_ShareScreenPreprocessorDemo\VSDK_ShareScreenPreprocessorDemo.vcxproj", "{56878597-80B3-4037-AFF7-0060955A36FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -187,6 +189,14 @@ Global
 		{906EA758-3379-4CD5-994D-8C03F87F6A37}.Release|x64.Build.0 = Release|x64
 		{906EA758-3379-4CD5-994D-8C03F87F6A37}.Release|x86.ActiveCfg = Release|Win32
 		{906EA758-3379-4CD5-994D-8C03F87F6A37}.Release|x86.Build.0 = Release|Win32
+		{56878597-80B3-4037-AFF7-0060955A36FE}.Debug|x64.ActiveCfg = Debug|x64
+		{56878597-80B3-4037-AFF7-0060955A36FE}.Debug|x64.Build.0 = Debug|x64
+		{56878597-80B3-4037-AFF7-0060955A36FE}.Debug|x86.ActiveCfg = Debug|Win32
+		{56878597-80B3-4037-AFF7-0060955A36FE}.Debug|x86.Build.0 = Debug|Win32
+		{56878597-80B3-4037-AFF7-0060955A36FE}.Release|x64.ActiveCfg = Release|x64
+		{56878597-80B3-4037-AFF7-0060955A36FE}.Release|x64.Build.0 = Release|x64
+		{56878597-80B3-4037-AFF7-0060955A36FE}.Release|x86.ActiveCfg = Release|Win32
+		{56878597-80B3-4037-AFF7-0060955A36FE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
