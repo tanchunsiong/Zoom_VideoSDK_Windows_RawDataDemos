@@ -1,126 +1,143 @@
-# Zoom Video SDK Windows Sharing 2nd Camera over Share Screen
+﻿# Zoom Video SDK + OpenCV + Tesseract Integration
 
-This current sample app is based on version.txt
-A Windows C++ Application demonstrate Zoom Video SDK's  Sharing 2nd Camera over Share Screen
- feature
+This sample demonstrates a Zoom Video SDK application with integrated OCR preprocessing using OpenCV and Tesseract. The application captures shared screen frames, detects PII content using OCR, masks it, and streams the preprocessed data to session participants.
 
-# Install vcpkg for adding dependency libs.
-You might need to use Powershell (as administrator) or Windows Terminal to execute the sh script files
-```
-git clone https://github.com/Microsoft/vcpkg.git
-cd vcpkg
-./bootstrap-vcpkg.sh
-./vcpkg integrate install --vcpkg-root c:\vcpkg
+## Features
 
-```
+- Zoom Video SDK screen sharing integration
+- Real-time OCR processing with Tesseract
+- PII detection using regex patterns
+- Visual masking of matched PII on shared video
+- Console logging for debugging OCR results
+- Easy-to-extend design for additional preprocessing
 
-# Add dependency libs
-opencv might not be necessary if you are not going to do video/image processing before saving.
-opencv might not be necessary if you are just saving raw audio to file..
-opencv will take a while (10 mins) to complete
+## Dependencies via vcpkg
 
-```
+```sh
 ./vcpkg install jsoncpp
-./vcpkg install opencv 
-./vcpkg install tessaract
+./vcpkg install opencv
+./vcpkg install tesseract
 ```
 
+Make sure `TESSDATA_PREFIX` environment variable is set correctly to point to the tessdata directory (e.g., `C:/vcpkg/installed/x64-windows/share/tessdata`).
 
-This project is in the VSDK_xxxxxxxx folder
+## Notes
 
-You will need to create a config.json with the below parameters
+- OpenCV is used for YUV to BGR conversion and resizing before OCR.
+- Tesseract expects `eng.traineddata` to be available in the tessdata path.
+- Masked PII is directly altered on the Y-plane for visual censorship.
+- All processing occurs within the `RemovePIIFromRawData` method in `main_frame.cpp`.
 
+# Zoom Video SDK + OpenCV + Tesseract (PII Masking)
+
+This project integrates the Zoom Video SDK, OpenCV, and Tesseract OCR in C++ to perform real-time screen sharing with automatic PII redaction using OCR.
+
+---
+
+## 🧩 Key Components
+
+- **Zoom Video SDK**: Handles session joining, screen sharing, and raw YUV frame capture.
+- **OpenCV**: Converts raw YUV video frames to BGR and resizes for OCR.
+- **Tesseract OCR**: Detects text (including sensitive patterns) and allows masking them on the video stream.
+- **Regex Matching**: You can customize the `std::regex` to search for names, numbers, keywords like `"thread"` or `"Zane"`.
+
+---
+
+## 🛠 Prerequisites
+
+- Windows 10/11 with Visual Studio 2022
+- vcpkg installed at `C:/vcpkg`
+- Environment variable: `TESSDATA_PREFIX` set to `C:/vcpkg/installed/x64-windows/share/tessdata`
+
+Install dependencies:
+
+```bash
+vcpkg install opencv4:x64-windows
+vcpkg install tesseract:x64-windows
+vcpkg integrate install
 ```
-{
-  "sdk_jwt": "xxxxxx.yyyyyy.zzzzzzz",
-  "sessionName": "yoursessionname",
-  "password": "12345678",
-  "jwt_webservice_url": "https://yourdomain.com/videoSDKAuthJWTTokenGenerator",
-  "useJWTTokenFromWebService": "false"
-}
 
+Download `eng.traineddata` from https://github.com/tesseract-ocr/tessdata if it's missing.
+
+---
+
+## 🧪 OCR and PII Removal
+
+The key OCR logic is inside:
+
+```cpp
+void MainFrame::RemovePIIFromRawData(YUVRawDataI420* data_)
 ```
 
-Within `main_frame.cpp` you will need to enter your credentials in the `JoinSession` method
+Steps:
 
+1. Convert YUV420 to `cv::Mat`
+2. Resize to 50%
+3. Run Tesseract OCR
+4. Search for words using `std::regex`
+5. Mask detected text in the Y plane with neutral gray
+
+Example:
+```cpp
+std::regex piiRegex(R"(Zane)", std::regex_constants::icase);
 ```
-void CMainFrame::JoinSession()
 
-		std::wstring session_name = L"webchun6871";
-		std::wstring sUserName = L"vsdk_skeletondemo";
-		std::wstring session_password_ = L"12345678";
-		std::wstring token = L"xxxxx.yyyyyy.zzzzz";
+To search for another word like "thread", just replace the regex.
+
+---
+
+## 🖥 Real-Time Share Preprocessing
+
+- Hooks into Zoom SDK's `onCapturedRawDataReceived()`
+- Edits the video frame in-place
+- Sends the modified frame using `m_pShareSender->sendPreprocessedData(data_)`
+
+---
+
+## Screen Sharing with Preprocessing (PII Masking)
+
+To enable screen sharing with real-time preprocessing using OCR and masking of PII:
+
+### High-Level Workflow
+1. **Call `startShareWithPreprocessing`**
+   - Initiates screen or window sharing but does not broadcast yet.
+2. **SDK captures the screen and triggers `onCapturedRawDataReceived`**
+   - This delivers YUV raw frame data to your app.
+3. **App processes and masks the YUV data**
+   - Convert YUV to BGR using OpenCV.
+   - Use Tesseract to detect text in the frame.
+   - Match patterns (e.g. names, SSNs) with regex and mask them in-place.
+4. **Call `sendPreprocessedData`**
+   - Submit the modified frame to Zoom SDK.
+5. **Zoom SDK broadcasts the masked video frame**
+   - Other session participants receive the PII-safe video.
+
+This happens in real-time and is designed to protect sensitive information during screen sharing sessions.
+
+## 🧠 Notes
+
+- If OCR is too slow, disable `resize()` or optimize Tesseract config.
+- For better accuracy, avoid heavy downscaling before OCR.
+- Use logging to validate OCR output via confidence scores.
+
+---
+
+## 🧼 Cleanup
+
+To leave the session:
+
+```cpp
+video_sdk_obj_->leaveSession(true);
 ```
 
+To uninitialize:
 
-## Download the official Video SDK for Windows, and add sdk files into a folder name `SDK`
+```cpp
+video_sdk_obj_->cleanup();
+```
 
-The folder structure should look something like this
+---
 
-VSDK_SkeletonDemo
-- SDK    <- #add sdk files into this directory
-	-x86
-	-x64
-- x64
-	-Debug
-	-Release
+## 📄 License
 
-
-## Open and Run Project
-
-Open "VSDK_RawDataDemos.sln" file from Visual Studio 2022.
-
-Hit F5 or click from menu "Debug" -> "Start Debugging" in x86 or x64 to launch the application.
-
-
-
-
-  # Error
-
-  what if i would like to use x64 environment?
-
-  add this to your environment variable before installing openCV from vcpkg
-
-  VCPKG_DEFAULT_TRIPLET = x64-windows
-
-  and reinstall
-
-  ```
-  ./vcpkg install jsoncpp
-  ./vcpkg install opencv
-  ```
-
-  There are some errors about opencv being unable to find certain libraries?
-
-  They should not affect the basic functionality of this sample, but you can do a list of additional opencv libraries to install
-  ```
-  ./vcpkg list opencv
-  ```
-
-  to install addition libraries, do something like this. This might take around 1 hour, depending on the number of libraries you install
-  ```
-  ./vcpkg install opencv[contrib,ffmpeg,nonfree,opengl,openmp,world]
-  ```
-## Getting Started
-
-The main method, or main entry point of this application is at `main_frame.cpp`
-
-From a high level point of view it will showcase some of the functionalities below.
-For ease of development understanding, I've used the below variables as "control keywords" in `main_frame.cpp` Search for these "control keywords" (bool variables) to understand the flow
-
-Example searching for "control keyword" `getRawAudio` will highlight bookmark on 
- - header files which needs to be included, 
- - the session context options needed before joining a session, 
- - the methods to call after successfully joining a session and 
- - the callbacks to handle the raw audio frame
-
-
-# Upgrading Guide
-
-You will need to download the latest Video SDK Windows for c++ from marketplace.zoom.us
-
-Replace the files in the folder `SDK` with those found in the SDK files downloaded from marketplace.zoom.us
-
-You will need to ensure any missing abstract classes are implemented etc... before you can compile and upgrade to a newer SDK version.
-Usually newer version of SDK will introduce new interfaces / abstract classes.
-
+MIT
