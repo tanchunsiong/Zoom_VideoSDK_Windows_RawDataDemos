@@ -130,15 +130,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)SDK\$(Platform)\h;C:\vcpkg\packages\curl_x64-windows\include;C:\vcpkg\packages\jsoncpp_x64-windows\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDK\$(Platform)\h;C:\vcpkg\packages\curl_x64-windows\include;C:\vcpkg\packages\jsoncpp_x64-windows\include;C:\vcpkg\packages\tesseract_x64-windows\include;C:\vcpkg\packages\opencv4_x64-windows\include\opencv4;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);videosdk.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)SDK\$(Platform)\lib;$(ProjectDir)SDK\$(Platform)\bin;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);videosdk.lib;tesseract55.lib;leptonica-1.85.0.lib;opencv_core4.lib;opencv_imgproc4.lib;opencv_highgui4.lib;opencv_imgcodecs4.lib;</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

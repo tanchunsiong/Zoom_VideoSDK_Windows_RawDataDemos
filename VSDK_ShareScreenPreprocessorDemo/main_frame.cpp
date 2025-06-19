@@ -9,8 +9,12 @@
 #include <signal.h>
 #include <stdlib.h>
 
-#include <opencv2/opencv.hpp>
-#include <tesseract/baseapi.h>
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp> // Only if you're using imshow or GUI tools
+#include <tesseract/baseapi.h>          // Tesseract OCR API
+#include <leptonica/allheaders.h>       // Required by Tesseract for image structures
 #include <regex>
 
 
@@ -292,7 +296,6 @@ std::vector<std::wstring> MainFrame::GetMonitorDeviceNames()
 }
 
 //working sample
-
 //void MainFrame::RemovePIIFromRawData(YUVRawDataI420* data_)
 //{
 //	std::cout << "RemovePIIFromRawData()" << std::endl;
@@ -305,34 +308,64 @@ std::vector<std::wstring> MainFrame::GetMonitorDeviceNames()
 //	data_->Release(); //IMPORTANT：call Release to make sure the SDK will delete the data after the data is sent out.
 //}
 
-//dreamtcs work in progress for OCR
 
+//dreamtcs work in progress for OCR
 void MainFrame::RemovePIIFromRawData(YUVRawDataI420* data_)
 {
-	std::cout << "RemovePIIFromRawData()" << std::endl;
+	std::cout << "[INFO] RemovePIIFromRawData() invoked." << std::endl;
 
 	int width = data_->GetStreamWidth();
 	int height = data_->GetStreamHeight();
+	std::cout << "[INFO] Stream dimensions: " << width << "x" << height << std::endl;
 
 	// Convert YUV420 to OpenCV Mat (grayscale)
+	std::cout << "[INFO] Creating YUV420 Mat..." << std::endl;
 	cv::Mat yuv420(height + height / 2, width, CV_8UC1, (void*)data_->GetYBuffer());
+
 	cv::Mat bgr;
+	std::cout << "[INFO] Converting YUV420 to BGR..." << std::endl;
 	cv::cvtColor(yuv420, bgr, cv::COLOR_YUV2BGR_I420);
 
 	// Resize for OCR (e.g., 1/2 size)
 	cv::Mat resized;
+	std::cout << "[INFO] Resizing image for OCR..." << std::endl;
 	cv::resize(bgr, resized, cv::Size(), 0.5, 0.5);
 
 	// OCR
+	std::cout << "[INFO] Initializing Tesseract..." << std::endl;
 	tesseract::TessBaseAPI tess;
-	tess.Init(nullptr, "eng", tesseract::OEM_LSTM_ONLY);
-	tess.SetImage(resized.data, resized.cols, resized.rows, 3, resized.step);
 
+	char* tessPrefix = nullptr;
+	size_t len = 0;
+	if (_dupenv_s(&tessPrefix, &len, "TESSDATA_PREFIX") == 0 && tessPrefix != nullptr) {
+		std::cout << "[INFO] TESSDATA_PREFIX=" << tessPrefix << std::endl;
+		free(tessPrefix);
+	}
+	else {
+		std::cerr << "[WARN] TESSDATA_PREFIX not set." << std::endl;
+	}
+
+	if (tess.Init("C:/vcpkg/installed/x64-windows/share/tessdata", "eng", tesseract::OEM_LSTM_ONLY)) {
+		std::cerr << "[ERROR] Tesseract failed to initialize." << std::endl;
+		data_->Release();
+		return;
+	}
+	std::cout << "[INFO] Tesseract initialized successfully." << std::endl;
+
+	std::cout << "[INFO] Setting image to Tesseract..." << std::endl;
+	tess.SetImage(resized.data, resized.cols, resized.rows, 3, resized.step);
+	//tess.SetImage(bgr.data, bgr.cols, bgr.rows, 3, bgr.step);
+
+
+	std::cout << "[INFO] Running OCR..." << std::endl;
 	tess.Recognize(0);
 	tesseract::ResultIterator* ri = tess.GetIterator();
 	tesseract::PageIteratorLevel level = tesseract::RIL_WORD;
 
-	std::regex piiRegex(R"(\d{3}-\d{2}-\d{4})"); // Example: SSN pattern
+	//std::regex piiRegex(R"(\d{3}-\d{2}-\d{4})");
+	std::regex piiRegex(R"(\bZane\b)", std::regex_constants::icase);
+
+	int maskCount = 0;
 
 	if (ri != nullptr) {
 		do {
@@ -341,33 +374,47 @@ void MainFrame::RemovePIIFromRawData(YUVRawDataI420* data_)
 			int x1, y1, x2, y2;
 			ri->BoundingBox(level, &x1, &y1, &x2, &y2);
 
-			if (word && std::regex_match(word, piiRegex)) {
-				// Scale back to original coordinates
-				int orig_x1 = static_cast<int>(x1 * 2);
-				int orig_y1 = static_cast<int>(y1 * 2);
-				int orig_x2 = static_cast<int>(x2 * 2);
-				int orig_y2 = static_cast<int>(y2 * 2);
+			if (word) {
+				//std::cout << "[OCR] Word: '" << word << "' at (" << x1 << "," << y1 << ") - (" << x2 << "," << y2 << ") confidence: " << conf << std::endl;
 
-				// Apply mask directly to Y plane (packed format)
-				char* yBuffer = data_->GetYBuffer();
-				for (int y = orig_y1; y < orig_y2 && y < height; ++y) {
-					for (int x = orig_x1; x < orig_x2 && x < width; ++x) {
-						int index = y * width + x;
-						yBuffer[index] = 128; // neutral gray
+				if (std::regex_match(word, piiRegex)) {
+					std::cout << "[MATCH] Masking PII word: " << word << std::endl;
+					maskCount++;
+
+					int orig_x1 = static_cast<int>(x1 * 2);
+					int orig_y1 = static_cast<int>(y1 * 2);
+					int orig_x2 = static_cast<int>(x2 * 2);
+					int orig_y2 = static_cast<int>(y2 * 2);
+
+					char* yBuffer = data_->GetYBuffer();
+					for (int y = orig_y1; y < orig_y2 && y < height; ++y) {
+						for (int x = orig_x1; x < orig_x2 && x < width; ++x) {
+							int index = y * width + x;
+							yBuffer[index] = 128;
+						}
 					}
 				}
-
 				delete[] word;
 			}
 		} while (ri->Next(level));
 	}
+	else {
+		std::cout << "[INFO] No text detected." << std::endl;
+	}
 
-	if (m_pShareSender)
+	std::cout << "[INFO] Total PII items masked: " << maskCount << std::endl;
+
+	if (m_pShareSender) {
+		std::cout << "[INFO] Sending preprocessed data..." << std::endl;
 		m_pShareSender->sendPreprocessedData(data_);
+	}
+	else {
+		std::cerr << "[WARN] m_pShareSender is null." << std::endl;
+	}
 
 	data_->Release();
+	std::cout << "[INFO] Raw data released." << std::endl;
 }
-
 
 void MainFrame::onCapturedRawDataReceived(YUVRawDataI420* pRawData, IZoomVideoSDKSharePreprocessSender* pSender)
 {

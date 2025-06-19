@@ -22,6 +22,7 @@ opencv will take a while (10 mins) to complete
 ```
 ./vcpkg install jsoncpp
 ./vcpkg install opencv 
+./vcpkg install tessaract
 ```
 
 
@@ -93,7 +94,7 @@ Hit F5 or click from menu "Debug" -> "Start Debugging" in x86 or x64 to launch t
 
   They should not affect the basic functionality of this sample, but you can do a list of additional opencv libraries to install
   ```
-  ./cvpkg list opencv
+  ./vcpkg list opencv
   ```
 
   to install addition libraries, do something like this. This might take around 1 hour, depending on the number of libraries you install
