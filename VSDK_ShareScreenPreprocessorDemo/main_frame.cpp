@@ -210,7 +210,14 @@ void LoadConfig() {
 
 }
 MainFrame::MainFrame() {
+	if (m_tess.Init("C:/vcpkg/installed/x64-windows/share/tessdata", "eng", tesseract::OEM_LSTM_ONLY)) {
+		std::cerr << "[ERROR] Tesseract failed to initialize." << std::endl;
+		
+	}
 
+	std::cout << "[INFO] Tesseract initialized successfully." << std::endl;
+	m_tessInitialized = true;
+	
 }
 
 MainFrame::~MainFrame()
@@ -236,7 +243,7 @@ void MainFrame::StartToShare()
 
 	ZoomVideoSDKSharePreprocessParam param;
 	param.type = ZoomVideoSDKSharePreprocessType_screen;
-	param.monitorID = L"\\\\.\\DISPLAY1"; // Example
+	param.monitorID = L"\\\\.\\DISPLAY3"; // Example
 
 	// Print the monitor ID
 	std::wcout << L"Sharing monitor with ID: " << param.monitorID << std::endl;
@@ -310,96 +317,331 @@ std::vector<std::wstring> MainFrame::GetMonitorDeviceNames()
 
 
 //dreamtcs work in progress for OCR
+//void MainFrame::RemovePIIFromRawData(YUVRawDataI420* data_)
+//{
+//	std::cout << "[INFO] RemovePIIFromRawData() invoked." << std::endl;
+//
+//	int width = data_->GetStreamWidth();
+//	int height = data_->GetStreamHeight();
+//	std::cout << "[INFO] Stream dimensions: " << width << "x" << height << std::endl;
+//
+//	// Convert YUV420 to OpenCV Mat (grayscale)
+//	std::cout << "[INFO] Creating YUV420 Mat..." << std::endl;
+//	cv::Mat yuv420(height + height / 2, width, CV_8UC1, (void*)data_->GetYBuffer());
+//
+//	cv::Mat bgr;
+//	std::cout << "[INFO] Converting YUV420 to BGR..." << std::endl;
+//	cv::cvtColor(yuv420, bgr, cv::COLOR_YUV2BGR_I420);
+//
+//	// Resize for OCR (e.g., 1/2 size)
+//	cv::Mat resized;
+//	std::cout << "[INFO] Resizing image for OCR..." << std::endl;
+//	cv::resize(bgr, resized, cv::Size(), 0.5, 0.5);
+//
+//	// OCR
+//	std::cout << "[INFO] Initializing Tesseract..." << std::endl;
+//	tesseract::TessBaseAPI tess;
+//
+//	char* tessPrefix = nullptr;
+//	size_t len = 0;
+//	if (_dupenv_s(&tessPrefix, &len, "TESSDATA_PREFIX") == 0 && tessPrefix != nullptr) {
+//		std::cout << "[INFO] TESSDATA_PREFIX=" << tessPrefix << std::endl;
+//		free(tessPrefix);
+//	}
+//	else {
+//		std::cerr << "[WARN] TESSDATA_PREFIX not set." << std::endl;
+//	}
+//
+//	if (tess.Init("C:/vcpkg/installed/x64-windows/share/tessdata", "eng", tesseract::OEM_LSTM_ONLY)) {
+//		std::cerr << "[ERROR] Tesseract failed to initialize." << std::endl;
+//		data_->Release();
+//		return;
+//	}
+//	std::cout << "[INFO] Tesseract initialized successfully." << std::endl;
+//
+//	std::cout << "[INFO] Setting image to Tesseract..." << std::endl;
+//	tess.SetImage(resized.data, resized.cols, resized.rows, 3, resized.step);
+//	//tess.SetImage(bgr.data, bgr.cols, bgr.rows, 3, bgr.step);
+//
+//
+//	std::cout << "[INFO] Running OCR..." << std::endl;
+//	tess.Recognize(0);
+//	tesseract::ResultIterator* ri = tess.GetIterator();
+//	tesseract::PageIteratorLevel level = tesseract::RIL_WORD;
+//
+//	//std::regex piiRegex(R"(\d{3}-\d{2}-\d{4})");
+//	std::regex piiRegex(R"(\bZane\b)", std::regex_constants::icase);
+//
+//	int maskCount = 0;
+//
+//	if (ri != nullptr) {
+//		do {
+//			const char* word = ri->GetUTF8Text(level);
+//			float conf = ri->Confidence(level);
+//			int x1, y1, x2, y2;
+//			ri->BoundingBox(level, &x1, &y1, &x2, &y2);
+//
+//			if (word) {
+//				//std::cout << "[OCR] Word: '" << word << "' at (" << x1 << "," << y1 << ") - (" << x2 << "," << y2 << ") confidence: " << conf << std::endl;
+//
+//				if (std::regex_match(word, piiRegex)) {
+//					std::cout << "[MATCH] Masking PII word: " << word << std::endl;
+//					maskCount++;
+//
+//					int orig_x1 = static_cast<int>(x1 * 2);
+//					int orig_y1 = static_cast<int>(y1 * 2);
+//					int orig_x2 = static_cast<int>(x2 * 2);
+//					int orig_y2 = static_cast<int>(y2 * 2);
+//
+//					char* yBuffer = data_->GetYBuffer();
+//					for (int y = orig_y1; y < orig_y2 && y < height; ++y) {
+//						for (int x = orig_x1; x < orig_x2 && x < width; ++x) {
+//							int index = y * width + x;
+//							yBuffer[index] = 128;
+//						}
+//					}
+//				}
+//				delete[] word;
+//			}
+//		} while (ri->Next(level));
+//	}
+//	else {
+//		std::cout << "[INFO] No text detected." << std::endl;
+//	}
+//
+//	std::cout << "[INFO] Total PII items masked: " << maskCount << std::endl;
+//
+//	if (m_pShareSender) {
+//		std::cout << "[INFO] Sending preprocessed data..." << std::endl;
+//		m_pShareSender->sendPreprocessedData(data_);
+//	}
+//	else {
+//		std::cerr << "[WARN] m_pShareSender is null." << std::endl;
+//	}
+//
+//	data_->Release();
+//	std::cout << "[INFO] Raw data released." << std::endl;
+//}
+
+
+//dreamtcs add opritmization for reuse
+//void MainFrame::RemovePIIFromRawData(YUVRawDataI420* data_)
+//{
+//	std::cout << "[INFO] RemovePIIFromRawData() invoked." << std::endl;
+//
+//	if (!m_tessInitialized) {
+//		std::cerr << "[ERROR] Tesseract not initialized." << std::endl;
+//		data_->Release();
+//		return;
+//	}
+//
+//	int width = data_->GetStreamWidth();
+//	int height = data_->GetStreamHeight();
+//	std::cout << "[INFO] Stream dimensions: " << width << "x" << height << std::endl;
+//
+//	cv::Mat yuv420(height + height / 2, width, CV_8UC1, (void*)data_->GetYBuffer());
+//	cv::Mat bgr;
+//	cv::cvtColor(yuv420, bgr, cv::COLOR_YUV2BGR_I420);
+//
+//	cv::Mat resized = bgr;
+//	double resizeFactor = 1.0;
+//
+//	// Run initial OCR to estimate average word height
+//	m_tess.SetPageSegMode(tesseract::PSM_AUTO);
+//	m_tess.SetImage(bgr.data, bgr.cols, bgr.rows, 3, bgr.step);
+//	m_tess.Recognize(0);
+//
+//	tesseract::ResultIterator* ri_check = m_tess.GetIterator();
+//	tesseract::PageIteratorLevel level = tesseract::RIL_WORD;
+//	int sampleCount = 0;
+//	int totalHeight = 0;
+//
+//	if (ri_check) {
+//		do {
+//			int x1, y1, x2, y2;
+//			ri_check->BoundingBox(level, &x1, &y1, &x2, &y2);
+//			int h = y2 - y1;
+//			if (h > 5 && h < height) {
+//				totalHeight += h;
+//				sampleCount++;
+//			}
+//		} while (ri_check->Next(level));
+//	}
+//
+//	if (sampleCount > 0) {
+//		double avgHeight = static_cast<double>(totalHeight) / sampleCount;
+//		std::cout << "[INFO] Average word height: " << avgHeight << " pixels" << std::endl;
+//
+//		if (avgHeight > 80) {
+//			resizeFactor = 80.0 / avgHeight;
+//			std::cout << "[INFO] Downscaling image due to large text (factor: " << resizeFactor << ")" << std::endl;
+//			cv::resize(bgr, resized, cv::Size(), resizeFactor, resizeFactor);
+//		}
+//	}
+//	else {
+//		std::cout << "[INFO] No words found in preview OCR. Using original resolution." << std::endl;
+//	}
+//
+//	// Now do actual OCR on final resized image
+//	m_tess.SetImage(resized.data, resized.cols, resized.rows, 3, resized.step);
+//	m_tess.Recognize(0);
+//	tesseract::ResultIterator* ri = m_tess.GetIterator();
+//
+//	std::regex piiRegex(R"((\b\d{3}-\d{2}-\d{4}\b)|(\bZane\b))", std::regex_constants::icase);
+//	int maskCount = 0;
+//
+//	if (ri != nullptr) {
+//		do {
+//			const char* word = ri->GetUTF8Text(level);
+//			float conf = ri->Confidence(level);
+//			int x1, y1, x2, y2;
+//			ri->BoundingBox(level, &x1, &y1, &x2, &y2);
+//
+//			if (word && std::regex_match(word, piiRegex)) {
+//				std::cout << "[MATCH] Masking PII word: " << word << std::endl;
+//				maskCount++;
+//
+//				int orig_x1 = static_cast<int>(x1 / resizeFactor);
+//				int orig_y1 = static_cast<int>(y1 / resizeFactor);
+//				int orig_x2 = static_cast<int>(x2 / resizeFactor);
+//				int orig_y2 = static_cast<int>(y2 / resizeFactor);
+//
+//				char* yBuffer = data_->GetYBuffer();
+//				for (int y = orig_y1; y < orig_y2 && y < height; ++y) {
+//					for (int x = orig_x1; x < orig_x2 && x < width; ++x) {
+//						yBuffer[y * width + x] = 128;
+//					}
+//				}
+//			}
+//			delete[] word;
+//		} while (ri->Next(level));
+//	}
+//	else {
+//		std::cout << "[INFO] No text detected." << std::endl;
+//	}
+//
+//	std::cout << "[INFO] Total PII items masked: " << maskCount << std::endl;
+//
+//	if (m_pShareSender) {
+//		std::cout << "[INFO] Sending preprocessed data..." << std::endl;
+//		m_pShareSender->sendPreprocessedData(data_);
+//	}
+//	else {
+//		std::cerr << "[WARN] m_pShareSender is null." << std::endl;
+//	}
+//
+//	data_->Release();
+//	std::cout << "[INFO] Raw data released." << std::endl;
+//}
+
+//with no scale upscale and downscale
 void MainFrame::RemovePIIFromRawData(YUVRawDataI420* data_)
 {
 	std::cout << "[INFO] RemovePIIFromRawData() invoked." << std::endl;
+
+	if (!m_tessInitialized) {
+		std::cerr << "[ERROR] Tesseract not initialized." << std::endl;
+		data_->Release();
+		return;
+	}
 
 	int width = data_->GetStreamWidth();
 	int height = data_->GetStreamHeight();
 	std::cout << "[INFO] Stream dimensions: " << width << "x" << height << std::endl;
 
-	// Convert YUV420 to OpenCV Mat (grayscale)
-	std::cout << "[INFO] Creating YUV420 Mat..." << std::endl;
 	cv::Mat yuv420(height + height / 2, width, CV_8UC1, (void*)data_->GetYBuffer());
-
 	cv::Mat bgr;
-	std::cout << "[INFO] Converting YUV420 to BGR..." << std::endl;
 	cv::cvtColor(yuv420, bgr, cv::COLOR_YUV2BGR_I420);
 
-	// Resize for OCR (e.g., 1/2 size)
-	cv::Mat resized;
-	std::cout << "[INFO] Resizing image for OCR..." << std::endl;
-	cv::resize(bgr, resized, cv::Size(), 0.5, 0.5);
+	std::vector<cv::Rect> piiBoxes;
+	std::regex piiRegex(
+		R"((\b\d{3}-\d{2}-\d{4}\b)|(\b\d{2}/\d{2}/\d{4}\b)|(\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?|\$\d+(?:\.\d{2})?))",
+		std::regex_constants::icase);
 
-	// OCR
-	std::cout << "[INFO] Initializing Tesseract..." << std::endl;
-	tesseract::TessBaseAPI tess;
-
-	char* tessPrefix = nullptr;
-	size_t len = 0;
-	if (_dupenv_s(&tessPrefix, &len, "TESSDATA_PREFIX") == 0 && tessPrefix != nullptr) {
-		std::cout << "[INFO] TESSDATA_PREFIX=" << tessPrefix << std::endl;
-		free(tessPrefix);
+	// ---------- OCR at original scale ----------
+	m_tess.SetImage(bgr.data, bgr.cols, bgr.rows, 3, bgr.step);
+	m_tess.Recognize(0);
+	if (auto* ri = m_tess.GetIterator()) {
+		do {
+			const char* word = ri->GetUTF8Text(tesseract::RIL_WORD);
+			int x1, y1, x2, y2;
+			if (word && std::regex_match(word, piiRegex) && ri->BoundingBox(tesseract::RIL_WORD, &x1, &y1, &x2, &y2)) {
+				std::cout << "[MATCH] original: " << word << std::endl;
+				if (x1 < 0) x1 = 0;
+				if (y1 < 0) y1 = 0;
+				if (x2 >= width) x2 = width - 1;
+				if (y2 >= height) y2 = height - 1;
+				if (x2 > x1 && y2 > y1)
+					piiBoxes.emplace_back(cv::Rect(cv::Point(x1, y1), cv::Point(x2, y2)));
+			}
+			delete[] word;
+		} while (ri->Next(tesseract::RIL_WORD));
 	}
-	else {
-		std::cerr << "[WARN] TESSDATA_PREFIX not set." << std::endl;
+
+	// ---------- OCR at 1.5x upscale ----------
+	cv::Mat upscaled;
+	cv::resize(bgr, upscaled, cv::Size(), 1.5, 1.5);
+	m_tess.SetImage(upscaled.data, upscaled.cols, upscaled.rows, 3, upscaled.step);
+	m_tess.Recognize(0);
+	if (auto* ri = m_tess.GetIterator()) {
+		do {
+			const char* word = ri->GetUTF8Text(tesseract::RIL_WORD);
+			int x1, y1, x2, y2;
+			if (word && std::regex_match(word, piiRegex) && ri->BoundingBox(tesseract::RIL_WORD, &x1, &y1, &x2, &y2)) {
+				std::cout << "[MATCH] upscale: " << word << std::endl;
+				int orig_x1 = static_cast<int>(x1 / 1.5);
+				int orig_y1 = static_cast<int>(y1 / 1.5);
+				int orig_x2 = static_cast<int>(x2 / 1.5);
+				int orig_y2 = static_cast<int>(y2 / 1.5);
+				if (orig_x1 < 0) orig_x1 = 0;
+				if (orig_y1 < 0) orig_y1 = 0;
+				if (orig_x2 >= width) orig_x2 = width - 1;
+				if (orig_y2 >= height) orig_y2 = height - 1;
+				if (orig_x2 > orig_x1 && orig_y2 > orig_y1)
+					piiBoxes.emplace_back(cv::Rect(cv::Point(orig_x1, orig_y1), cv::Point(orig_x2, orig_y2)));
+			}
+			delete[] word;
+		} while (ri->Next(tesseract::RIL_WORD));
 	}
 
-	if (tess.Init("C:/vcpkg/installed/x64-windows/share/tessdata", "eng", tesseract::OEM_LSTM_ONLY)) {
-		std::cerr << "[ERROR] Tesseract failed to initialize." << std::endl;
-		data_->Release();
-		return;
+	// ---------- OCR at 0.6x downscale ----------
+	cv::Mat downscaled;
+	cv::resize(bgr, downscaled, cv::Size(), 0.6, 0.6);
+	m_tess.SetImage(downscaled.data, downscaled.cols, downscaled.rows, 3, downscaled.step);
+	m_tess.Recognize(0);
+	if (auto* ri = m_tess.GetIterator()) {
+		do {
+			const char* word = ri->GetUTF8Text(tesseract::RIL_WORD);
+			int x1, y1, x2, y2;
+			if (word && std::regex_match(word, piiRegex) && ri->BoundingBox(tesseract::RIL_WORD, &x1, &y1, &x2, &y2)) {
+				std::cout << "[MATCH] downscale: " << word << std::endl;
+				int orig_x1 = static_cast<int>(x1 / 0.6);
+				int orig_y1 = static_cast<int>(y1 / 0.6);
+				int orig_x2 = static_cast<int>(x2 / 0.6);
+				int orig_y2 = static_cast<int>(y2 / 0.6);
+				if (orig_x1 < 0) orig_x1 = 0;
+				if (orig_y1 < 0) orig_y1 = 0;
+				if (orig_x2 >= width) orig_x2 = width - 1;
+				if (orig_y2 >= height) orig_y2 = height - 1;
+				if (orig_x2 > orig_x1 && orig_y2 > orig_y1)
+					piiBoxes.emplace_back(cv::Rect(cv::Point(orig_x1, orig_y1), cv::Point(orig_x2, orig_y2)));
+			}
+			delete[] word;
+		} while (ri->Next(tesseract::RIL_WORD));
 	}
-	std::cout << "[INFO] Tesseract initialized successfully." << std::endl;
 
-	std::cout << "[INFO] Setting image to Tesseract..." << std::endl;
-	tess.SetImage(resized.data, resized.cols, resized.rows, 3, resized.step);
-	//tess.SetImage(bgr.data, bgr.cols, bgr.rows, 3, bgr.step);
-
-
-	std::cout << "[INFO] Running OCR..." << std::endl;
-	tess.Recognize(0);
-	tesseract::ResultIterator* ri = tess.GetIterator();
-	tesseract::PageIteratorLevel level = tesseract::RIL_WORD;
-
-	//std::regex piiRegex(R"(\d{3}-\d{2}-\d{4})");
-	std::regex piiRegex(R"(\bZane\b)", std::regex_constants::icase);
-
+	// ---------- Mask detected regions ----------
+	std::cout << "[INFO] Total PII regions to mask: " << piiBoxes.size() << std::endl;
+	char* yBuffer = data_->GetYBuffer();
 	int maskCount = 0;
 
-	if (ri != nullptr) {
-		do {
-			const char* word = ri->GetUTF8Text(level);
-			float conf = ri->Confidence(level);
-			int x1, y1, x2, y2;
-			ri->BoundingBox(level, &x1, &y1, &x2, &y2);
-
-			if (word) {
-				//std::cout << "[OCR] Word: '" << word << "' at (" << x1 << "," << y1 << ") - (" << x2 << "," << y2 << ") confidence: " << conf << std::endl;
-
-				if (std::regex_match(word, piiRegex)) {
-					std::cout << "[MATCH] Masking PII word: " << word << std::endl;
-					maskCount++;
-
-					int orig_x1 = static_cast<int>(x1 * 2);
-					int orig_y1 = static_cast<int>(y1 * 2);
-					int orig_x2 = static_cast<int>(x2 * 2);
-					int orig_y2 = static_cast<int>(y2 * 2);
-
-					char* yBuffer = data_->GetYBuffer();
-					for (int y = orig_y1; y < orig_y2 && y < height; ++y) {
-						for (int x = orig_x1; x < orig_x2 && x < width; ++x) {
-							int index = y * width + x;
-							yBuffer[index] = 128;
-						}
-					}
-				}
-				delete[] word;
+	for (const auto& box : piiBoxes) {
+		for (int y = box.y; y < box.y + box.height && y < height; ++y) {
+			for (int x = box.x; x < box.x + box.width && x < width; ++x) {
+				yBuffer[y * width + x] = 128;
 			}
-		} while (ri->Next(level));
-	}
-	else {
-		std::cout << "[INFO] No text detected." << std::endl;
+		}
+		maskCount++;
 	}
 
 	std::cout << "[INFO] Total PII items masked: " << maskCount << std::endl;
@@ -416,16 +658,26 @@ void MainFrame::RemovePIIFromRawData(YUVRawDataI420* data_)
 	std::cout << "[INFO] Raw data released." << std::endl;
 }
 
+
+
+
+
+
 void MainFrame::onCapturedRawDataReceived(YUVRawDataI420* pRawData, IZoomVideoSDKSharePreprocessSender* pSender)
 {
-	std::cout << "onCapturedRawDataReceived()" << std::endl;
+	//std::cout << "onCapturedRawDataReceived() - Frame " << m_frameCounter << std::endl;
 
 	m_pShareSender = pSender;
 
 	if (!pRawData) return;
-	pRawData->AddRef(); //IMPORTANT：call AddRef to make sure the SDK will not delete the data immediately.
-	RemovePIIFromRawData(pRawData);
 
+	// Only process every 5th frame
+	if (m_frameCounter % 5 == 0) {
+		pRawData->AddRef(); // Important: prevent premature deletion
+		RemovePIIFromRawData(pRawData);
+	}
+
+	m_frameCounter++;
 }
 
 //dreamtcs might be able to remove this

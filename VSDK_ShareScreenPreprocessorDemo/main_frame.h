@@ -4,7 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
+#include <tesseract/baseapi.h>
+#include <opencv2/core.hpp>
 #include "resource.h"
 
 #include "zoom_video_sdk_delegate_interface.h"
@@ -161,6 +162,12 @@ private:
 
 	
 	IZoomVideoSDKSharePreprocessSender* m_pShareSender;
+	tesseract::TessBaseAPI m_tess;
+	bool m_tessInitialized = false;
+	int m_frameCounter = 0;
 
+//optimizing OCR with previous screen compare
+	std::vector<cv::Rect> m_prevPIIBoxes;
+	std::vector<std::string> m_prevWords;
 
 };

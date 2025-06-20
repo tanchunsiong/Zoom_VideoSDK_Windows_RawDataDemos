@@ -138,7 +138,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)SDK\$(Platform)\lib;$(ProjectDir)SDK\$(Platform)\bin;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);videosdk.lib;tesseract55.lib;leptonica-1.85.0.lib;opencv_core4.lib;opencv_imgproc4.lib;opencv_highgui4.lib;opencv_imgcodecs4.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);videosdk.lib;</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
