@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window  layeredimage="" layeredopacity="255" >
+	<Font id="0" name="Microsoft YaHei" size="12" bold="false" underline="false" italic="false" />
+	<HorizontalLayout >
+		<Button name="btn_close" padding="10,10,0,0" width="22" height="22" normalimage="res='BUTTON_MAIN_CLOSE' restype='ZPIMGRES' "/>
+		<Button name="btn_minimize"  padding="10,10,0,0" width="22" height="22" normalimage="res='BUTTON_MINIMIZE' restype='ZPIMGRES' "/>
+		<Control />
+		<Button name="btn_session_name" text="connecting..." font="0" textcolor="#FFFFFFFF" padding="0,10,0,0" width="120" height="36" transtext="0" normalimage="res='CHAT_EDIT_NOR_BK' restype='ZPIMGRES' corner='10,10,10,10' " />
+		<Control />
+		<Button name="btn_fullscreen"  padding="0,10,10,0" width="22" height="22" normalimage="res='BUTTON_FULL_SCREEN' restype='ZPIMGRES' "/>
+	</HorizontalLayout>
+</Window>

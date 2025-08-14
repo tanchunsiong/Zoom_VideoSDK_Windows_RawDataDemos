@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="400,520" caption="0,0,0,30">
+	<Font id="0" name="Microsoft YaHei" size="14" bold="false" underline="false" italic="false"/>
+	<Font id="1" name="Microsoft YaHei" size="16" bold="false" underline="false" italic="false"/>
+	<Font id="2" name="Microsoft YaHei" size="13" bold="false" underline="false" italic="false"/>
+	<VerticalLayout bkcolor="#FF212121">
+		<VerticalLayout name="session_setting_layout" visible="true" height="550">
+			<HorizontalLayout height="40">
+				<Label text="Session Settings" font="1" padding="20,10,0,0" textcolor="#FFF5F5F5" />
+				<Button name="btn_session_settings_close" width="28" height="26" normalimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,0,28,26' " hotimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,26,28,52' " pushedimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,52,28,78' " disabledimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,78,28,104' "/>
+			</HorizontalLayout>
+
+			<HorizontalLayout padding="20,10,20,0" height="30" visible="false">
+				<Option text="General" name="option_general" font="0" width="66" height="32" selected="true" textcolor="0xFF98A0A9" selectedtextcolor="0xFF4793F1" group="setting"/>
+				<Option text="" name="option_stickers" font="0" width="66" height="32" textcolor="0xFF98A0A9" selectedtextcolor="0xFF4793F1" group="setting"/>
+			</HorizontalLayout>
+
+			<TabLayout name="tablayout_main" selectedid="-1" topbordersize="1" padding="2,2,2,2" height="460">
+				<VerticalLayout vscrollbar="true" height="460" name="client_layout">
+					<Label text="Camera" font="0" padding="20,0,0,0" textcolor="#FF8C8C8C" />
+					<Combo name="combo_camera_list" font="2" padding="20,0,0,0" width="368" height="32" itembkcolor="0xFF3B3C3C" itemselectedbkcolor="0xFF3B3C3C"  itemhotbkcolor="0xFF3B3C3C" itemhottextcolor="0xFFF5F5F5" itemtextcolor = "0xFFF5F5F5" itemselectedtextcolor = "0xFFF5F5F5" textpadding="0,0,0,0" itemtextpadding="10,0,20,0" normalimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,0,364,45' corner='10,10,10,10'" hotimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,45,364,90' corner='10,10,10,10'" pushedimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,90,364,135' corner='10,10,10,10'" />
+					<HorizontalLayout padding="16,10,0,0" height="206" bkcolor="#FF6E7680">
+						<Control />
+						<Control height="195" width="195" bkimage="res='DEFAULT_AVATAR' restype='ZPIMGRES'" padding="0,10,0,0"/>
+						<Control />
+						<HorizontalLayout name="lowerthird_info" visible="false" float="true" pos="8,8" width="152" height="62">
+							<HorizontalLayout bkcolor="#FF131619" borderround="4,4" width="132">
+								<Control name="control_left_line" bkimage="res='BUTTON_COLOR_COMMON' restype='ZPIMGRES' source='0,0,2,18'" borderround="1,1" width="4" height="38" padding="8,11,0,0"/>
+								<VerticalLayout padding="8,8,0,0">
+									<Label name="label_thirds_name" font="0" text="" endellipsis="true" align="left" textcolor="#FFFFFFFF" height="20"/>
+									<Label name="label_thirds_title" font="2" endellipsis="true" padding="0,2,0,0" align="left" text="" height="20" bkimage="res='BUTTON_COLOR_COMMON' restype='ZPIMGRES' source='0,0,2,18'" textcolor="#FFFFFFFF"/>
+								</VerticalLayout>
+							</HorizontalLayout>
+							<Control name="control_right_corner" width="11" height="18" padding="0,30,0,0" bkimage="res='BUTTON_COLOR_COMMON' restype='ZPIMGRES' source='0,0,11,18'"/>
+						</HorizontalLayout>						
+					</HorizontalLayout>
+					<CheckBox name="chk_fill_video_to_frame" font="0" text="Fill my video to frame"  height="16" textcolor="#FFF5F5F5" padding="20,10,0,0" align="left,singleline" valign="vcenter" textpadding="21,0,0,0" normalimage="res='CHECK_BOX_NOR' restype='ZPIMGRES' dest='0,0,16,16'" selectedimage="res='CHECK_BOX_SEL' restype='ZPIMGRES' dest='0,0,16,16'" noprefix="true"  focuspadding="22,10,0,10"/>
+					<HorizontalLayout height="20" padding="20,10,0,0">
+						<CheckBox name="chk_enable_lower_third" font="0" text="Enable lower third" width="145" height="18" textcolor="#FFF5F5F5" align="left,singleline" valign="vcenter" textpadding="21,0,0,0" normalimage="res='CHECK_BOX_NOR' restype='ZPIMGRES' dest='0,0,16,16'" selectedimage="res='CHECK_BOX_SEL' restype='ZPIMGRES' dest='0,0,16,16'" noprefix="true"  focuspadding="22,10,0,10"/>
+						<Button name="btn_custom_lower_third" font="0" width="133" height="18" padding="12,0,0,0" text="Custom Lower Third" textcolor="#FF4793F1"/>
+					</HorizontalLayout>
+					<Label text="Speaker" font="0" padding="20,10,0,0" textcolor="#FF8C8C8C" />
+					<Combo name="combo_speaker_list" font="2" padding="20,0,0,0" width="368" height="32" itembkcolor="0xFF3B3C3C" itemselectedbkcolor="0xFF3B3C3C"  itemhotbkcolor="0xFF3B3C3C" itemhottextcolor="0xFFF5F5F5" itemtextcolor = "0xFFF5F5F5" itemselectedtextcolor = "0xFFF5F5F5" textpadding="0,0,0,0" itemtextpadding="10,0,20,0" normalimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,0,364,45' corner='10,10,10,10'" hotimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,45,364,90' corner='10,10,10,10'" pushedimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,90,364,135' corner='10,10,10,10'" />
+					<Label text="Microphone" font="0" padding="20,10,0,0" textcolor="#FF8C8C8C" />
+					<Combo name="combo_microphone_list" font="2" padding="20,0,0,0" width="368" height="32" itembkcolor="0xFF3B3C3C" itemselectedbkcolor="0xFF3B3C3C"  itemhotbkcolor="0xFF3B3C3C" itemhottextcolor="0xFFF5F5F5" itemtextcolor = "0xFFF5F5F5" itemselectedtextcolor = "0xFFF5F5F5" textpadding="0,0,0,0" itemtextpadding="10,0,20,0" normalimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,0,364,45' corner='10,10,10,10'" hotimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,45,364,90' corner='10,10,10,10'" pushedimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,90,364,135' corner='10,10,10,10'" />
+					<Label text="Renderer Type" font="0" padding="20,10,0,0" textcolor="#FF8C8C8C" />
+					<Combo name="combo_render_type" font="2" padding="20,0,0,0" width="368" height="32" itembkcolor="0xFF3B3C3C" itemselectedbkcolor="0xFF3B3C3C"  itemhotbkcolor="0xFF3B3C3C" itemhottextcolor="0xFFF5F5F5" itemtextcolor = "0xFFF5F5F5" itemselectedtextcolor = "0xFFF5F5F5" textpadding="0,0,0,0" itemtextpadding="10,0,20,0" normalimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,0,364,45' corner='10,10,10,10'" hotimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,45,364,90' corner='10,10,10,10'" pushedimage="res='BUTTON_COMMON_COMBO_LONG' restype='ZPIMGRES' source='0,90,364,135' corner='10,10,10,10'" >
+						<ListLabelElement text="SDL" height="23" selected="true" />
+					</Combo>
+					
+					<VerticalLayout name="token_layout" height="80" padding="20,10,0,0">
+						<Label text="token" font="0" textcolor="#FF8C8C8C" />
+						<RichEdit  name="edit_token" font="0" textcolor="#FFF5F5F5" width="368" height="30" text="" inset="10,6,10,6" multiline="false" autohscroll="true"  wanttab="false" rich="false" bkimage="res='EDIT_COMMON_NOR' restype='ZPIMGRES' corner='10,10,10,10' "/>
+						<Label text="token is empty" font="0" name="token_empty_tip" textcolor="#FFCE5F5F" />
+					</VerticalLayout>
+
+					<VerticalLayout name="show_statistics_layout" height="40" padding="20,20,0,0">
+						<Button name="btn_show_statistics" text="Show Statistics" font="0" width="140" height="35" textcolor="#FFFFFFFF" align="center" normalimage="res='BUTTON_COMMON_BTN_NOR' restype='ZPIMGRES' corner='10,10,10,10'"/>
+					</VerticalLayout>
+
+				</VerticalLayout>
+
+				<VerticalLayout name="stickers_layout">
+
+				</VerticalLayout>
+			</TabLayout>
+		</VerticalLayout>
+
+		
+	</VerticalLayout>
+
+</Window>

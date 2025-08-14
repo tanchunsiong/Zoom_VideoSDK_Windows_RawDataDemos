@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<window>
+	<Font id="0" name="Microsoft YaHei" size="12" bold="false" underline="false" italic="false" default="true"/>
+	<ShareAppItem bkcolor="0xff242424" bordercolor="0xFFFFFFFF" textcolor="0xFFFFFFFF" textpadding="10,0,10,0" selectedtextcolor="0xFFFFFFFF" bordersize="2" selectedimage="res='BUTTON_COMMON_BTN_NOR' restype='ZPIMGRES' " />
+</window>

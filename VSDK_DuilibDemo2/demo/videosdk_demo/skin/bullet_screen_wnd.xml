@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window layeredimage="" layeredopacity="200">
+	<Font id="0" name="Microsoft YaHei" size="13" bold="false" underline="false" italic="false" default="true" />
+	<VerticalLayout name="bullet_screen_layout" bkcolor="#FF000000">
+	</VerticalLayout>
+</Window>

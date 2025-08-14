@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="25,25" roundcorner="2,2" >
+	<Font id="0" name="Microsoft YaHei" size="12" bold="false" underline="false" italic="false" />
+	<HorizontalLayout bkcolor="#FF212121">
+		<Button name="btn_switch_camera" padding="0,0,0,0" width="24" height="24" normalimage="res='BUTTON_SWITCH_CAMERA_DEFULT' restype='ZPIMGRES' "/>
+	</HorizontalLayout>
+</Window>

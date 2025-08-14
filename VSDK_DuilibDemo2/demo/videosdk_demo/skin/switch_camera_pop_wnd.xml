@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="180,210" roundcorner="4,4">
+	<Font id="0" name="Microsoft YaHei" size="11" bold="false" underline="false" italic="false" default="true" />
+	<VerticalLayout bkcolor="#FF242424">
+		<HorizontalLayout width="180">
+		<VerticalLayout padding="0,5,0,0" width="180" height="210">
+			<Button name="btn_camera_1" align="left" textpadding="16,0,0,0" textcolor="#FFFFFFFF" text="camera 1" font="0" height="32" width="180" visible="true" />
+			<Button name="btn_camera_2" align="left" textpadding="16,0,0,0" textcolor="#FFFFFFFF" text="camera 2" font="0" height="32" width="180" visible="true" />
+			<Button name="btn_camera_3" align="left" textpadding="16,0,0,0" textcolor="#FFFFFFFF" text="camera 3" font="0" height="32" width="180" visible="true" />
+			<Button name="btn_camera_4" align="left" textpadding="16,0,0,0" textcolor="#FFFFFFFF" text="camera 4" font="0" height="32" width="180" visible="true" />
+			<Button name="btn_camera_5" align="left" textpadding="16,0,0,0" textcolor="#FFFFFFFF" text="camera 5" font="0" height="32" width="180" visible="true" />
+			<Button name="btn_camera_6" align="left" textpadding="16,0,0,0" textcolor="#FFFFFFFF" text="camera 6" font="0" height="32" width="180" visible="true" />
+		</VerticalLayout>
+		</HorizontalLayout>	
+	</VerticalLayout>
+</Window>

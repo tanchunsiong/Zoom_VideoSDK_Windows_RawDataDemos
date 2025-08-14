@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="300,180">
+	<Font id="0" name="Microsoft YaHei" size="14" bold="false" underline="false" italic="false" default="true"/>
+	<VerticalLayout bkcolor="0xFF242424" >
+		<HorizontalLayout height="36" >
+			<Control />
+			<Button name="btn_leave_session_close" width="28" height="26" normalimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,0,28,26' " hotimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,26,28,52' " pushedimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,52,28,78' " disabledimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,78,28,104' "/>
+		</HorizontalLayout>
+		<HorizontalLayout padding="0,0,0,0" height="26" >
+			<Control />
+			<Label  text="Do you want to leave this session?" font="1" width="240" textcolor="#FFFFFFFF" /> 
+			<Control />
+		</HorizontalLayout>
+		<HorizontalLayout  height="100" padding="10,0,10,20">
+			<Control />
+			<VerticalLayout width="200" >
+				<control />
+				<Button name="btn_end_session" text="End Session for All" width="200" height="40" textcolor="#FFFFFFFF" align="center" normalimage="res='BUTTON_COMMON_END' restype='ZPIMGRES' corner='10,10,10,10'"/>
+				<Button name="btn_leave_session" padding="0,10,0,0" text="Leave Session" width="200" height="40" textcolor="#FFFFFFFF" align="center" normalimage="res='BUTTON_COMMON_BTN_NOR' restype='ZPIMGRES' corner='10,10,10,10'"/>
+				<control />
+			</VerticalLayout>
+			<Control />
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="1120,630"  mininfo="910,450" sizebox="5,5,5,5" >
+	<Font id="0" name="Microsoft YaHei" size="12" bold="false" underline="false" italic="false" default="true"/>
+	<HorizontalLayout bkcolor="#FF3A3B3B">
+	</HorizontalLayout>
+</Window>

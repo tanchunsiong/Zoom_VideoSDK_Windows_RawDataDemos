@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{a7c20212-4569-4e92-ae6a-566ddb2e2aae}</ProjectGuid>
+    <RootNamespace>instantsdkdemo</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>VSDK_DuilibDemo</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>../../bin/</OutDir>
+    <IntDir>../../bin/objs</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>../../bin/</OutDir>
+    <IntDir>../../bin/objs</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;UILIB_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>../duilib/include;../ZoomVideoSDKRender/export_h/;../../h/</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <Optimization>MaxSpeed</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../duilib/lib;../../lib;../ZoomVideoSDKRender/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>videosdk.lib;ZoomvideosdkRender.lib;Duilib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy ..\sdl\lib\x86\*.dll ..\..\bin
+copy ..\ZoomVideoSDKRender\lib\*.dll ..\..\bin</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;UILIB_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>../duilib/include;../ZoomVideoSDKRender/export_h/;../../h/</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../duilib/lib;../../lib;../../bin;../ZoomVideoSDKRender/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>videosdk.lib;ZoomvideosdkRender.lib;Duilib64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy ..\sdl\lib\x64\*.dll ..\..\bin
+copy ..\ZoomVideoSDKRender\lib\*.dll ..\..\bin</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="bottom_bar_wnd_ui.h" />
+    <ClInclude Include="bullet_screen_wnd.h" />
+    <ClInclude Include="chat_send_edit_ui.h" />
+    <ClInclude Include="enum_apps_info_mgr.h" />
+    <ClInclude Include="enum_apps_info_mgr_comm_def.h" />
+    <ClInclude Include="feedback_tips_wnd.h" />
+    <ClInclude Include="feed_back_wnd.h" />
+    <ClInclude Include="lowerthirds_setting_wnd_ui.h" />
+    <ClInclude Include="lower_thirds_info_wnd.h" />
+    <ClInclude Include="message_tip_wnd_ui.h" />
+    <ClInclude Include="top_tip_wnd_ui.h" />
+    <ClInclude Include="error_tip_dlg.h" />
+    <ClInclude Include="gallary_mode_video_container.h" />
+    <ClInclude Include="join_session_wnd_ui.h" />
+    <ClInclude Include="leave_session_tips_wnd_ui.h" />
+    <ClInclude Include="main_frame.h" />
+    <ClInclude Include="more_pop_wnd.h" />
+    <ClInclude Include="reaction_bar_wnd.h" />
+    <ClInclude Include="roll_control_ui.h" />
+    <ClInclude Include="session_info_wnd_ui.h" />
+    <ClInclude Include="session_settings_wnd_ui.h" />
+    <ClInclude Include="share_app_item_ui.h" />
+    <ClInclude Include="share_app_layout_ui.h" />
+    <ClInclude Include="share_select_apps_wnd_ui.h" />
+    <ClInclude Include="share_tool_bar_wnd_ui.h" />
+    <ClInclude Include="chat_content_wnd_ui.h" />
+    <ClInclude Include="statistics_wnd_ui.h" />
+    <ClInclude Include="title_bar_wnd_ui.h" />
+    <ClInclude Include="switch_camera_wnd_ui.h" />
+    <ClInclude Include="remote_control_camera_wnd_ui.h" />
+    <ClInclude Include="camera_control_request_received_wnd_ui.h" />
+    <ClInclude Include="stop_camera_control_wnd_ui.h" />
+    <ClInclude Include="gallery_more_pop_wnd_ui.h" />
+    <ClInclude Include="switch_camera_pop_wnd_ui.h" />
+    <ClInclude Include="control_camera_tip_wnd_ui.h" />
+    <ClInclude Include="control_camera_pop_wnd_ui.h" />
+    <ClInclude Include="turn_page_wnd_ui.h" />
+    <ClInclude Include="utils.h" />
+    <ClInclude Include="videosdk_demo.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="active_video_layout_item.h" />
+    <ClInclude Include="videosdk_demo_mgr.h" />
+    <ClInclude Include="videosdk_include_files.h" />
+    <ClInclude Include="video_container_base.h" />
+    <ClInclude Include="video_layout_item_base.h" />
+    <ClInclude Include="video_show_mgr.h" />
+    <ClInclude Include="video_show_mgr_comm_def.h" />
+    <ClInclude Include="app_utils.h" />
+    <ClInclude Include="wall_mode_video_layout_item.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="bottom_bar_wnd_ui.cpp" />
+    <ClCompile Include="bullet_screen_wnd.cpp" />
+    <ClCompile Include="chat_send_edit_ui.cpp" />
+    <ClCompile Include="enum_apps_info_mgr.cpp" />
+    <ClCompile Include="lowerthirds_setting_wnd_ui.cpp" />
+    <ClCompile Include="lower_thirds_info_wnd.cpp" />
+    <ClCompile Include="message_tip_wnd_u.cpp" />
+    <ClCompile Include="top_tip_wnd_ui.cpp" />
+    <ClCompile Include="error_tip_dlg.cpp" />
+    <ClCompile Include="join_session_wnd_ui.cpp" />
+    <ClCompile Include="leave_session_tips_wnd_ui.cpp" />
+    <ClCompile Include="main_frame.cpp" />
+    <ClCompile Include="roll_control_ui.cpp" />
+    <ClCompile Include="session_info_wnd_ui.cpp" />
+    <ClCompile Include="session_settings_wnd_ui.cpp" />
+    <ClCompile Include="chat_content_wnd_ui.cpp" />
+    <ClCompile Include="title_bar_wnd_ui.cpp" />
+    <ClCompile Include="switch_camera_wnd_ui.cpp" />
+    <ClCompile Include="remote_control_camera_wnd_ui.cpp" />
+    <ClCompile Include="camera_control_request_received_wnd_ui.cpp" />
+    <ClCompile Include="stop_camera_control_wnd_ui.cpp" />
+    <ClCompile Include="switch_camera_pop_wnd_ui.cpp" />
+    <ClCompile Include="turn_page_wnd_ui.cpp" />
+    <ClCompile Include="videosdk_demo.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="video_container_base.cpp" />
+    <ClCompile Include="gallary_mode_video_container.cpp" />
+    <ClCompile Include="active_video_layout_item.cpp" />
+    <ClCompile Include="video_layout_item_base.cpp" />
+    <ClCompile Include="video_show_mgr.cpp" />
+    <ClCompile Include="videosdk_demo_mgr.cpp" />
+    <ClCompile Include="app_utils.cpp" />
+    <ClCompile Include="wall_mode_video_layout_item.cpp" />
+    <ClCompile Include="control_camera_tip_wnd_ui.cpp" />
+    <ClCompile Include="control_camera_pop_wnd_ui.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="videosdk_demo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\app_win32.ico" />
+    <Image Include="res\main.ico" />
+    <Image Include="res\muted.png" />
+    <Image Include="skin\button\chat_edit_hover.png" />
+    <Image Include="skin\button\chat_edit_nor.png" />
+    <Image Include="skin\button\chat_send.png" />
+    <Image Include="skin\button\chat_user.png" />
+    <Image Include="skin\button\close.png" />
+    <Image Include="skin\button\down_page.png" />
+    <Image Include="skin\button\end.png" />
+    <Image Include="skin\button\fullscreen.png" />
+    <Image Include="skin\button\joinsession_settings.png" />
+    <Image Include="skin\button\main_close.png" />
+    <Image Include="skin\button\minimize.png" />
+    <Image Include="skin\button\muted.png" />
+    <Image Include="skin\button\muted_audio.png" />
+    <Image Include="skin\button\muted_video.png" />
+    <Image Include="skin\button\Participants.png" />
+    <Image Include="skin\button\settings.png" />
+    <Image Include="skin\button\share.png" />
+    <Image Include="skin\button\stop_share.png" />
+    <Image Include="skin\button\unmuted_audio.png" />
+    <Image Include="skin\button\unmuted_video.png" />
+    <Image Include="skin\button\up_page.png" />
+    <Image Include="skin\common\btn_end.png" />
+    <Image Include="skin\common\btn_hover.png" />
+    <Image Include="skin\common\btn_nor.png" />
+    <Image Include="skin\common\btn_nor1.png" />
+    <Image Include="skin\common\btn_selected.png" />
+    <Image Include="skin\common\check_box_nor.png" />
+    <Image Include="skin\common\check_box_sel.png" />
+    <Image Include="skin\common\combo.png" />
+    <Image Include="skin\common\eidt_nor.png" />
+    <Image Include="skin\common\main_icon.png" />
+    <Image Include="videosdk_demo.ico" />
+    <Image Include="skin\shadow\Shadow.png" />
+    <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="skin\bottom_bar_wnd.xml" />
+    <Xml Include="skin\bullet_screen_wnd.xml" />
+    <Xml Include="skin\chat_content_wnd.xml" />
+    <Xml Include="skin\error_tip_dlg.xml" />
+    <Xml Include="skin\feedback_launch_wnd.xml" />
+    <Xml Include="skin\feedback_submit_wnd.xml" />
+    <Xml Include="skin\feedback_tips_wnd.xml" />
+    <Xml Include="skin\join_session_wnd.xml" />
+    <Xml Include="skin\leave_session_tips_wnd.xml" />
+    <Xml Include="skin\lowerthird_settings_wnd.xml" />
+    <Xml Include="skin\lower_third_info_wnd.xml" />
+    <Xml Include="skin\mainframe.xml" />
+    <Xml Include="skin\reaction_bar_wnd.xml" />
+    <Xml Include="skin\session_info_wnd.xml" />
+    <Xml Include="skin\session_settings_wnd.xml" />
+    <Xml Include="skin\share_app_item.xml" />
+    <Xml Include="skin\share_select_apps_wnd.xml" />
+    <Xml Include="skin\share_tool_bar_wnd.xml" />
+    <Xml Include="skin\title_bar_wnd.xml" />
+    <Xml Include="skin\switch_camera_wnd.xml" />
+    <Xml Include="skin\remote_control_camera_wnd.xml" />
+    <Xml Include="skin\camera_control_request_received_wnd.xml" />
+    <Xml Include="skin\stop_camera_control_wnd.xml" />
+    <Xml Include="skin\gallery_more_pop_wnd.xml" />
+    <Xml Include="skin\turn_page_wnd.xml" />
+    <Xml Include="skin\control_camera_tip_wnd.xml" />
+    <Xml Include="skin\control_camera_pop_wnd.xml" />
+    <Xml Include="skin\top_tip_wnd.xml" />
+    <Xml Include="skin\switch_camera_pop_wnd.xml" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="25,25" roundcorner="2,2" >
+	<Font id="0" name="Microsoft YaHei" size="12" bold="false" underline="false" italic="false" />
+	<HorizontalLayout bkcolor="#FF212121">
+		<Label name="label_control_camera_tip" padding="0,0,0,0" width="24" height="24" bkimage="res='BUTTON_CONTROL_CAMERA_TIP' restype='ZPIMGRES'" />
+	</HorizontalLayout>
+</Window>

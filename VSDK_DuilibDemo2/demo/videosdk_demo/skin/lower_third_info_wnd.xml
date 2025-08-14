@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="200,62"  layeredimage="" layeredopacity="255">
+	<Font id="0" name="Microsoft YaHei" size="20" bold="false" underline="false" italic="false" default="true" />
+	<Font id="1" name="Microsoft YaHei" size="16" bold="false" underline="false" italic="false" />
+	<HorizontalLayout>
+		<HorizontalLayout bkimage="res='CHAT_EDIT_NOR_BK' restype='ZPIMGRES' corner='10,10,10,10'">
+			<Control name="control_left_line" bkimage="res='BUTTON_COLOR_COMMON' restype='ZPIMGRES' source='0,0,2,18'" width="4" height="38" borderround="1,1" padding="8,11,0,0"/>
+			<VerticalLayout padding="10,10,0,0">
+				<Label name="label_thirds_name" font="0" text="" borderround="2,2" endellipsis="true" align="left" textcolor="#FFFFFFFF" height="20"/>
+				<Label name="label_thirds_title" font="1" endellipsis="true" padding="0,3,0,0" textpadding="4,0,0,0" align="left" valign="vcenter" text="" height="20" bkimage="res = 'BUTTON_COLOR_COMMON' restype = 'ZPIMGRES' source = '0,0,2,18'" textcolor="#FFFFFFFF"/>
+			</VerticalLayout>
+		</HorizontalLayout>
+		<Control name="control_right_corner" width="15" height="20" padding="0,33,0,0" bkimage="res = 'BUTTON_COLOR_COMMON' restype = 'ZPIMGRES' source = '0,0,11,18'"/>
+	</HorizontalLayout>
+</Window>

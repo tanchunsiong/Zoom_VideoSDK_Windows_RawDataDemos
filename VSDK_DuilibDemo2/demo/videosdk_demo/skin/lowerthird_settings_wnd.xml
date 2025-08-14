@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="430,560" caption="0,0,0,30">
+	<Font id="0" name="Microsoft YaHei" size="14" bold="false" underline="false" italic="false"/>
+	<Font id="1" name="Microsoft YaHei" size="16" bold="false" underline="false" italic="false"/>
+	<Font id="2" name="Microsoft YaHei" size="13" bold="false" underline="false" italic="false"/>
+	<VerticalLayout bkcolor="#FF212121">
+		
+		<VerticalLayout  name="lower_third_layout" padding="24,10,0,0">
+			<Label text="Lower Thirds" font="1" textcolor="#FFF5F5F5" />
+
+			<HorizontalLayout padding="0,10,24,0" height="195" bkcolor="#FF6E7680">
+				<Control />
+				<Control height="166" width="166" bkimage="res='DEFAULT_AVATAR' restype='ZPIMGRES'" padding="0,10,0,0"/>
+				<Control />
+				<HorizontalLayout name="lowerthird_info_setting" float="true" pos="8,8" width="152" height="62">
+					<HorizontalLayout bkcolor="#FF131619" borderround="4,4" width="132">
+						<Control name="control_left_line_setting" bkimage="res='BUTTON_COLOR_COMMON' restype='ZPIMGRES' source='0,0,2,18'" borderround="1,1" width="4" height="38" padding="8,11,0,0"/>
+						<VerticalLayout padding="10,8,0,0">
+							<Label name="label_thirds_name_setting" font="0" text="" endellipsis="true" align="left" textcolor="#FFFFFFFF" height="20"/>
+							<Label name="label_thirds_title_setting" font="2" endellipsis="true" padding="0,2,0,0" align="left" text="" height="18" bkimage="res='BUTTON_COLOR_COMMON' restype='ZPIMGRES' source='0,0,2,18'" textcolor="#FFFFFFFF"/>
+						</VerticalLayout>
+					</HorizontalLayout>
+					<Control name="control_right_corner_setting" width="11" height="18" padding="0,30,0,0" bkimage="res='BUTTON_COLOR_COMMON' restype='ZPIMGRES' source='0,0,11,18'"/>
+				</HorizontalLayout>
+
+			</HorizontalLayout>
+
+			<HorizontalLayout height="33" padding="0,14,0,0">
+				<Label text="Your Name" font="0" textcolor="#FFF7F9FA" width="75"/>
+				<Label text="*" font="0" textcolor="#FFFD3D4A" padding="2,0,0,0"/>
+			</HorizontalLayout>
+			<RichEdit  name="edit_lower_third_name" tipvalue="Enter your name" maxchar="100" font="0" textcolor="#FFF7F9FA" width="385" height="30" inset="10,4,10,2" multiline="false" autohscroll="true"  wanttab="false" rich="false" bkimage="res='EDIT_COMMON_NOR' restype='ZPIMGRES' corner='5,5,5,5' "/>
+
+			<HorizontalLayout padding="0,8,0,0" height="33">
+				<Label text="Description" font="0" textcolor="#FFF7F9FA" width="77"/>
+				<!--<Label text="*" font="0" textcolor="#FFFD3D4A" padding="2,0,0,0"/>-->
+			</HorizontalLayout>
+			<RichEdit  name="edit_lower_third_title" font="0" maxchar="100" textcolor="#FFF7F9FA" width="385" height="30" inset="10,4,10,2" multiline="false" autohscroll="true"  wanttab="false" rich="false" bkimage="res='EDIT_COMMON_NOR' restype='ZPIMGRES' corner='5,5,5,5' "/>
+
+			<Label text="Brand Color" font="0" textcolor="#FFF7F9FA" padding="0,15,0,0"/>
+			<HorizontalLayout name="option_color_layout" padding="0,10,0,0" childpadding="8" hscrollbar="true" height="50" width="432">
+				<Option name="option_color_none" userdata="#444B53" width="40" height="40" group="color_setting" selected="true" normalimage="res='BUTTON_COLOR_NONE' restype='ZPIMGRES'" hotimage="res='BUTTON_COLOR_NONE_HOT' restype='ZPIMGRES'" selectedimage="res='BUTTON_COLOR_NONE_HOT' restype='ZPIMGRES'"/>
+
+				<Option name="option_color_blue" userdata="#1E71D6" width="40" height="40" group="color_setting" normalimage="res='BUTTON_COLOR_BULE' restype='ZPIMGRES'" hotimage="res='BUTTON_COLOR_BULE_HOT' restype='ZPIMGRES'" selectedimage="res='BUTTON_COLOR_BULE_HOT' restype='ZPIMGRES'"/>
+				<!--bkcolor="#1E71D6"-->
+				<Option name="option_color_red" userdata="#FD3D4A" width="40" height="40" group="color_setting" normalimage="res='BUTTON_COLOR_RED' restype='ZPIMGRES'" hotimage="res='BUTTON_COLOR_RED_HOT' restype='ZPIMGRES'" selectedimage="res='BUTTON_COLOR_RED_HOT' restype='ZPIMGRES'"/>
+				<!--bkcolor="#FD3D4A"-->
+				<Option name="option_color_green" userdata="#66CC84" width="40" height="40" group="color_setting" normalimage="res='BUTTON_COLOR_GREEN' restype='ZPIMGRES'" hotimage="res='BUTTON_COLOR_GREEN_HOT' restype='ZPIMGRES'" selectedimage="res='BUTTON_COLOR_GREEN_HOT' restype='ZPIMGRES'"/>
+				<!--bkcolor="#66CC84"-->
+				<Option name="option_color_orange" userdata="#FF8422" width="40" height="40" group="color_setting" normalimage="res='BUTTON_COLOR_ORANGE' restype='ZPIMGRES'" hotimage="res='BUTTON_COLOR_ORANGE_HOT' restype='ZPIMGRES'" selectedimage="res='BUTTON_COLOR_ORANGE_HOT' restype='ZPIMGRES'"/>
+				<!--bkcolor="#FF8422"-->
+				<Option name="option_color_darkblue" userdata="#493AB7" width="40" height="40" group="color_setting" normalimage="res='BUTTON_COLOR_DARKBULE' restype='ZPIMGRES'" hotimage="res='BUTTON_COLOR_DARKBULE_HOT' restype='ZPIMGRES'" selectedimage="res='BUTTON_COLOR_DARKBULE_HOT' restype='ZPIMGRES'"/>
+				<!--bkcolor="#493AB7"-->
+				<Option name="option_color_violet" userdata="#A477FF" width="40" height="40" group="color_setting" normalimage="res='BUTTON_COLOR_VIOLET' restype='ZPIMGRES'" hotimage="res='BUTTON_COLOR_VIOLET_HOT' restype='ZPIMGRES'" selectedimage="res='BUTTON_COLOR_VIOLET_HOT' restype='ZPIMGRES'"/>
+				<!--bkcolor="#A477FF"-->
+				<Option name="option_color_yellow" userdata="#FFBF39" width="40" height="40" group="color_setting" normalimage="res='BUTTON_COLOR_YELLOW' restype='ZPIMGRES'" hotimage="res='BUTTON_COLOR_YELLOW_HOT' restype='ZPIMGRES'" selectedimage="res='BUTTON_COLOR_YELLOW_HOT' restype='ZPIMGRES'"/>
+				<!--bkcolor="#FFBF39"-->
+			</HorizontalLayout>
+			<HorizontalLayout height="35" padding="0,18,0,0">
+				<!--<CheckBox name="chk_show_company_info" font="0" width="230" text="Show company information"  height="16" textcolor="#FFF7F9FA" padding="0,5,0,0" align="left,singleline" valign="vcenter" textpadding="21,0,0,0" normalimage="res='CHECK_BOX_NOR' restype='ZPIMGRES' dest='0,0,16,16'" selectedimage="res='CHECK_BOX_SEL' restype='ZPIMGRES' dest='0,0,16,16'" noprefix="true"  focuspadding="22,10,0,10"/>-->
+				<Control />
+				<Button name="btn_save_lower_third" text="Save" enabled="false" font="0" width="76" height="30" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" align="center" bordersize="1" borderround="2,2" normalimage="res='BUTTON_COMMON_BTN_NOR' restype='ZPIMGRES' corner='10,10,10,10'" disabledimage="res='CHAT_EDIT_NOR_BK' restype='ZPIMGRES' corner='10,10,10,10'"/>
+				<Button name="btn_cancel_lower_third" text="Cancel" font="0" width="78" height="30"  padding="12,0,24,0" textcolor="#FFFFFFFF" align="center" normalimage="res='BUTTON_COMMON_BTN_NOR1' restype='ZPIMGRES' corner='10,10,10,10'" />
+			</HorizontalLayout>
+		</VerticalLayout>
+	</VerticalLayout>
+
+</Window>

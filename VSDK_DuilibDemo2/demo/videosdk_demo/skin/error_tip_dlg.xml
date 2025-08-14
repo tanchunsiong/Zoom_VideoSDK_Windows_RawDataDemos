@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window  size="340,170" caption="0,0,0,26" >
+	<Font id="0" name="Microsoft YaHei" size="12" bold="false" underline="false" italic="false" default="true"/>
+	<Font id="1" name="Microsoft YaHei" size="14" bold="false" underline="false" italic="false" />
+	<VerticalLayout bkcolor="0xFF232424" >
+		<HorizontalLayout height="36" >
+			<Control />
+			<Button name="btn_close" width="28" height="26" normalimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,0,28,26' " hotimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,26,28,52' " pushedimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,52,28,78' " disabledimage="res='BUTTON_CLOSE' restype='ZPIMGRES' source='0,78,28,104' "/>
+		</HorizontalLayout>
+		<HorizontalLayout padding="0,20,0,0" height="60" >
+			<Control />
+			<Label  name="label_error_tip" width="300" font="1" textcolor="#FFFFFFFF" multiline="true" />
+			<Control />
+		</HorizontalLayout>
+		<control />
+		<HorizontalLayout padding="0,0,0,0" height="30" padding="0,0,0,20" >
+			<Control />
+			<Button  name="btn_ok" text="OK" width="60" height="30" textcolor="#FFFFFFFF" align="center" normalimage="res='BUTTON_COMMON_BTN_NOR' restype='ZPIMGRES' corner='10,10,10,10'" />
+			<Control />
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>

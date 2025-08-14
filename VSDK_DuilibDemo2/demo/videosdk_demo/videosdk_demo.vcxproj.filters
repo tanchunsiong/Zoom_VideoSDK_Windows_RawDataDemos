@@ -1,0 +1,476 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="header files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="header files\VideoContainer">
+      <UniqueIdentifier>{f849d23b-c6cc-45d5-b2c2-cf5f040afb11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header files\VideoItem">
+      <UniqueIdentifier>{f922d95e-cf00-4533-9c47-3b87ad259c03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header files\UI">
+      <UniqueIdentifier>{824e746b-5b22-415e-a34b-4fc6540df0fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\VideoContainer">
+      <UniqueIdentifier>{3ec3420f-c9fe-4e30-8ba3-ad6d692d0722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\VideoItem">
+      <UniqueIdentifier>{98e8fea4-6cc4-45bb-b604-0014da7f69e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\UI">
+      <UniqueIdentifier>{e9e6cc21-6067-4136-9031-0fb37bf41fe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="video_show_mgr.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="video_show_mgr_comm_def.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="active_video_layout_item.h">
+      <Filter>header files\VideoItem</Filter>
+    </ClInclude>
+    <ClInclude Include="video_layout_item_base.h">
+      <Filter>header files\VideoItem</Filter>
+    </ClInclude>
+    <ClInclude Include="video_container_base.h">
+      <Filter>header files\VideoContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="gallary_mode_video_container.h">
+      <Filter>header files\VideoContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="videosdk_demo.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="videosdk_include_files.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="videosdk_demo_mgr.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="share_app_item_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="share_select_apps_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="enum_apps_info_mgr.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="enum_apps_info_mgr_comm_def.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="app_utils.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="share_app_layout_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="share_tool_bar_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="chat_content_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="chat_send_edit_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="bottom_bar_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="leave_session_tips_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="join_session_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="main_frame.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="session_info_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="session_settings_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="title_bar_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="switch_camera_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="control_camera_tip_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="control_camera_pop_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="camera_control_request_received_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="stop_camera_control_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="gallery_more_pop_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="switch_camera_pop_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="remote_control_camera_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="turn_page_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="wall_mode_video_layout_item.h">
+      <Filter>header files\VideoItem</Filter>
+    </ClInclude>
+    <ClInclude Include="error_tip_dlg.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="message_tip_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="top_tip_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="statistics_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="roll_control_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet_screen_wnd.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="feed_back_wnd.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="lower_thirds_info_wnd.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="more_pop_wnd.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="reaction_bar_wnd.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="feedback_tips_wnd.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="lowerthirds_setting_wnd_ui.h">
+      <Filter>header files\UI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="video_show_mgr.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="active_video_layout_item.cpp">
+      <Filter>src\VideoItem</Filter>
+    </ClCompile>
+    <ClCompile Include="video_layout_item_base.cpp">
+      <Filter>src\VideoItem</Filter>
+    </ClCompile>
+    <ClCompile Include="video_container_base.cpp">
+      <Filter>src\VideoContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="gallary_mode_video_container.cpp">
+      <Filter>src\VideoContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="videosdk_demo.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="videosdk_demo_mgr.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="share_app_item_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="share_select_apps_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="app_utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="enum_apps_info_mgr.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="share_app_layout_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="share_tool_bar_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="chat_content_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="chat_send_edit_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="bottom_bar_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="leave_session_tips_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="join_session_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="main_frame.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="session_info_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="session_settings_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="title_bar_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="switch_camera_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="control_camera_tip_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="control_camera_pop_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="camera_control_request_received_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="stop_camera_control_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="gallery_more_pop_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="switch_camera_pop_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="remote_control_camera_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="turn_page_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="wall_mode_video_layout_item.cpp">
+      <Filter>src\VideoItem</Filter>
+    </ClCompile>
+    <ClCompile Include="error_tip_dlg.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="message_tip_wnd_u.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="top_tip_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="statistics_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet_screen_wnd.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="feed_back_wnd.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="lower_thirds_info_wnd.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="roll_control_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="more_pop_wnd.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="reaction_bar_wnd.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="feedback_tips_wnd.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="lowerthirds_setting_wnd_ui.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\shadow\Shadow.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="videosdk_demo.ico">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\app_win32.ico">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\chat_edit_hover.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\chat_edit_nor.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\chat_send.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\chat_user.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\close.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\down_page.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\end.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\fullscreen.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\joinsession_settings.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\main_close.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\minimize.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\muted.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\muted_audio.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\muted_video.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\Participants.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\settings.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\share.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\stop_share.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\unmuted_audio.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\unmuted_video.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\button\up_page.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\common\btn_hover.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\common\btn_nor.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\common\btn_nor1.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\common\btn_selected.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\common\check_box_nor.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\common\check_box_sel.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\common\combo.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\common\eidt_nor.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\common\main_icon.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\main.ico">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="skin\common\btn_end.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\muted.png">
+      <Filter>res</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="videosdk_demo.rc">
+      <Filter>res</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="skin\bottom_bar_wnd.xml" />
+    <Xml Include="skin\chat_content_wnd.xml" />
+    <Xml Include="skin\join_session_wnd.xml" />
+    <Xml Include="skin\leave_session_tips_wnd.xml" />
+    <Xml Include="skin\mainframe.xml" />
+    <Xml Include="skin\session_info_wnd.xml" />
+    <Xml Include="skin\session_settings_wnd.xml" />
+    <Xml Include="skin\share_app_item.xml" />
+    <Xml Include="skin\share_select_apps_wnd.xml" />
+    <Xml Include="skin\share_tool_bar_wnd.xml" />
+    <Xml Include="skin\title_bar_wnd.xml" />
+    <Xml Include="skin\turn_page_wnd.xml" />
+    <Xml Include="skin\error_tip_dlg.xml" />
+    <Xml Include="skin\bullet_screen_wnd.xml" />
+    <Xml Include="skin\feedback_launch_wnd.xml" />
+    <Xml Include="skin\feedback_submit_wnd.xml" />
+    <Xml Include="skin\lower_third_info_wnd.xml" />
+    <Xml Include="skin\reaction_bar_wnd.xml" />
+    <Xml Include="skin\feedback_tips_wnd.xml" />
+    <Xml Include="skin\lowerthird_settings_wnd.xml" />
+    <Xml Include="skin\switch_camera_wnd.xml" />
+    <Xml Include="skin\remote_control_camera_wnd.xml" />
+    <Xml Include="skin\camera_control_request_received_wnd.xml" />
+    <Xml Include="skin\stop_camera_control_wnd.xml" />
+    <Xml Include="skin\gallery_more_pop_wnd.xml" />
+    <Xml Include="skin\control_camera_tip_wnd.xml" />
+    <Xml Include="skin\control_camera_pop_wnd.xml" />
+    <Xml Include="skin\top_tip_wnd.xml" />
+    <Xml Include="skin\switch_camera_pop_wnd.xml" />
+  </ItemGroup>
+</Project>

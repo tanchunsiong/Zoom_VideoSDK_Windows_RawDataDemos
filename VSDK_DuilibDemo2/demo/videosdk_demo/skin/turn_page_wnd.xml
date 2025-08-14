@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="24,24" >
+	<VerticalLayout width="24" height="24">
+		<Button name="btn_up_page" width="24" height="24" visible="true" normalimage="res='BUTTON_UP_PAGE' restype='ZPIMGRES'"/>
+		<Button name="btn_down_page" width="24" height="24" visible="true" normalimage="res='BUTTON_DOWN_PAGE' restype='ZPIMGRES'"/>
+	</VerticalLayout>
+</Window>

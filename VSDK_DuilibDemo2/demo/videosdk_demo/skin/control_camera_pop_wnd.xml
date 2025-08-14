@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="180,48" roundcorner="4,4">
+	<Font id="0" name="Microsoft YaHei" size="13" bold="false" underline="false" italic="false" default="true" />
+	<HorizontalLayout bkcolor="0xFF232424">
+		<Label name="label_text" font="0" textcolor="#FFFFFFFF" padding="10,0,10,0"/> 			
+	</HorizontalLayout>
+</Window>

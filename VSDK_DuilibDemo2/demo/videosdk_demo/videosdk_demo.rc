@@ -1,0 +1,363 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (Simplified, PRC) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_INSTANTSDKDEMO      ICON                    "res\\main.ico"
+
+IDI_SMALL               ICON                    "res\\main.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// XML
+//
+
+IDXML_MAINFRAM_UI                 XML                     "skin/mainframe.xml"
+
+IDXML_BOTTOM_BAR_WND_UI           XML                     "skin/bottom_bar_wnd.xml"
+
+IDXML_LEAVE_SESSION_TIPS_WND_UI   XML                     "skin/leave_session_tips_wnd.xml"
+
+IDXML_JOIN_SESSION_WND_UI         XML                     "skin/join_session_wnd.xml"
+
+IDXML_SESSION_INFO_WND_UI         XML                     "skin/session_info_wnd.xml"
+
+IDXML_SESSION_SETTINGS_WND_UI     XML                     "skin/session_settings_wnd.xml"
+
+IDXML_LOWERTHIRDS_SETTINGS_WND_UI XML                     "skin/lowerthird_settings_wnd.xml"
+
+IDXML_SHARE_APP_ITEM_UI           XML                     "skin/share_app_item.xml"
+
+IDXML_TITLE_BAR_WND_UI            XML                     "skin/title_bar_wnd.xml"
+
+IDXML_SHOW_CHAT_CONTENT_WND_UI    XML                     "skin/chat_content_wnd.xml"
+
+IDXML_TURN_PAGE_WND_UI            XML                     "skin/turn_page_wnd.xml"
+
+IDXML_ERROR_TIP_DLG_UI            XML                     "skin/error_tip_dlg.xml"
+
+IDXML_MESSAGE_TIP_WND_UI          XML                     "skin/message_tip_wnd.xml"
+
+IDXML_BULLET_SCREEN_WND_UI        XML                     "skin/bullet_screen_wnd.xml"
+
+IDXML_LOWERTHIRDS_INFO_WND_UI     XML                     "skin/lower_third_info_wnd.xml"
+
+IDXML_SWITCH_CAMERA_WND_UI            XML                     "skin/switch_camera_wnd.xml"
+
+IDXML_REMOTE_CTRL_CAMERA_WND_UI            XML                     "skin/remote_control_camera_wnd.xml"
+
+IDXML_CAMERA_CONTROL_REQUEST_WND_UI            XML                     "skin/camera_control_request_received_wnd.xml"
+
+IDXML_STOP_CAMERA_CONTROL_WND_UI            XML                     "skin/stop_camera_control_wnd.xml"
+
+IDXML_CONTROL_CAMERA_TIP_WND_UI            XML                     "skin/control_camera_tip_wnd.xml"
+
+IDXML_CONTROL_CAMERA_POP_WND_UI            XML                     "skin/control_camera_pop_wnd.xml"
+
+IDXML_TOP_TIP_WND_UI          XML                     "skin/top_tip_wnd.xml"
+
+IDXML_SWITCH_CAMERA_POP_WND_UI             XML                     "skin/switch_camera_pop_wnd.xml"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// ZPIMGRES
+//
+
+BUTTON_CLOSE                    ZPIMGRES                "skin/button/close.png"
+
+BUTTON_WHITE_CLOSE              ZPIMGRES                "skin/button/white_close.png"
+
+BUTTON_END                      ZPIMGRES                "skin/button/end.png"
+
+BUTTON_FULL_SCREEN              ZPIMGRES                "skin/button/fullscreen.png"
+
+BUTTON_MAIN_CLOSE               ZPIMGRES                "skin/button/main_close.png"
+
+BUTTON_MINIMIZE                 ZPIMGRES                "skin/button/minimize.png"
+    
+BUTTON_MUTED_AUDIO              ZPIMGRES                "skin/button/muted_audio.png"
+
+BUTTON_MUTED_VIDEO              ZPIMGRES                "skin/button/muted_video.png"
+
+BUTTON_MUTED                    ZPIMGRES                "skin/button/muted.png"
+
+BUTTON_SETTING                  ZPIMGRES                "skin/button/settings.png"
+
+BUTTON_SHARE                    ZPIMGRES                "skin/button/share.png"
+
+BUTTON_STOP_SHARE               ZPIMGRES                "skin/button/stop_share.png"
+
+BUTTON_UNMUTED_AUDIO            ZPIMGRES                "skin/button/unmuted_audio.png"
+
+BUTTON_UNMUTED_VIDEO            ZPIMGRES                "skin/button/unmuted_video.png"
+
+BUTTON_EMOJI                    ZPIMGRES                "skin/button/emoji.png"
+
+BUTTON_FEEDBACK                 ZPIMGRES                "skin/button/feedback.png"
+
+BUTTON_FEEDBACK_SMALL           ZPIMGRES                "skin/button/feedback_small.png"
+
+NUMBER_BKIMAGE_RED              ZPIMGRES                "skin/button/number_bkimage_red.png"
+
+NUMBER_BKIMAGE_BLACK            ZPIMGRES                "skin/button/number_bkimage_black.png"
+
+BUTTON_MORE                     ZPIMGRES                "skin/button/more.png"
+
+BUTTON_COMMON_BTN_HOVER         ZPIMGRES                "skin/common/btn_hover.png"
+
+BUTTON_COMMON_BTN_NOR           ZPIMGRES                "skin/common/btn_nor.png"
+
+BUTTON_COMMON_BTN_NOR1          ZPIMGRES                "skin/common/btn_nor1.png"
+
+BUTTON_COMMON_BTN_SELECTED      ZPIMGRES                "skin/common/btn_selected.png"
+
+BUTTON_COMMON_COMBO             ZPIMGRES                "skin/common/combo.png"
+
+BUTTON_COMMON_COMBO_LONG        ZPIMGRES                "skin/common/combo_long.png"
+
+BUTTON_COMMON_END               ZPIMGRES                "skin/common/btn_end.png"
+
+CHAT_EDIT_NOR_BK                ZPIMGRES                "skin/button/chat_edit_nor.png"
+
+CHAT_EDIT_HOV_BK                ZPIMGRES                "skin/button/chat_edit_hover.png"
+
+CHAT_USER_ICON                  ZPIMGRES                "skin/button/chat_user.png"
+
+CHAT_SEND                       ZPIMGRES                "skin/button/chat_send.png"
+
+MAIN_ICON                       ZPIMGRES                "skin/common/main_icon.png"
+
+JOINSESSION_SETTINGS            ZPIMGRES                "skin/button/joinsession_settings.png"
+
+SHADOW_BK                       ZPIMGRES                "skin/shadow/shadow.png"
+
+DEFAULT_AVATAR                  ZPIMGRES                "skin/shadow/default_avatar.png"
+
+BUTTON_UP_PAGE                  ZPIMGRES                "skin/button/up_page.png"
+
+BUTTON_DOWN_PAGE                ZPIMGRES                "skin/button/down_page.png"
+
+POPUP_CORNER                    ZPIMGRES                "skin/button/popup_corner.png"
+
+VIDEO_MUTED_ICON                ZPIMGRES                "skin/button/muted.png"
+
+BUTTON_PARTICIPANTS             ZPIMGRES                "skin/button/Participants.png"
+
+EDIT_COMMON_NOR                 ZPIMGRES                "skin/common/eidt_nor.png"
+
+CHECK_BOX_NOR                   ZPIMGRES                "skin/common/check_box_nor.png"
+
+CHECK_BOX_SEL                   ZPIMGRES                "skin/common/check_box_sel.png"
+
+FINISH_DOWN                     ZPIMGRES                "skin/common/finish_done.png"
+FINISH_DOWN_BIG                 ZPIMGRES                "skin/common/finish_done_big.png"
+
+OPTION_NOR                      ZPIMGRES                "skin/common/radio_nor.png"
+
+OPTION_SEL                      ZPIMGRES                "skin/common/radio_select.png"
+
+BUTTON_SHARE_UNMUTED_AUDIO      ZPIMGRES                "skin/button/share_unmuted_audio.png"
+
+BUTTON_SHARE_MUTED_AUDIO        ZPIMGRES                "skin/button/share_muted_audio.png"
+
+BUTTON_SHARE_UNMUTED_VIDEO      ZPIMGRES                "skin/button/share_unmuted_video.png"
+
+BUTTON_SHARE_MUTED_VIDEO        ZPIMGRES                "skin/button/share_muted_video.png"
+
+BUTTON_SHARE_PARTICIPANT        ZPIMGRES                "skin/button/share_participant.png"
+
+BUTTON_EMOJI_CLAP               ZPIMGRES                "skin/emoji/clap.png"
+BUTTON_EMOJI_CLAP_HOVER         ZPIMGRES                "skin/emoji/clap_hover.png"
+BUTTON_EMOJI_CLAP_CLICK         ZPIMGRES                "skin/emoji/clap_click.png"
+
+BUTTON_EMOJI_THUMBSUP           ZPIMGRES                "skin/emoji/thumbsup.png"
+BUTTON_EMOJI_THUMBSUP_HOVER     ZPIMGRES                "skin/emoji/thumbsup_hover.png"
+BUTTON_EMOJI_THUMBSUP_CLICK     ZPIMGRES                "skin/emoji/thumbsup_click.png"
+
+BUTTON_EMOJI_JOY                ZPIMGRES                "skin/emoji/joy.png"
+BUTTON_EMOJI_JOY_HOVER          ZPIMGRES                "skin/emoji/joy_hover.png"
+BUTTON_EMOJI_JOY_CLICK          ZPIMGRES                "skin/emoji/joy_click.png"
+
+BUTTON_EMOJI_HUSHED             ZPIMGRES                "skin/emoji/hushed.png"
+BUTTON_EMOJI_HUSHED_HOVER       ZPIMGRES                "skin/emoji/hushed_hover.png"
+BUTTON_EMOJI_HUSHEDD_CLICK      ZPIMGRES                "skin/emoji/hushed_click.png"
+
+BUTTON_EMOJI_HEART              ZPIMGRES                "skin/emoji/heart.png"
+BUTTON_EMOJI_HEART_HOVER        ZPIMGRES                "skin/emoji/heart_hover.png"
+BUTTON_EMOJI_HEART_CLICK        ZPIMGRES                "skin/emoji/heart_click.png"
+
+BUTTON_EMOJI_TADA               ZPIMGRES                "skin/emoji/tada.png"
+BUTTON_EMOJI_TADA_HOVER         ZPIMGRES                "skin/emoji/tada_hover.png"
+BUTTON_EMOJI_TADA_CLICK         ZPIMGRES                "skin/emoji/tada_click.png"
+
+BUTTON_EMOJI_RAISEDHAND         ZPIMGRES                "skin/emoji/raised_hand.png"
+
+BUTTON_COLOR_COMMON             ZPIMGRES                "skin/button/color_common.png"
+
+BUTTON_COLOR_NONE               ZPIMGRES                "skin/button/color_none.png"
+BUTTON_COLOR_BULE               ZPIMGRES                "skin/button/color_blue.png"
+BUTTON_COLOR_VIOLET             ZPIMGRES                "skin/button/color_violet.png"
+BUTTON_COLOR_GREEN              ZPIMGRES                "skin/button/color_green.png"
+BUTTON_COLOR_ORANGE             ZPIMGRES                "skin/button/color_orange.png"
+BUTTON_COLOR_RED                ZPIMGRES                "skin/button/color_red.png"
+BUTTON_COLOR_DARKBULE           ZPIMGRES                "skin/button/color_darkblue.png"
+BUTTON_COLOR_YELLOW             ZPIMGRES                "skin/button/color_yellow.png"
+BUTTON_COLOR_NONE_HOT           ZPIMGRES                "skin/button/color_none_hot.png"
+BUTTON_COLOR_BULE_HOT           ZPIMGRES                "skin/button/color_blue_hot.png"
+BUTTON_COLOR_VIOLET_HOT         ZPIMGRES                "skin/button/color_violet_hot.png"
+BUTTON_COLOR_GREEN_HOT          ZPIMGRES                "skin/button/color_green_hot.png"
+BUTTON_COLOR_ORANGE_HOT         ZPIMGRES                "skin/button/color_orange_hot.png"
+BUTTON_COLOR_RED_HOT            ZPIMGRES                "skin/button/color_red_hot.png"
+BUTTON_COLOR_DARKBULE_HOT       ZPIMGRES                "skin/button/color_darkblue_hot.png"
+BUTTON_COLOR_YELLOW_HOT         ZPIMGRES                "skin/button/color_yellow_hot.png"
+
+PROGRESS_FORE                   ZPIMGRES                "skin/common/progress_fore.png"
+PROGRESS_BK                     ZPIMGRES                "skin/common/progress_bk.png"
+
+FEEDBACK_HIGHLY_SATISFIED       ZPIMGRES                "skin/emoji/fb_highly_satisfied.png"
+FEEDBACK_SATISFIED              ZPIMGRES                "skin/emoji/fb_satisfied.png"
+FEEDBACK_NEUTRAL                ZPIMGRES                "skin/emoji/fb_neutral.png"
+FEEDBACK_DISSATISFIED           ZPIMGRES                "skin/emoji/fb_dissatisfied.png"
+FEEDBACK_VERY_DISSATISFIED      ZPIMGRES                "skin/emoji/fb_very_dissatisfied.png"
+
+FEEDBACK_HIGHLY_SATISFIED_DIS   ZPIMGRES                "skin/emoji/fb_highly_satisfied_dis.png"
+FEEDBACK_SATISFIED_DIS          ZPIMGRES                "skin/emoji/fb_satisfied_dis.png"
+FEEDBACK_NEUTRAL_DIS            ZPIMGRES                "skin/emoji/fb_neutral_dis.png"
+FEEDBACK_DISSATISFIED_DIS       ZPIMGRES                "skin/emoji/fb_dissatisfied_dis.png"
+FEEDBACK_VERY_DISSATISFIED_DIS  ZPIMGRES                "skin/emoji/fb_very_dissatisfied_dis.png"
+
+BUTTON_SWITCH_CAMERA_DEFULT               ZPIMGRES                "skin/button/switch_camera_defult.png"
+
+BUTTON_CLOSE_REMOTE_CTRL              ZPIMGRES                "skin/button/close_remote_ctrl.png"
+BUTTON_ZOOM_IN              ZPIMGRES                "skin/button/zoom_in.png"
+BUTTON_ZOOM_OUT              ZPIMGRES                "skin/button/zoom_out.png"
+BUTTON_TURN_UP              ZPIMGRES                "skin/button/turn_up.png"
+BUTTON_TURN_DOWN              ZPIMGRES                "skin/button/turn_down.png"
+BUTTON_TURN_LEFT              ZPIMGRES                "skin/button/turn_left.png"
+BUTTON_TURN_RIGHT              ZPIMGRES                "skin/button/turn_right.png"
+BUTTON_CONTROL_CAMERA_TIP               ZPIMGRES                "skin/button/control_camera_tip.png"
+
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "videosdk_demo"
+    IDC_VIDEOSDKDEMO        "VIDEOSDKDEMO"
+END
+
+#endif    // Chinese (Simplified, PRC) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON_MAIN               ICON                    "res\\main.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_PNG_MUTED           PNG                     "res\\muted.png"
+IDB_PNG_MUTED_SHADE     PNG                     "res\\muted_shade.png"
+IDB_PNG_MORE_NORMAL     PNG                     "res\\more_normal.png"
+IDB_EMOJI_CLAP			PNG                     "skin\\emoji\\clap.png"
+IDB_EMOJI_THUMBSUP		PNG                     "skin\\emoji\\thumbsup.png"
+IDB_EMOJI_JOY			PNG                     "skin\\emoji\\joy.png"
+IDB_EMOJI_HUSHED		PNG                     "skin\\emoji\\hushed.png"
+IDB_EMOJI_HEART			PNG                     "skin\\emoji\\heart.png"
+IDB_EMOJI_TADA			PNG                     "skin\\emoji\\tada.png"
+IDB_EMOJI_RAISEDHAND	PNG                     "skin\\emoji\\raised_hand.png"
+IDB_PNG_SHARE_2ND_CAMERA           PNG                     "res\\share_2nd_camera_dark.png"
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

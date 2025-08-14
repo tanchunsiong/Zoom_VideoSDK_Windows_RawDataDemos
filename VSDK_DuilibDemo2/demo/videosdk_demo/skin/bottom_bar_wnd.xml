@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window layeredimage="" layeredopacity="255" >
+	<Font id="0" name="Microsoft YaHei" size="10" bold="false" underline="false" italic="false" default="true"/>
+	<HorizontalLayout >
+		<HorizontalLayout padding="10,6,0,6" >
+			<ChatRichEdit name ="chat_rich_edit" tipvalue="Type comment here..." inset="0,0,10,0" textpadding="20,10,20,10" width="180" height="36" align="left" font="0" textcolor="0xfff3f7fd" tipvaluecolor="0xffbad7e2  " bkimage="res='CHAT_EDIT_NOR_BK' restype='ZPIMGRES' corner='10,10,10,10'" pushimage=" res='CHAT_EDIT_HOV_BK' restype='ZPIMGRES' corner='10,10,10,10'" multiline="false" autohscroll="false" autovscroll="false" vscrollbar="false" hscrollbar="false" wantreturn="true" >
+				<Button name="btn_chat_send" pos="154,10" width="16" height="16" float="true" normalimage="res='CHAT_SEND' restype='ZPIMGRES'" />
+			</ChatRichEdit>
+			<Control />
+		</HorizontalLayout>
+		<HorizontalLayout width="454" >
+			<VerticalLayout padding="0,0,0,0" width="48" height="48">
+				<Button name="btn_muted_audio" width="48" height="48" visible="true" normalimage="res='BUTTON_MUTED_AUDIO' restype='ZPIMGRES'"/>
+				<Button name="btn_unmuted_audio" width="48" height="48" visible="false" normalimage="res='BUTTON_UNMUTED_AUDIO' restype='ZPIMGRES'"/>
+			</VerticalLayout>
+			<VerticalLayout padding="10,0,0,0" width="48" height="48">
+				<Button name="btn_muted_video" width="48" height="48" visible="true" normalimage="res='BUTTON_MUTED_VIDEO' restype='ZPIMGRES' "/>
+				<Button name="btn_unmuted_video" width="48" height="48" visible="false" normalimage="res='BUTTON_UNMUTED_VIDEO' restype='ZPIMGRES'"/>
+			</VerticalLayout>
+			<Button name="btn_end" padding="10,0,0,0" width="48" height="48" normalimage="res='BUTTON_END' restype='ZPIMGRES'"/>
+			<VerticalLayout  width="48" height="48" padding="10,0,0,0"> 
+				<Button name="btn_participant" width="48" height="48" normalimage="res='BUTTON_PARTICIPANTS' restype='ZPIMGRES'"/>
+				<label name="label_participant_num" text="1" textcolor="0xFFA9A9A9" visible="true" float="true" pos="20,0,48,20" align="center" />
+			</VerticalLayout>
+		</HorizontalLayout>
+		<HorizontalLayout>
+			<Control />
+			<Button name="btn_settings" padding="0,0,10,0" width="48" height="48" normalimage="res='BUTTON_SETTING' restype='ZPIMGRES' "/>
+		</HorizontalLayout>
+	</HorizontalLayout>
+</Window>
