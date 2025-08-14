@@ -179,8 +179,7 @@ void CLowerThirdsInfoWnd::InitCurrentUserLowerThirdInfo()
 
 	if (username.empty())
 	{
-		POINT emoji_middle_point = { LOWERTHIRDS_PADDING_LEFT, LOWERTHIRDS_PADDING_TOP };
-		CMainFrame::GetInstance().SetActivityVideoEmojiPos(emoji_middle_point);
+	
 		return;
 	}
 	
@@ -192,8 +191,7 @@ void CLowerThirdsInfoWnd::InitCurrentUserLowerThirdInfo()
 	}
 	else
 	{
-		POINT emoji_middle_point = { LOWERTHIRDS_PADDING_LEFT, LOWERTHIRDS_PADDING_TOP};
-		CMainFrame::GetInstance().SetActivityVideoEmojiPos(emoji_middle_point);
+	
 	}
 }
 

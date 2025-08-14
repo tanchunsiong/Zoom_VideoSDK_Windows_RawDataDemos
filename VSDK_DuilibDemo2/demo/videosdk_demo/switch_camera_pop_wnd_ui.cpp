@@ -34,30 +34,7 @@ void CSwitchCameraPopWnd::Notify(TNotifyUI& msg)
 	int iii = 0;
 	if (msg.sType == _T("click"))
 	{
-		if (msg.pSender->GetName() == _T("btn_camera_1"))
-		{
-			CMainFrame::GetInstance().ShareSelectedCamera(map_cameras_[0]);
-		}
-		else if (msg.pSender->GetName() == _T("btn_camera_2"))
-		{
-			CMainFrame::GetInstance().ShareSelectedCamera(map_cameras_[1]);
-		}
-		else if (msg.pSender->GetName() == _T("btn_camera_3"))
-		{
-			CMainFrame::GetInstance().ShareSelectedCamera(map_cameras_[2]);
-		}
-		else if (msg.pSender->GetName() == _T("btn_camera_4"))
-		{
-			CMainFrame::GetInstance().ShareSelectedCamera(map_cameras_[3]);
-		}
-		else if (msg.pSender->GetName() == _T("btn_camera_5"))
-		{
-			CMainFrame::GetInstance().ShareSelectedCamera(map_cameras_[4]);
-		}
-		else if (msg.pSender->GetName() == _T("btn_camera_6"))
-		{
-			CMainFrame::GetInstance().ShareSelectedCamera(map_cameras_[5]);
-		}
+
 		this->ShowWindow(false);
 		map_cameras_.clear();
 	}

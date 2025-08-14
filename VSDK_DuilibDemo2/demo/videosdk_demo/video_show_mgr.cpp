@@ -125,24 +125,7 @@ void VideoShowMgr::OnUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelp
 	}
 }
 
-void VideoShowMgr::SetActivityVideoEmojiPos(POINT emoji_pos)
-{
-	GalleryModeVideoContainer* activity_video_container = dynamic_cast<GalleryModeVideoContainer*>(video_container_);
-	if (activity_video_container)
-		activity_video_container->SetActivityVideoEmojiPos(emoji_pos);
-}
 
-void VideoShowMgr::OnUserEmojiStatusChanged(IZoomVideoSDKUser* pUser, int res_id)
-{
-	if (video_container_)
-	{
-		video_container_->OnUserEmojiStatusChanged(pUser,res_id);		
-	}
-	
-	GalleryModeVideoContainer* activity_video_container = dynamic_cast<GalleryModeVideoContainer*>(video_container_);
-	if (activity_video_container)
-		activity_video_container->UpdateActivityEmoji(pUser, res_id);
-}
 
 void VideoShowMgr::OnUpdateRenderModeLowerThird(IZoomVideoSDKUser* pUser, wstring lower_third_name, wstring lower_third_description, LowerThirdColorInfo& color_info)
 {

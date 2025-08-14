@@ -22,13 +22,9 @@
 #include "lower_thirds_info_wnd.h"
 #include "lowerthirds_setting_wnd_ui.h"
 #include "switch_camera_wnd_ui.h"
-#include "remote_control_camera_wnd_ui.h"
-#include "camera_control_request_received_wnd_ui.h"
-#include "stop_camera_control_wnd_ui.h"
-#include "control_camera_tip_wnd_ui.h"
-#include "control_camera_pop_wnd_ui.h"
-#include "top_tip_wnd_ui.h"
 #include "switch_camera_pop_wnd_ui.h"
+#include "top_tip_wnd_ui.h"
+
 
 #include "video_layout_item_base.h"
 
@@ -108,33 +104,7 @@ void CMainFrame::DestroyAllOwnedWnd()
 		delete switch_camera_wnd_;
 		switch_camera_wnd_ = nullptr;
 	}
-	if (remote_control_camera_wnd_)
-	{
-		if (::IsWindow(remote_control_camera_wnd_->GetHWND()))
-		{
-			DestroyWindow(remote_control_camera_wnd_->GetHWND());
-		}
-		delete remote_control_camera_wnd_;
-		remote_control_camera_wnd_ = nullptr;
-	}
-	if (control_camera_tip_wnd_)
-	{
-		if (::IsWindow(control_camera_tip_wnd_->GetHWND()))
-		{
-			DestroyWindow(control_camera_tip_wnd_->GetHWND());
-		}
-		delete control_camera_tip_wnd_;
-		control_camera_tip_wnd_ = nullptr;
-	}
-	if (control_camera_pop_wnd_)
-	{
-		if (::IsWindow(control_camera_pop_wnd_->GetHWND()))
-		{
-			DestroyWindow(control_camera_pop_wnd_->GetHWND());
-		}
-		delete control_camera_pop_wnd_;
-		control_camera_pop_wnd_ = nullptr;
-	}
+	
 	if (switch_camera_pop_wnd_)
 	{
 		if (::IsWindow(switch_camera_pop_wnd_->GetHWND()))
@@ -201,11 +171,7 @@ void CMainFrame::InitControls()
 	CreateJoinSessionWnd();
 	CreateTitleBarWnd();
 	CreateSwitchCamera();
-	CreateRemoteControlCamera();
-	CreateCameraControlRequestReceivedWnd();
-	CreateStopCameraControlWnd();
-	CreateControlCameraTipWnd();
-	CreateControlCameraPopWnd();
+
 	CreateTopTipWnd();
 	CreateSwitchCameraPopWnd();
 	CreateBottomBarWnd();
@@ -318,40 +284,12 @@ void CMainFrame::UpdateAllOwnedWndPos()
 	UpdateLowerThirdsWndPos();
 	UpdateBulletScreenWndPos();
 	UpdateSwitchCameraWndPos();
-	UpdateRemoteControlCameraWndPos();
-	UpdateControlCameraTipWndPos();
-	UpdateCameraControlRequestReceivedWndPos();
+
 	UpdateTopTipWndPos();
 }
 
-void CMainFrame::UpdateCameraControlRequestReceivedWndPos()
-{
-	if (camera_control_request_wnd_ && ::IsWindow(camera_control_request_wnd_->GetHWND()))
-	{
-		RECT rect = GetMainFrameCenterRect(camera_control_request_wnd_->GetHWND());
-		::SetWindowPos(camera_control_request_wnd_->GetHWND(), NULL, rect.left, rect.top, 0, 0, SWP_NOSIZE);
-	}
-}
-void CMainFrame::UpdateControlCameraTipWndPos()
-{
-	if (control_camera_tip_wnd_ && ::IsWindow(control_camera_tip_wnd_->GetHWND()))
-	{
-		RECT rcMain = { 0 };
-		GetWindowRect(m_hWnd, &rcMain);
-		SetWindowPos(control_camera_tip_wnd_->GetHWND(), HWND_TOP, rcMain.left + DEFAULT_BTN_GAP, rcMain.top + DEFAULT_ROW_GAP * 4, SMALL_ICON_SIZE, SMALL_ICON_SIZE, SWP_NOACTIVATE);
-	}
-	if (control_camera_pop_wnd_ && ::IsWindow(control_camera_pop_wnd_->GetHWND()))
-	{
-		RECT rcWindow = { 0 };
-		::GetWindowRect(control_camera_tip_wnd_->GetHWND(), &rcWindow);
-		POINT pt_temp = { rcWindow.left, rcWindow.top };
-		int iXpos = 0, iYpos = 0;
-		iXpos = pt_temp.x;
-		iYpos = pt_temp.y + DEFAULT_COLUMN_GAP + CHAT_CONTENT_LEFT_MARGIN;
 
-		::SetWindowPos(control_camera_pop_wnd_->GetHWND(), NULL, iXpos, iYpos, 0, 0, SWP_NOSIZE);
-	}
-}
+
 void CMainFrame::UpdateSwitchCameraWndPos()
 {
 	if (switch_camera_wnd_ && ::IsWindow(switch_camera_wnd_->GetHWND()))
@@ -372,29 +310,7 @@ void CMainFrame::UpdateSwitchCameraWndPos()
 		::SetWindowPos(switch_camera_pop_wnd_->GetHWND(), NULL, iXpos, iYpos, 0, 0, SWP_NOSIZE);
 	}
 }
-void CMainFrame::UpdateRemoteControlCameraWndPos()
-{
-	if (remote_control_camera_wnd_ && ::IsWindow(remote_control_camera_wnd_->GetHWND()))
-	{
-		RECT rcMain = { 0 };
-		GetWindowRect(m_hWnd, &rcMain);
 
-		int gallery_width = 0;
-		if (video_show_mgr_)
-		{
-			gallery_width = video_show_mgr_->GetGalleryContainerGalleryWidth();
-		}
-		if (is_show_gallery_)
-		{
-			
-			SetWindowPos(remote_control_camera_wnd_->GetHWND(), HWND_TOPMOST, rcMain.left + 700, rcMain.top + 450, 152, 96, SWP_NOACTIVATE);
-		}
-		else
-		{
-			SetWindowPos(remote_control_camera_wnd_->GetHWND(), HWND_TOPMOST, rcMain.left + 700 + gallery_width + 20, rcMain.top + 450, 152, 96, SWP_NOACTIVATE);
-		}
-	}
-}
 void CMainFrame::UpdateTopTipWndPos()
 {
 	if (!top_tip_wnd_ || !::IsWindow(top_tip_wnd_->GetHWND()))
@@ -689,9 +605,7 @@ void CMainFrame::HideAllOwnedWnd()
 		title_bar_wnd_->ShowWindow(false);
 	}
 
-	ShowRemoteControlCameraWnd(false);
-	ShowCameraControlRequestReceivedWnd(false);
-	ShowStopCameraControlWnd(false);
+
 
 	ShowBottomBarWnd(false);
 	ShowMessageTipWnd(false);	
@@ -884,32 +798,7 @@ void CMainFrame::CreateSwitchCameraPopWnd()
 		switch_camera_pop_wnd_->ShowWindow(false);
 	}
 }
-void CMainFrame::CreateControlCameraPopWnd()
-{
-	if (control_camera_pop_wnd_ == nullptr)
-	{
-		control_camera_pop_wnd_ = new CControlCameraPopWnd;
-	}
 
-	if (control_camera_pop_wnd_)
-	{
-		control_camera_pop_wnd_->Create(m_hWnd, nullptr, UI_WNDSTYLE_DIALOG & ~WS_MAXIMIZEBOX, 0);
-		control_camera_pop_wnd_->ShowWindow(false);
-	}
-}
-void CMainFrame::CreateControlCameraTipWnd()
-{
-	if (control_camera_tip_wnd_ == nullptr)
-	{
-		control_camera_tip_wnd_ = new CControlCameraTipWndUI;
-	}
-
-	if (control_camera_tip_wnd_)
-	{
-		control_camera_tip_wnd_->Create(m_hWnd, nullptr, UI_WNDSTYLE_DIALOG & ~WS_MAXIMIZEBOX, 0);
-		control_camera_tip_wnd_->ShowWindow(false);
-	}
-}
 void CMainFrame::CreateSwitchCamera()
 {
 	if (switch_camera_wnd_ == nullptr)
@@ -923,45 +812,7 @@ void CMainFrame::CreateSwitchCamera()
 		switch_camera_wnd_->ShowWindow(false);
 	}
 }
-void CMainFrame::CreateRemoteControlCamera()
-{
-	if (remote_control_camera_wnd_ == nullptr)
-	{
-		remote_control_camera_wnd_ = new CRemoteControlCameraWndUI;
-	}
 
-	if (remote_control_camera_wnd_)
-	{
-		remote_control_camera_wnd_->Create(m_hWnd, nullptr, UI_WNDSTYLE_DIALOG & ~WS_MAXIMIZEBOX, 0);
-		remote_control_camera_wnd_->ShowWindow(false);
-	}
-}
-void CMainFrame::CreateCameraControlRequestReceivedWnd()
-{
-	if (camera_control_request_wnd_ == nullptr)
-	{
-		camera_control_request_wnd_ = new CCameraControlRequestReceivedWndUI;
-	}
-
-	if (camera_control_request_wnd_)
-	{
-		camera_control_request_wnd_->Create(m_hWnd, nullptr, UI_WNDSTYLE_DIALOG & ~WS_MAXIMIZEBOX, 0);
-		camera_control_request_wnd_->ShowWindow(false);
-	}
-}
-void CMainFrame::CreateStopCameraControlWnd()
-{
-	if (stop_camera_control_wnd_ == nullptr)
-	{
-		stop_camera_control_wnd_ = new CStopCameraControlWndUI;
-	}
-
-	if (stop_camera_control_wnd_)
-	{
-		stop_camera_control_wnd_->Create(m_hWnd, nullptr, UI_WNDSTYLE_DIALOG & ~WS_MAXIMIZEBOX, 0);
-		stop_camera_control_wnd_->ShowWindow(false);
-	}
-}
 
 void CMainFrame::CreateTopTipWnd()
 {
@@ -1286,9 +1137,7 @@ void CMainFrame::StartPreview()
 	UpdateTtileBarWndPos();
 	UpdateBottomBarWndPos();
 	UpdateSwitchCameraWndPos();
-	UpdateRemoteControlCameraWndPos();
-	UpdateControlCameraTipWndPos();
-	UpdateCameraControlRequestReceivedWndPos();
+
 
 	ShowBottomBarWnd(false);
 	HideTurnPageWnd();
@@ -1433,14 +1282,7 @@ void CMainFrame::ShowChatContentWnd(bool show)
 	}
 }
 
-void CMainFrame::SetActivityVideoEmojiPos(POINT emoji_pos)
-{
-	if (video_show_mgr_)
-	{
-		video_show_mgr_->SetActivityVideoEmojiPos(emoji_pos);
-	}
-	
-}
+
 
 
 void CMainFrame::ShowBulletScreenWnd(bool show)
@@ -1495,8 +1337,7 @@ void CMainFrame::ShowLowerThirdsInfoWnd(bool show)
 			if (username.empty())
 			{
 				lower_thirds_info_wnd_->ShowWindow(false);
-				POINT emoji_middle_point = { LOWERTHIRDS_PADDING_LEFT, LOWERTHIRDS_PADDING_TOP };
-				SetActivityVideoEmojiPos(emoji_middle_point);
+			
 				return;
 			}
 
@@ -1519,15 +1360,12 @@ void CMainFrame::ShowLowerThirdsInfoWnd(bool show)
 
 			lower_thirds_info_wnd_->ShowWindow(true);
 
-			POINT emoji_middle_point = { iWndWidth + LOWERTHIRDS_PADDING_LEFT, LOWERTHIRDS_PADDING_TOP };
-			SetActivityVideoEmojiPos(emoji_middle_point);
+			
 		}
 		else
 		{
 			lower_thirds_info_wnd_->ShowWindow(false);
 
-			POINT emoji_middle_point = { LOWERTHIRDS_PADDING_LEFT, LOWERTHIRDS_PADDING_TOP };
-			SetActivityVideoEmojiPos(emoji_middle_point);
 		}
 			
 	}
@@ -1587,72 +1425,6 @@ void CMainFrame::ShowMessageTipWnd(bool show, wstring error_text)
 }
 
 
-IZoomVideoSDKUser* CMainFrame::GetCameraControlRequester()
-{
-	if (camera_control_request_wnd_)
-	{
-		return camera_control_request_wnd_->GetRequester();
-	}
-	return NULL;
-}
-
-void CMainFrame::SwitchShareCamera()
-{
-	video_show_mgr_->SwitchShareCamera();
-}
-void CMainFrame::ShareSelectedCamera(std::wstring deviceID)
-{
-	video_show_mgr_->ShareSelectedCamera(deviceID);
-}
-void CMainFrame::ShowControlCameraTipButton(bool show)
-{
-	if (control_camera_tip_wnd_ && ::IsWindow(control_camera_tip_wnd_->GetHWND()))
-	{
-		control_camera_tip_wnd_->ShowWindow(show);
-	}
-}
-void CMainFrame::ShowSwitchShareCameraButton(bool show)
-{
-	if (switch_camera_wnd_ && ::IsWindow(switch_camera_wnd_->GetHWND()))
-	{
-		switch_camera_wnd_->ShowWindow(show);
-	}
-}
-void CMainFrame::ShowRemoteControlCameraWnd(bool show)
-{
-	if (remote_control_camera_wnd_ && ::IsWindow(remote_control_camera_wnd_->GetHWND()))
-	{
-		remote_control_camera_wnd_->ShowWindow(show);
-	}
-}
-void CMainFrame::ShowCameraControlRequestReceivedWnd(bool bShow)
-{
-	if (camera_control_request_wnd_ && ::IsWindow(camera_control_request_wnd_->GetHWND()))
-	{
-		if (bShow)
-		{
-			RECT rect = GetMainFrameCenterRect(camera_control_request_wnd_->GetHWND());
-			::SetWindowPos(camera_control_request_wnd_->GetHWND(), NULL, rect.left, rect.top, 0, 0, SWP_NOSIZE);
-			camera_control_request_wnd_->ShowWindow(true);
-		}
-		else
-		{
-			camera_control_request_wnd_->ShowWindow(false);
-		}
-	}
-}
-void CMainFrame::ShowStopCameraControlWnd(bool bShow)
-{
-	if (stop_camera_control_wnd_ && ::IsWindow(stop_camera_control_wnd_->GetHWND()))
-	{
-		stop_camera_control_wnd_->ShowWindow(bShow);
-		RECT rect = GetMainFrameCenterRect(stop_camera_control_wnd_->GetHWND());
-		::SetWindowPos(stop_camera_control_wnd_->GetHWND(), NULL, rect.left, rect.top, 0, 0, SWP_NOSIZE);
-	}
-}
-
-
-
 
 void CMainFrame::ShowSwitchCameraPopWnd(bool show, POINT pt)
 {
@@ -1707,22 +1479,6 @@ void CMainFrame::ShowSwitchCameraPopWnd(bool show, POINT pt)
 	}
 }
 
-void CMainFrame::StartScreenShare(wstring screen_id)
-{
-	ZoomVideoSDKShareOption option;
-	option.isWithDeviceAudio = false;
-	option.isOptimizeForSharedVideo = false;
-	ZoomVideoSDKErrors err = ZoomVideoSDKMgr::GetInst().StartShareScreen(screen_id.c_str(), option);
-	if (err == ZoomVideoSDKErrors_Success)
-	{
-	
-	}
-
-
-}
-
-
-
 
 
 void CMainFrame::SendChatToAll(const zchar_t* msgContent)
@@ -1756,9 +1512,7 @@ void CMainFrame::ShowParticipantGallery(bool bShow)
 		UpdateTtileBarWndPos();
 		UpdateBottomBarWndPos();
 		UpdateSwitchCameraWndPos();
-		UpdateRemoteControlCameraWndPos();
-		UpdateControlCameraTipWndPos();
-		UpdateCameraControlRequestReceivedWndPos();
+
 		UpdateTopTipWndPos();
 		HideOrShowTurnPageWnd();
 	}
@@ -1942,18 +1696,8 @@ std::wstring CMainFrame::GetLowerThirdConfPath()
 	}
 }
 
-int CMainFrame::GetUserReactionResId(IZoomVideoSDKUser* pUser)
-{
-	return 0;
-}
 
-void CMainFrame::RemoveUserReaction(IZoomVideoSDKUser* pUser)
-{
-	if (video_show_mgr_)
-	{
-		video_show_mgr_->OnUserEmojiStatusChanged(pUser, 0);		
-	}	
-}
+
 
 void CMainFrame::HandleTurnUpPageEvent()
 {
@@ -2133,11 +1877,7 @@ void CMainFrame::onUserLeave(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVect
 		session_infos_wnd_->UpdateSessionInfoUI();
 	}
 
-	if (camera_control_request_wnd_)
-	{
-		camera_control_request_wnd_->OnUserLeave(userList);
-	}
-	
+
 	ZoomVideoSDKMgr::GetInst().OnUserLeave(userList);
 
 	UpdateParticipantNum();
@@ -2344,43 +2084,13 @@ void CMainFrame::onUserNameChanged(IZoomVideoSDKUser* pUser)
 
 void CMainFrame::onCameraControlRequestResult(IZoomVideoSDKUser* pUser, bool isApproved)
 {
-	wstring user_name = pUser->getUserName();
-	wstring str_message;
-	if (isApproved)
-	{
-		str_message = _T("You can now control ") + user_name + _T("'s camera");
-		ShowRemoteControlCameraWnd(true);
-	}
-	else
-	{
-		str_message = user_name + _T(" declined your request");
-	}
-	
-
 }
 
 void CMainFrame::onCameraControlRequestReceived(IZoomVideoSDKUser* pUser, ZoomVideoSDKCameraControlRequestType requestType, IZoomVideoSDKCameraControlRequestHandler* pCameraControlRequestHandler)
 {
-	std::wstring text;
-	std::wstring userName;
-	if (pUser && pUser->getUserName())
-	{
-		userName = pUser->getUserName();
-	}
-	if (requestType == ZoomVideoSDKCameraControlRequestType_RequestControl && pCameraControlRequestHandler)
-	{
-		camera_control_request_wnd_->SetRequester(pUser);
-		camera_control_request_wnd_->SetCameraControlRequestHandler(pCameraControlRequestHandler);
-		ShowCameraControlRequestReceivedWnd(true);
-	}
-	if (requestType == ZoomVideoSDKCameraControlRequestType_GiveUpControl)
-	{
-		text = userName + _T(" stopped controlling your camera");
-
-		ShowControlCameraTipButton(false);
-
-	}
 }
+
+
 
 void CMainFrame::onCommandReceived(IZoomVideoSDKUser* pSender, const zchar_t* strCmd)
 {

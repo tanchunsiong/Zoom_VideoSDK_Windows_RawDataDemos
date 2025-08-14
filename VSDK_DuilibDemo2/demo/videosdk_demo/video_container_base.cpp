@@ -263,14 +263,7 @@ void VideoContainerBase::OnUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAud
 	}
 }
 
-void VideoContainerBase::OnUserEmojiStatusChanged(IZoomVideoSDKUser* user, int res_id)
-{
-	VideoLayoutItemBase* layout_item = FindItemByUser(user);
-	if (!layout_item)
-		return;
 
-	layout_item->OnEmojiStatusChange(res_id);
-}
 
 void VideoContainerBase::OnUpdateRenderModeLowerThird(IZoomVideoSDKUser* pUser, wstring lower_third_name, wstring lower_third_description, LowerThirdColorInfo& color_info)
 {

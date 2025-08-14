@@ -46,8 +46,7 @@ void VideoLayoutItemBase::SetPos(RendererRect rect)
 	{
 		renderer_->ModifyLayoutItemRect(renderer_item_handle_, rect);
 		UpdateLayeredElementRect();
-		if (user_emoji_resid_ != 0)
-			UpdateUserEmoji(user_emoji_resid_);
+
 	}
 }
 
@@ -205,11 +204,7 @@ void VideoLayoutItemBase::SetUserHasHandUp(bool is_raise_hand)
 	user_has_hand_up_ = is_raise_hand;
 }
 
-void VideoLayoutItemBase::SetEmojiPos(POINT emoji_point)
-{
-	emoji_middle_point_ = emoji_point;
-	UpdateUserEmoji(user_emoji_resid_);
-}
+
 
 void VideoLayoutItemBase::SetLowerThirdInfo(wstring lower_third_name, wstring lower_third_description, LowerThirdColorInfo& color_info)
 {
@@ -361,16 +356,7 @@ bool VideoLayoutItemBase::IsIdle()
 	return true;
 }
 
-void VideoLayoutItemBase::set_user_emoji_resid(int res_id)
-{
-	user_emoji_resid_ = res_id;
-	UpdateUserEmoji(user_emoji_resid_);
-}
 
-int VideoLayoutItemBase::get_user_emoji_resid()
-{
-	return user_emoji_resid_;
-}
 
 void VideoLayoutItemBase::set_is_selected(bool is_selected)
 {
@@ -413,10 +399,7 @@ void VideoLayoutItemBase::OnAudioStatusChange()
 	UpdateLowerThird();
 }
 
-void VideoLayoutItemBase::OnEmojiStatusChange(int res_id)
-{
-	UpdateUserEmoji(res_id);
-}
+
 
 void VideoLayoutItemBase::OnLowerThirdChange()
 {
@@ -920,70 +903,6 @@ void VideoLayoutItemBase::UpdateAudioUserName()
 	}
 }
 
-void VideoLayoutItemBase::UpdateUserEmoji(int res_id)
-{
-	if (!renderer_) return;
-
-	auto iter = map_layed_element_.find(_T("Emoji"));
-	if (iter != map_layed_element_.end())
-	{
-		Gdiplus::Bitmap* pImage = LoadResImage(res_id);
-		if (!pImage)
-		{
-			renderer_->RemoveLayeredElement(iter->second);
-			map_layed_element_.erase(iter);
-			return;
-		}
-
-		renderer_->RemoveLayeredElement(iter->second);
-		
-		Gdiplus::BitmapData bitmap_data;
-		GetImageBitmapData(pImage, bitmap_data);
-
-		RendererRect rect;
-		rect.width = pImage->GetWidth();
-		rect.height = pImage->GetHeight();
-		AddLayeredImageElement(_T("Emoji"), bitmap_data, rect, 2);
-
-		PixelsData pixels_data;
-		pixels_data.width = bitmap_data.Width;
-		pixels_data.height = bitmap_data.Height;
-		pixels_data.pixels = (uint8_t*)bitmap_data.Scan0;
-		pixels_data.pitch = bitmap_data.Stride;
-
-		renderer_->ModifyLayeredImageElementPixelsData(iter->second, pixels_data);
-
-		pImage->UnlockBits(&bitmap_data);
-		delete pImage;
-		pImage = nullptr;
-	}
-	else
-	{
-		Gdiplus::Bitmap* pImage = LoadResImage(res_id);
-		if (!pImage)
-			return;
-
-		Gdiplus::BitmapData bitmap_data;
-		GetImageBitmapData(pImage, bitmap_data);
-
-		PixelsData pixels_data;
-		pixels_data.width = bitmap_data.Width;
-		pixels_data.height = bitmap_data.Height;
-		pixels_data.pixels = (uint8_t*)bitmap_data.Scan0;
-		pixels_data.pitch = bitmap_data.Stride;
-
-		RendererRect rect;
-		rect.width = bitmap_data.Width;
-		rect.height = bitmap_data.Height;
-		AddLayeredImageElement(_T("Emoji"), bitmap_data, rect, 2);
-
-		renderer_->ModifyLayeredImageElementPixelsData(iter->second, pixels_data);
-
-		pImage->UnlockBits(&bitmap_data);
-		delete pImage;
-		pImage = nullptr;
-	}
-}
 
 void VideoLayoutItemBase::UpdateMoreBtn()
 {

@@ -65,7 +65,7 @@ public:
 
 	virtual void OnUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IZoomVideoSDKUser* user);
 
-	virtual void OnUserEmojiStatusChanged(IZoomVideoSDKUser* user, int res_id);
+
 
 	virtual void OnUpdateRenderModeLowerThird(IZoomVideoSDKUser* pUser, wstring lower_third_name, wstring lower_third_description, LowerThirdColorInfo& color_info);
 

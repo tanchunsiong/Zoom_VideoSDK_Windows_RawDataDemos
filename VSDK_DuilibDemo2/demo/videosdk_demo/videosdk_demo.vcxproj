@@ -166,8 +166,6 @@ copy ..\ZoomVideoSDKRender\lib\*.dll ..\..\bin</Command>
     <ClInclude Include="chat_send_edit_ui.h" />
     <ClInclude Include="enum_apps_info_mgr.h" />
     <ClInclude Include="enum_apps_info_mgr_comm_def.h" />
-    <ClInclude Include="feedback_tips_wnd.h" />
-    <ClInclude Include="feed_back_wnd.h" />
     <ClInclude Include="lowerthirds_setting_wnd_ui.h" />
     <ClInclude Include="lower_thirds_info_wnd.h" />
     <ClInclude Include="message_tip_wnd_ui.h" />
@@ -178,25 +176,15 @@ copy ..\ZoomVideoSDKRender\lib\*.dll ..\..\bin</Command>
     <ClInclude Include="leave_session_tips_wnd_ui.h" />
     <ClInclude Include="main_frame.h" />
     <ClInclude Include="more_pop_wnd.h" />
-    <ClInclude Include="reaction_bar_wnd.h" />
     <ClInclude Include="roll_control_ui.h" />
     <ClInclude Include="session_info_wnd_ui.h" />
     <ClInclude Include="session_settings_wnd_ui.h" />
-    <ClInclude Include="share_app_item_ui.h" />
-    <ClInclude Include="share_app_layout_ui.h" />
-    <ClInclude Include="share_select_apps_wnd_ui.h" />
-    <ClInclude Include="share_tool_bar_wnd_ui.h" />
     <ClInclude Include="chat_content_wnd_ui.h" />
     <ClInclude Include="statistics_wnd_ui.h" />
     <ClInclude Include="title_bar_wnd_ui.h" />
     <ClInclude Include="switch_camera_wnd_ui.h" />
-    <ClInclude Include="remote_control_camera_wnd_ui.h" />
-    <ClInclude Include="camera_control_request_received_wnd_ui.h" />
-    <ClInclude Include="stop_camera_control_wnd_ui.h" />
     <ClInclude Include="gallery_more_pop_wnd_ui.h" />
     <ClInclude Include="switch_camera_pop_wnd_ui.h" />
-    <ClInclude Include="control_camera_tip_wnd_ui.h" />
-    <ClInclude Include="control_camera_pop_wnd_ui.h" />
     <ClInclude Include="turn_page_wnd_ui.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="videosdk_demo.h" />
@@ -232,9 +220,6 @@ copy ..\ZoomVideoSDKRender\lib\*.dll ..\..\bin</Command>
     <ClCompile Include="chat_content_wnd_ui.cpp" />
     <ClCompile Include="title_bar_wnd_ui.cpp" />
     <ClCompile Include="switch_camera_wnd_ui.cpp" />
-    <ClCompile Include="remote_control_camera_wnd_ui.cpp" />
-    <ClCompile Include="camera_control_request_received_wnd_ui.cpp" />
-    <ClCompile Include="stop_camera_control_wnd_ui.cpp" />
     <ClCompile Include="switch_camera_pop_wnd_ui.cpp" />
     <ClCompile Include="turn_page_wnd_ui.cpp" />
     <ClCompile Include="videosdk_demo.cpp" />
@@ -249,8 +234,6 @@ copy ..\ZoomVideoSDKRender\lib\*.dll ..\..\bin</Command>
     <ClCompile Include="videosdk_demo_mgr.cpp" />
     <ClCompile Include="app_utils.cpp" />
     <ClCompile Include="wall_mode_video_layout_item.cpp" />
-    <ClCompile Include="control_camera_tip_wnd_ui.cpp" />
-    <ClCompile Include="control_camera_pop_wnd_ui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="videosdk_demo.rc" />
@@ -299,29 +282,17 @@ copy ..\ZoomVideoSDKRender\lib\*.dll ..\..\bin</Command>
     <Xml Include="skin\bullet_screen_wnd.xml" />
     <Xml Include="skin\chat_content_wnd.xml" />
     <Xml Include="skin\error_tip_dlg.xml" />
-    <Xml Include="skin\feedback_launch_wnd.xml" />
-    <Xml Include="skin\feedback_submit_wnd.xml" />
-    <Xml Include="skin\feedback_tips_wnd.xml" />
     <Xml Include="skin\join_session_wnd.xml" />
     <Xml Include="skin\leave_session_tips_wnd.xml" />
     <Xml Include="skin\lowerthird_settings_wnd.xml" />
     <Xml Include="skin\lower_third_info_wnd.xml" />
     <Xml Include="skin\mainframe.xml" />
-    <Xml Include="skin\reaction_bar_wnd.xml" />
     <Xml Include="skin\session_info_wnd.xml" />
     <Xml Include="skin\session_settings_wnd.xml" />
-    <Xml Include="skin\share_app_item.xml" />
-    <Xml Include="skin\share_select_apps_wnd.xml" />
-    <Xml Include="skin\share_tool_bar_wnd.xml" />
     <Xml Include="skin\title_bar_wnd.xml" />
     <Xml Include="skin\switch_camera_wnd.xml" />
-    <Xml Include="skin\remote_control_camera_wnd.xml" />
-    <Xml Include="skin\camera_control_request_received_wnd.xml" />
-    <Xml Include="skin\stop_camera_control_wnd.xml" />
     <Xml Include="skin\gallery_more_pop_wnd.xml" />
     <Xml Include="skin\turn_page_wnd.xml" />
-    <Xml Include="skin\control_camera_tip_wnd.xml" />
-    <Xml Include="skin\control_camera_pop_wnd.xml" />
     <Xml Include="skin\top_tip_wnd.xml" />
     <Xml Include="skin\switch_camera_pop_wnd.xml" />
   </ItemGroup>

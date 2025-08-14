@@ -45,21 +45,20 @@ public:
 	RendererMode GetRenderMode() const;
 	void set_is_selected(bool is_selected);
 	bool get_is_selected() const;
-	void set_user_emoji_resid(int res_id);
-	int  get_user_emoji_resid();
+
 	void SetRenderMode(RendererMode mode);
 	IZoomVideoSDKUser* GetUser() const;
 
 	void OnShareStatusChange();
 	void OnAudioStatusChange();
-	void OnEmojiStatusChange(int res_id);
+	
 	void OnLowerThirdChange();
 	void AddRendererVideoItem(IZoomVideoSDKUser* user);
 	void AddUserAvatarIcon();
 	bool GetUserHasSubscribed();
 	bool GetUserHasHandUp();
 	void SetUserHasHandUp(bool is_raise_hand);
-	void SetEmojiPos(POINT emoji_point);
+
 
 	
 public: //IZoomVideoSDKRawDataPipeDelegate
@@ -76,7 +75,7 @@ protected:
 	void CalLayeredImageElementPos(wstring element_name, RendererRect& rect);
 	void UpdateRenderUserName();
 	void UpdateAudioUserName();
-	void UpdateUserEmoji(int res_id = -1);
+
 	void UpdateLowerThird();
 	void UpdateMoreBtn();
 	void UpdateMouseHoverLowerThird();

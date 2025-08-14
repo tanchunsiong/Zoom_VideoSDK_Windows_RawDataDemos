@@ -40,10 +40,6 @@ public:
 
 	void TurnDownPage();
 
-	void UpdateActivityEmoji(IZoomVideoSDKUser* user, int res_id);
-
-	void SetActivityVideoEmojiPos(POINT emoji_pos);
-
 	void SwitchShareCamera();
 	void ShareSelectedCamera(std::wstring deviceID);
 

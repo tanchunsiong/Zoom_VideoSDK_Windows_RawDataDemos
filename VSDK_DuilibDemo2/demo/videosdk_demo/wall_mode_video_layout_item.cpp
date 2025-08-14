@@ -20,6 +20,5 @@ void NormalVideoLayoutItem::Subscribe(IZoomVideoSDKUser* pUser, ZoomVideoSDKRawD
 	UpdateRenderUserName();
 	//UpdateAudioUserName();
 	UpdateLowerThird();
-	UpdateUserEmoji(user_emoji_resid_);
 	UpdateMoreBtn();
 }

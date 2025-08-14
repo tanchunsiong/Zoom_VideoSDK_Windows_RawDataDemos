@@ -21,30 +21,26 @@ class CLeaveSessionTipsWndUI;
 class CSessionInfoWndUI;
 class CSessionSettingsWndUI;
 class VideoShowMgr;
-class ShareSelectAppsWndUI;
-class ShareToolBarWndUI;
+
+
 class ChatContentWndUI;
 class TurnPageWndUI;
 class MessageTipWndUI;
-class CReactionBarWnd;
+
 class CLowerThirdsInfoWnd;
 class CBulletScreenWnd;
 class IParseChannelCmdWnd;
-class CFeedBackLaunchWnd;
-class CFeedBackSubmitWnd;
-class CFeedBackTipsWnd;
+
 class CLowerThirdsSettingWndUI;
 class CMorePopWnd;
 class StatisticsWndUI;
 class CSwitchCameraWndUI;
-class CRemoteControlCameraWndUI;
-class CCameraControlRequestReceivedWndUI;
-class CStopCameraControlWndUI;
-class CGalleryMorePopWnd;
-class CControlCameraTipWndUI;
-class CControlCameraPopWnd;
-class TopTipWndUI;
 class CSwitchCameraPopWnd;
+
+class CGalleryMorePopWnd;
+
+class TopTipWndUI;
+
 
 class CMainFrame : public WindowImplBase
 	             , public IZoomVideoSDKDelegate
@@ -56,13 +52,8 @@ public:
 	void CreateJoinSessionWnd();
 	void CreateTitleBarWnd();
 	void CreateSwitchCamera();
-	void CreateRemoteControlCamera();
-	void CreateCameraControlRequestReceivedWnd();
-	void CreateStopCameraControlWnd();
-	void CreateControlCameraTipWnd();
-	void CreateControlCameraPopWnd();
-	void CreateTopTipWnd();
 	void CreateSwitchCameraPopWnd();
+	void CreateTopTipWnd();
 	void CreateBottomBarWnd();
 	void CreateLeaveSessionTipsWnd();
 	void CreateSessionInfoWnd();
@@ -90,19 +81,10 @@ public:
 	void ShowTurnUpPageWnd(bool show);
 	void ShowTurnDownPageWnd(bool show);
 	void ShowMessageTipWnd(bool show,wstring error_text = _T(""));
-	void StartScreenShare(wstring screen_id);
-	void StartShareView(HWND hwnd);
+
+	
 
 	void SendChatToAll(const zchar_t* msgContent);
-	void StartShare2ndCamera();
-	void SwitchShareCamera();
-	void ShareSelectedCamera(std::wstring deviceID);
-	void ShowSwitchShareCameraButton(bool show);
-	void ShowRemoteControlCameraWnd(bool show);
-	void ShowCameraControlRequestReceivedWnd(bool bShow);
-	void ShowStopCameraControlWnd(bool bShow);
-	void ShowControlCameraTipButton(bool show);
-	IZoomVideoSDKUser* GetCameraControlRequester();
 	void ShowSwitchCameraPopWnd(bool show, POINT pt = { 0 });
 
 	void UpdateRenderModeLowerThird(IZoomVideoSDKUser* pUser, wstring lower_third_name, wstring lower_third_description, LowerThirdColorInfo &color_info);
@@ -122,14 +104,13 @@ public:
 	void OnGalleryContainerSelectUserChange();
 	CSessionSettingsWndUI* GetSessionSettingsWndUI() const;
 	IZoomVideoSDKUser* GetGalleryContainerSelectUser();
-	void RemoveUserReaction(IZoomVideoSDKUser* pUser);
+
 	LowerThirdColorInfo GetLowerThirdsColorInfo(const std::wstring& colorKey);
 	LowerThirdInfo	GetUserLowerThirdInfo(IZoomVideoSDKUser* pUser);
 	void SetLowerThirdsInfo(std::wstring username, std::wstring description, std::wstring color);
 	void GetLowerThirdInfoFromIniFile(std::wstring& username, std::wstring& description, std::wstring& color, std::wstring& enable);
 	std::wstring GetLowerThirdConfPath();
-	int GetUserReactionResId(IZoomVideoSDKUser* pUser);
-	void SetActivityVideoEmojiPos(POINT emoji_pos);
+
 
 	void HandleTurnUpPageEvent();
 	void HandleTurnDownPageEvent();
@@ -284,14 +265,12 @@ private:
 	void UpdateChatContentWndPos(bool show = false);
 	void UpdateTurnUpPageWndPos();
 	void UpdateTurnDownPageWndPos();
-	void UpdateShareToolBarWndPos();
+
 	void UpdateMessageTipWndPos();
 	void UpdateLowerThirdsWndPos();
 	void UpdateBulletScreenWndPos();
 	void UpdateSwitchCameraWndPos();
-	void UpdateRemoteControlCameraWndPos();
-	void UpdateControlCameraTipWndPos();
-	void UpdateCameraControlRequestReceivedWndPos();
+
 	void UpdateTopTipWndPos();
 	void HideOrShowTurnPageWnd();
 	void HideTurnPageWnd();
@@ -317,28 +296,22 @@ private:
 	CLeaveSessionTipsWndUI* leave_session_tips_wnd_ = nullptr;
 	CSessionInfoWndUI*		session_infos_wnd_ = nullptr;
 	CSessionSettingsWndUI*	session_setting_wnd_ = nullptr;
-	ShareSelectAppsWndUI*	share_select_apps_wnd_ = nullptr;
-	CReactionBarWnd*		reaction_bar_wnd_ = nullptr;
+
 	CMorePopWnd*			more_pop_wnd_ = nullptr;
-	ShareToolBarWndUI*		share_tool_bar_wnd_ = nullptr;
+
 	ChatContentWndUI*		chat_content_wnd_ = nullptr;
 	TurnPageWndUI*			turn_up_page_wnd_ = nullptr;
 	TurnPageWndUI*			turn_down_page_wnd_ = nullptr;	
 	MessageTipWndUI*		message_tip_wnd_ = nullptr;
 	CBulletScreenWnd*		bullet_screen_wnd_ = nullptr;
 	CLowerThirdsInfoWnd*	lower_thirds_info_wnd_ = nullptr;
-	CFeedBackLaunchWnd*		feedback_launch_wnd_ = nullptr;
-	CFeedBackSubmitWnd*		feedback_submit_wnd_ = nullptr;
-	CFeedBackTipsWnd*		feedback_tips_wnd_ = nullptr;
+;
 	CLowerThirdsSettingWndUI* lower_thirds_setting_wnd_ = nullptr;
 	StatisticsWndUI* statistics_wnd_ = nullptr;
 	CSwitchCameraWndUI* switch_camera_wnd_ = nullptr;
-	CRemoteControlCameraWndUI* remote_control_camera_wnd_ = nullptr;
-	CCameraControlRequestReceivedWndUI* camera_control_request_wnd_ = nullptr;
-	CStopCameraControlWndUI* stop_camera_control_wnd_ = nullptr;
+
 	CGalleryMorePopWnd* gallery_more_pop_wnd_ = nullptr;
-	CControlCameraTipWndUI* control_camera_tip_wnd_ = nullptr;
-	CControlCameraPopWnd* control_camera_pop_wnd_ = nullptr;
+
 	TopTipWndUI* top_tip_wnd_ = nullptr;
 	CSwitchCameraPopWnd* switch_camera_pop_wnd_ = nullptr;
 

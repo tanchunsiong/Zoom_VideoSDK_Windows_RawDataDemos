@@ -525,30 +525,8 @@ void GalleryModeVideoContainer::ShareSelectedCamera(std::wstring deviceID)
 	}
 }
 
-void GalleryModeVideoContainer::SetActivityVideoEmojiPos(POINT emoji_pos)
-{
-	if (!active_video_layout_item_)
-		return;
 
-	active_video_layout_item_->SetEmojiPos(emoji_pos);
-}
 
-void GalleryModeVideoContainer::UpdateActivityEmoji(IZoomVideoSDKUser* user,int res_id)
-{
-	if (!active_video_layout_item_)
-		return;
-
-	IZoomVideoSDKUser* active_user = active_video_layout_item_->GetUser();
-
-	if (user != active_user)
-		return;
-	
-	if (active_video_layout_item_)
-	{
-		active_video_layout_item_->OnEmojiStatusChange(res_id);
-		active_video_layout_item_->set_user_emoji_resid(res_id);
-	}
-}
 
 int GalleryModeVideoContainer::GetGalleryWidth()
 {
@@ -629,8 +607,7 @@ void GalleryModeVideoContainer::SubscribeCurrentPageUser()
 
 	IZoomVideoSDKUser* active_user = active_video_layout_item_->GetUser();
 
-	int active_res_id = CMainFrame::GetInstance().GetUserReactionResId(active_user);
-	active_video_layout_item_->set_user_emoji_resid(active_res_id);
+
 
 	auto iter = map_page_user_list_.find(current_page_);
 	if (iter != map_page_user_list_.end())
@@ -645,9 +622,9 @@ void GalleryModeVideoContainer::SubscribeCurrentPageUser()
 			VideoLayoutItemBase* item = FindIdelItem();
 			if (item)
 			{
-				int res_id = CMainFrame::GetInstance().GetUserReactionResId(user);
+			
 				item->Subscribe(user, RAW_DATA_TYPE_VIDEO, ZoomVideoSDKResolution_180P);
-				item->set_user_emoji_resid(res_id);
+		
 
 				LowerThirdInfo lower_third_info = CMainFrame::GetInstance().GetUserLowerThirdInfo(user);
 				LowerThirdColorInfo color_info = CMainFrame::GetInstance().GetLowerThirdsColorInfo(lower_third_info.lower_third_color);
@@ -843,9 +820,7 @@ void GalleryModeVideoContainer::OnLButtonUp(POINT pt)
 
 			if (status == ZoomVideoSDKShareStatus_Start || status == ZoomVideoSDKShareStatus_Resume)
 			{
-				active_video_layout_item_->Subscribe(selected_user, RAW_DATA_TYPE_SHARE, ZoomVideoSDKResolution_1080P);
-				int active_res_id = CMainFrame::GetInstance().GetUserReactionResId(selected_user);
-				active_video_layout_item_->set_user_emoji_resid(active_res_id);
+	
 				return;
 			}
 			
@@ -870,8 +845,7 @@ void GalleryModeVideoContainer::OnLButtonUp(POINT pt)
 
 		active_video_layout_item_->Subscribe(selected_user, data_type, ZoomVideoSDKResolution_1080P);
 		
-		int active_res_id = CMainFrame::GetInstance().GetUserReactionResId(selected_user);
-		active_video_layout_item_->set_user_emoji_resid(active_res_id);
+
 		/*CMainFrame::GetInstance().OnGalleryContainerSelectUserChange();*/
 	}
 }

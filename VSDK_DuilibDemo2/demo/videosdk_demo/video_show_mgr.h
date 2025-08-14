@@ -35,7 +35,7 @@ public:
 
 	void ContainerInit();
 
-	void SetActivityVideoEmojiPos(POINT emoji_pos);
+	
 public: //Handle from UI Event
 
 	void OnUserJoin(IVideoSDKVector<IZoomVideoSDKUser*>* userList);
@@ -48,7 +48,7 @@ public: //Handle from UI Event
 
 	void OnUserAudioStatusChanged(IZoomVideoSDKAudioHelper* pAudioHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList);
 
-	void OnUserEmojiStatusChanged(IZoomVideoSDKUser* pUser,int res_id);
+
 
 	void OnSize(RendererRect rect);
 

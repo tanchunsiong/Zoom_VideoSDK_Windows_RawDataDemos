@@ -59,10 +59,7 @@ void CSwitchCameraWndUI::Notify(TNotifyUI& msg)
 				POINT pt_temp = { rcWindow.left, rcWindow.top };
 				CMainFrame::GetInstance().ShowSwitchCameraPopWnd(true, pt_temp);
 			}
-			else
-			{
-				CMainFrame::GetInstance().SwitchShareCamera();
-			}
+		
 			
 		}
 	}

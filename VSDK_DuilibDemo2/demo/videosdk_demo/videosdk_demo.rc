@@ -54,8 +54,6 @@ IDXML_SESSION_SETTINGS_WND_UI     XML                     "skin/session_settings
 
 IDXML_LOWERTHIRDS_SETTINGS_WND_UI XML                     "skin/lowerthird_settings_wnd.xml"
 
-IDXML_SHARE_APP_ITEM_UI           XML                     "skin/share_app_item.xml"
-
 IDXML_TITLE_BAR_WND_UI            XML                     "skin/title_bar_wnd.xml"
 
 IDXML_SHOW_CHAT_CONTENT_WND_UI    XML                     "skin/chat_content_wnd.xml"
@@ -71,16 +69,6 @@ IDXML_BULLET_SCREEN_WND_UI        XML                     "skin/bullet_screen_wn
 IDXML_LOWERTHIRDS_INFO_WND_UI     XML                     "skin/lower_third_info_wnd.xml"
 
 IDXML_SWITCH_CAMERA_WND_UI            XML                     "skin/switch_camera_wnd.xml"
-
-IDXML_REMOTE_CTRL_CAMERA_WND_UI            XML                     "skin/remote_control_camera_wnd.xml"
-
-IDXML_CAMERA_CONTROL_REQUEST_WND_UI            XML                     "skin/camera_control_request_received_wnd.xml"
-
-IDXML_STOP_CAMERA_CONTROL_WND_UI            XML                     "skin/stop_camera_control_wnd.xml"
-
-IDXML_CONTROL_CAMERA_TIP_WND_UI            XML                     "skin/control_camera_tip_wnd.xml"
-
-IDXML_CONTROL_CAMERA_POP_WND_UI            XML                     "skin/control_camera_pop_wnd.xml"
 
 IDXML_TOP_TIP_WND_UI          XML                     "skin/top_tip_wnd.xml"
 
