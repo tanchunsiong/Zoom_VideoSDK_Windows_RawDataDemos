@@ -815,6 +815,9 @@ void MainFrame::onProxyDetectComplete() {}
 void MainFrame::onProxySettingNotification(IZoomVideoSDKProxySettingHandler* handler) {}
 void MainFrame::onSSLCertVerifiedFailNotification(IZoomVideoSDKSSLCertificateInfo* info) {}
 void MainFrame::onUserVideoNetworkStatusChanged(ZoomVideoSDKNetworkStatus status, IZoomVideoSDKUser* pUser) {}
+void MainFrame::onShareNetworkStatusChanged(ZoomVideoSDKNetworkStatus shareNetworkStatus, bool isSendingShare)
+{
+}
 void MainFrame::onCallCRCDeviceStatusChanged(ZoomVideoSDKCRCCallStatus status) {}
 void MainFrame::onVideoCanvasSubscribeFail(ZoomVideoSDKSubscribeFailReason fail_reason, IZoomVideoSDKUser* pUser, void* handle) {}
 void MainFrame::onShareCanvasSubscribeFail(IZoomVideoSDKUser* pUser, void* handle, IZoomVideoSDKShareAction* pShareAction) {}
@@ -829,6 +832,34 @@ void MainFrame::onIncomingLiveStreamStatusResponse(bool bSuccess, IVideoSDKVecto
 void MainFrame::onStartIncomingLiveStreamResponse(bool bSuccess, const zchar_t* strStreamKeyID) {}
 void MainFrame::onStopIncomingLiveStreamResponse(bool bSuccess, const zchar_t* strStreamKeyID) {}
 void MainFrame::onShareContentSizeChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, IZoomVideoSDKShareAction* pShareAction) {}
+
+void MainFrame::onSubSessionStatusChanged(ZoomVideoSDKSubSessionStatus status, IVideoSDKVector<ISubSessionKit*>* pSubSessionKitList)
+{
+}
+
+void MainFrame::onSubSessionManagerHandle(IZoomVideoSDKSubSessionManager* pManager)
+{
+}
+
+void MainFrame::onSubSessionParticipantHandle(IZoomVideoSDKSubSessionParticipant* pParticipant)
+{
+}
+
+void MainFrame::onSubSessionUsersUpdate(ISubSessionKit* pSubSessionKit)
+{
+}
+
+void MainFrame::onBroadcastMessageFromMainSession(const zchar_t* sMessage, const zchar_t* sUserName)
+{
+}
+
+void MainFrame::onSubSessionUserHelpRequest(ISubSessionUserHelpRequestHandler* pHandler)
+{
+}
+
+void MainFrame::onSubSessionUserHelpRequestResult(ZoomVideoSDKUserHelpRequestResult eResult)
+{
+}
 
 
 //IZoomVideoSDKRawDataPipeDelegate

@@ -122,6 +122,8 @@ public:
 	virtual void onSSLCertVerifiedFailNotification(IZoomVideoSDKSSLCertificateInfo* handler);
 
 	virtual void onUserVideoNetworkStatusChanged(ZoomVideoSDKNetworkStatus status, IZoomVideoSDKUser* pUser);
+	virtual void onShareNetworkStatusChanged(ZoomVideoSDKNetworkStatus shareNetworkStatus, bool isSendingShare);
+
 	virtual void onCallCRCDeviceStatusChanged(ZoomVideoSDKCRCCallStatus status);
 
 
@@ -141,6 +143,20 @@ public:
 	virtual void onStartIncomingLiveStreamResponse(bool bSuccess, const zchar_t* strStreamKeyID);
 	virtual void onStopIncomingLiveStreamResponse(bool bSuccess, const zchar_t* strStreamKeyID);
 	virtual void onShareContentSizeChanged(IZoomVideoSDKShareHelper* pShareHelper, IZoomVideoSDKUser* pUser, IZoomVideoSDKShareAction* pShareAction);
+
+	virtual void onSubSessionStatusChanged(ZoomVideoSDKSubSessionStatus status, IVideoSDKVector<ISubSessionKit*>* pSubSessionKitList);
+	virtual void onSubSessionManagerHandle(IZoomVideoSDKSubSessionManager* pManager);
+	virtual void onSubSessionParticipantHandle(IZoomVideoSDKSubSessionParticipant* pParticipant);
+	
+	
+	virtual void onSubSessionUsersUpdate(ISubSessionKit* pSubSessionKit);
+	virtual void onBroadcastMessageFromMainSession(const zchar_t* sMessage, const zchar_t* sUserName);
+
+
+
+	virtual void onSubSessionUserHelpRequest(ISubSessionUserHelpRequestHandler* pHandler);
+	virtual void onSubSessionUserHelpRequestResult(ZoomVideoSDKUserHelpRequestResult eResult);
+
 
 	//IZoomVideoSDKRawDataPipeDelegate
 
