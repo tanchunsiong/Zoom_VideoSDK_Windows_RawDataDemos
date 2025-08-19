@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "video_show_mgr.h"
-#include "wall_mode_video_container.h"
 #include "gallary_mode_video_container.h"
 #include "video_layout_item_base.h"
 #include "videosdk_demo_mgr.h"

@@ -175,15 +175,12 @@ copy ..\ZoomVideoSDKRender\lib\*.dll ..\..\bin</Command>
     <ClInclude Include="join_session_wnd_ui.h" />
     <ClInclude Include="leave_session_tips_wnd_ui.h" />
     <ClInclude Include="main_frame.h" />
-    <ClInclude Include="more_pop_wnd.h" />
     <ClInclude Include="roll_control_ui.h" />
     <ClInclude Include="session_info_wnd_ui.h" />
     <ClInclude Include="session_settings_wnd_ui.h" />
     <ClInclude Include="chat_content_wnd_ui.h" />
-    <ClInclude Include="statistics_wnd_ui.h" />
     <ClInclude Include="title_bar_wnd_ui.h" />
     <ClInclude Include="switch_camera_wnd_ui.h" />
-    <ClInclude Include="gallery_more_pop_wnd_ui.h" />
     <ClInclude Include="switch_camera_pop_wnd_ui.h" />
     <ClInclude Include="turn_page_wnd_ui.h" />
     <ClInclude Include="utils.h" />
@@ -291,7 +288,6 @@ copy ..\ZoomVideoSDKRender\lib\*.dll ..\..\bin</Command>
     <Xml Include="skin\session_settings_wnd.xml" />
     <Xml Include="skin\title_bar_wnd.xml" />
     <Xml Include="skin\switch_camera_wnd.xml" />
-    <Xml Include="skin\gallery_more_pop_wnd.xml" />
     <Xml Include="skin\turn_page_wnd.xml" />
     <Xml Include="skin\top_tip_wnd.xml" />
     <Xml Include="skin\switch_camera_pop_wnd.xml" />

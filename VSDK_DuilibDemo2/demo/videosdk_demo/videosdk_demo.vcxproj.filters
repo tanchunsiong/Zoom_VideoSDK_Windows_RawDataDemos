@@ -111,9 +111,6 @@
     <ClInclude Include="switch_camera_wnd_ui.h">
       <Filter>header files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="gallery_more_pop_wnd_ui.h">
-      <Filter>header files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="switch_camera_pop_wnd_ui.h">
       <Filter>header files\UI</Filter>
     </ClInclude>
@@ -132,9 +129,6 @@
     <ClInclude Include="top_tip_wnd_ui.h">
       <Filter>header files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="statistics_wnd_ui.h">
-      <Filter>header files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="roll_control_ui.h">
       <Filter>header files\UI</Filter>
     </ClInclude>
@@ -142,9 +136,6 @@
       <Filter>header files\UI</Filter>
     </ClInclude>
     <ClInclude Include="lower_thirds_info_wnd.h">
-      <Filter>header files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="more_pop_wnd.h">
       <Filter>header files\UI</Filter>
     </ClInclude>
     <ClInclude Include="lowerthirds_setting_wnd_ui.h">
@@ -376,7 +367,6 @@
     <Xml Include="skin\lower_third_info_wnd.xml" />
     <Xml Include="skin\lowerthird_settings_wnd.xml" />
     <Xml Include="skin\switch_camera_wnd.xml" />
-    <Xml Include="skin\gallery_more_pop_wnd.xml" />
     <Xml Include="skin\top_tip_wnd.xml" />
     <Xml Include="skin\switch_camera_pop_wnd.xml" />
   </ItemGroup>
