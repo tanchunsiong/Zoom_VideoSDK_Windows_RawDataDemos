@@ -1,0 +1,77 @@
+## Ignore Visual Studio temporary files, build results, and caches
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Bb]uild/
+[Bb]uild[Ll]og.*.txt
+
+## NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+*.nuget.props
+*.nuget.targets
+
+## Windows Form designer & auto-generated files
+*.Designer.cs
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.res
+*.resources
+*.tlog
+
+## Cache and profiling
+*.cache
+*.log
+*.vspscc
+*.vssscc
+*.vsp
+*.vsmdi
+TestResults/
+
+## C++ wrapper specific
+*.lib
+*.dll
+*.exp
+*.idb
+*.ipdb
+*.iobj
+*.manifest
+*.opendb
+
+## OS specific
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+## Rider / JetBrains IDE (if used)
+.idea/
+*.iml
+
+## Others
+*.swp
+*.bak
+*.tmp
+*.old
+*.log

@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutputPath>bin\Debug\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutputPath>bin\Release\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZoomVideoSDK.Wrapper\ZoomVideoSDK.Wrapper.vcxproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="libs\videosdk.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libs\libcrypto-3-zm.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libs\libssl-3-zm.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libs\turbojpeg.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libs\SDL2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libs\cares.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>config.json</Link>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if exist &quot;$(SolutionDir)..\..\bin\videosdk.dll&quot; copy &quot;$(SolutionDir)..\..\bin\videosdk.dll&quot; &quot;$(TargetDir)&quot;" />
+    <Exec Command="if exist &quot;$(SolutionDir)..\..\bin\*.dll&quot; copy &quot;$(SolutionDir)..\..\bin\*.dll&quot; &quot;$(TargetDir)&quot;" />
+    <Exec Command="if exist &quot;$(SolutionDir)bin\$(Configuration)\ZoomVideoSDK.Wrapper.dll&quot; copy &quot;$(SolutionDir)bin\$(Configuration)\ZoomVideoSDK.Wrapper.dll&quot; &quot;$(TargetDir)&quot;" />
+    <Exec Command="if exist &quot;$(SolutionDir)bin\$(Configuration)\*.dll&quot; copy &quot;$(SolutionDir)bin\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
+
+</Project>
