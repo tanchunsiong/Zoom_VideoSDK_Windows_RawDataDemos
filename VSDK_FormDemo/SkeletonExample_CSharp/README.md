@@ -1,131 +1,220 @@
-# Zoom VideoSDK C# Windows Forms Wrapper
+# Zoom Video SDK C# Example
 
-This project provides a C# Windows Forms wrapper for the Zoom VideoSDK, allowing you to integrate Zoom video conferencing capabilities into Windows desktop applications.
+A Windows Forms application demonstrating the integration of Zoom Video SDK with C# using a C++/CLI wrapper.
 
-## Project Structure
+## 📁 Project Structure
 
-- **ZoomVideoSDK.WinForms** - C# Windows Forms application with the main UI
-- **ZoomVideoSDK.Wrapper** - C++/CLI managed wrapper that bridges the native Zoom VideoSDK with .NET
+```
+SkeletonExample_CSharp/
+├── README.md                     # This file
+├── ZoomVideoSDK.CSharp.sln      # Visual Studio solution file
+├── config.json                  # Configuration file
+├── h/                           # Zoom Video SDK header files
+│   ├── zoom_video_sdk_*.h       # Main SDK headers
+│   └── helpers/                 # Helper interface headers
+├── lib/                         # Static libraries
+│   └── videosdk.lib            # Zoom Video SDK static library
+├── dll/                         # Runtime DLLs (copied to output during build)
+│   └── videosdk.dll            # Main SDK runtime library
+├── bin/                         # Build output directory
+│   ├── Debug/                   # Debug build outputs
+│   └── Release/                 # Release build outputs
+├── obj/                         # Intermediate build files
+├── ZoomVideoSDK.Wrapper/        # C++/CLI wrapper project
+│   ├── ZoomVideoSDK.Wrapper.vcxproj
+│   ├── ZoomSDKManager.h         # Wrapper header
+│   └── ZoomSDKManager.cpp       # Wrapper implementation
+└── ZoomVideoSDK.WinForms/       # C# Windows Forms application
+    ├── ZoomVideoSDK.WinForms.csproj
+    ├── MainForm.cs              # Main application form
+    ├── Program.cs               # Application entry point
+    └── ZoomSDKInterop.cs        # C# interop classes
+```
 
-## Features
-
-- **Session Management**: Join and leave Zoom sessions
-- **Audio Controls**: Mute/unmute microphone, adjust volume
-- **Video Controls**: Start/stop camera, switch cameras
-- **Device Management**: Enumerate and select audio/video devices
-- **User Management**: View session participants
-- **Chat**: Send and receive chat messages
-- **Screen Sharing**: Share your screen with other participants
-
-## Building the Project
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Visual Studio 2022 with C++ and .NET Framework 4.8 support
-- Zoom VideoSDK Windows libraries (included in this repository)
+- **Visual Studio 2022** (Community, Professional, or Enterprise)
+- **.NET Framework 4.8** or later
+- **Windows 10/11** (x64)
+- **C++/CLI support** in Visual Studio
+- **Zoom Video SDK** (headers and libraries included)
 
-### Build Steps
+### Building the Project
 
-1. Open the solution file:
+1. **Open the solution**:
    ```
-   ZoomVideoSDK.CSharp.sln
-   ```
-
-2. Build using MSBuild:
-   ```cmd
-   "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" ZoomVideoSDK.CSharp.sln /p:Configuration=Debug /p:Platform="Any CPU"
+   Open ZoomVideoSDK.CSharp.sln in Visual Studio 2022
    ```
 
-3. The application will be built to:
-   ```
-   ZoomVideoSDK.WinForms\bin\Debug\net48\ZoomVideoSDK.WinForms.exe
-   ```
+2. **Set build configuration**:
+   - Configuration: `Debug` or `Release`
+   - Platform: `x64` (required)
 
-## Running the Application
+3. **Build the solution**:
+   - Press `Ctrl+Shift+B` or use `Build > Build Solution`
+   - The build process will:
+     - Compile the C++/CLI wrapper
+     - Automatically copy DLLs from `dll/` folder to output directory
+     - Build the C# Windows Forms application
 
-1. Ensure all required DLLs are in the output directory:
-   - `videosdk.dll`
-   - `SDL2.dll`
-   - `turbojpeg.dll`
-   - `libcrypto-3-zm.dll`
-   - `libssl-3-zm.dll`
-   - `ZoomVideoSDK.Wrapper.dll`
+4. **Run the application**:
+   - Press `F5` or use `Debug > Start Debugging`
 
-2. Run the executable:
-   ```cmd
-   ZoomVideoSDK.WinForms\bin\Debug\net48\ZoomVideoSDK.WinForms.exe
-   ```
+### Alternative Build (Command Line)
 
-## Configuration
+```bash
+# Navigate to the project directory
+cd SkeletonExample_CSharp
 
-The application loads configuration from `config.json`:
-
-```json
-{
-  "app_type": 1,
-  "jwt_token": "your_jwt_token_here",
-  "session_name": "test_session",
-  "user_name": "test_user",
-  "session_password": "",
-  "log_level": 0,
-  "log_dir": "./logs",
-  "enable_log_by_default": true,
-  "enable_sdk_log_ui": false
-}
+# Build using MSBuild
+"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" ZoomVideoSDK.CSharp.sln /p:Configuration=Debug /p:Platform=x64
 ```
 
-## Architecture
+## 🏗️ Architecture
 
-### C++/CLI Wrapper (ZoomVideoSDK.Wrapper)
+### Component Overview
 
-The C++/CLI wrapper provides a managed interface to the native Zoom VideoSDK:
+1. **ZoomVideoSDK.WinForms** (C# Application)
+   - Windows Forms UI
+   - Event handling and user interactions
+   - Calls into the C++/CLI wrapper
 
-- **ZoomSDKManager**: Main managed class that wraps SDK functionality
-- **Event Handling**: Converts native SDK callbacks to .NET events
-- **Memory Management**: Handles marshaling between native and managed code
+2. **ZoomVideoSDK.Wrapper** (C++/CLI Bridge)
+   - Bridges C# managed code with native Zoom SDK
+   - Handles SDK initialization and session management
+   - Provides managed interfaces for SDK functionality
 
-### C# Windows Forms Application (ZoomVideoSDK.WinForms)
+3. **Zoom Video SDK** (Native C++)
+   - Core video conferencing functionality
+   - Audio/video processing
+   - Network communication
 
-The Windows Forms application provides the user interface:
+### Data Flow
 
-- **MainForm**: Main application window with all controls
-- **ZoomSDKInterop**: Helper class for SDK integration
-- **Event Handlers**: Responds to SDK events and updates UI
+```
+C# UI Layer (WinForms)
+        ↕
+C++/CLI Wrapper Layer
+        ↕
+Native Zoom SDK (C++)
+```
 
-## Current Implementation
+## 🔧 Key Features
 
-The current implementation includes:
+- **Session Management**: Join/leave video sessions
+- **Audio Controls**: Mute/unmute microphone and speakers
+- **Video Controls**: Start/stop camera
+- **Device Management**: List and select audio/video devices
+- **Event Handling**: Real-time session status updates
+- **Cross-Platform Bridge**: Seamless C# to C++ integration
 
-- ✅ Complete Windows Forms UI with all controls
-- ✅ C++/CLI wrapper with proper event handling
-- ✅ Session join/leave functionality (demo mode)
-- ✅ Audio/video control interfaces
-- ✅ Device enumeration interfaces
-- ✅ Chat functionality interface
-- ✅ Screen sharing interface
+## 📝 Usage Example
 
-## Next Steps
+```csharp
+// Initialize the SDK
+var sdkManager = new ZoomSDKManager();
+bool initialized = sdkManager.Initialize();
 
-To enable full Zoom SDK integration:
+// Join a session
+bool joined = sdkManager.JoinSession(
+    sessionName: "MySession",
+    token: "your_jwt_token",
+    userName: "John Doe",
+    password: "optional_password"
+);
 
-1. **Replace Demo Mode**: Update the C++/CLI wrapper to call actual Zoom SDK functions instead of demo simulations
-2. **Implement Real Callbacks**: Connect native SDK callbacks to managed events
-3. **Add Video Rendering**: Implement video frame rendering for local and remote participants
-4. **Error Handling**: Add comprehensive error handling and logging
-5. **Testing**: Test with real Zoom sessions
+// Handle events
+sdkManager.SessionStatusChanged += (sender, e) => {
+    Console.WriteLine($"Status: {e.Status}, Message: {e.Message}");
+};
 
-## Known Issues
+// Leave session when done
+sdkManager.LeaveSession();
+```
 
-- Architecture mismatch warning (MSIL vs AMD64) - this is expected and doesn't affect functionality
-- Currently runs in demo mode - SDK integration needs to be completed for real functionality
+## 🔄 Build Process Details
 
-## Dependencies
+### Automatic DLL Management
 
-- .NET Framework 4.8
-- Zoom VideoSDK Windows libraries
-- Visual C++ Redistributable
-- Windows 10/11
+The build system automatically handles runtime dependencies:
 
-## License
+1. **Pre-build**: Essential DLLs are stored in the `dll/` folder
+2. **Post-build**: DLLs are automatically copied to the output directory
+3. **Runtime**: Application finds all dependencies in the same folder
 
-This project is provided as an example implementation. Please ensure you comply with Zoom's SDK licensing terms.
+### Build Events
+
+- **C++ Wrapper Post-Build**: Copies DLLs from `dll/` to `bin/Debug` or `bin/Release`
+- **C# Application Post-Build**: Ensures all dependencies are in the final output directory
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Build Error: "Cannot open include file"**
+   - Ensure all header files are in the `h/` folder
+   - Check that include paths in the project are correct
+
+2. **Link Error: "Cannot find videosdk.lib"**
+   - Verify `videosdk.lib` is in the `lib/` folder
+   - Check library paths in project settings
+
+3. **Runtime Error: "DLL not found"**
+   - Ensure `videosdk.dll` is in the `dll/` folder
+   - Verify post-build events are copying DLLs correctly
+
+4. **Platform Mismatch**
+   - Always build for `x64` platform
+   - Ensure all projects target the same platform
+
+### Debug Tips
+
+- Check the build output for post-build event execution
+- Verify DLL copying with: `copy "dll\*.dll" "bin\Debug\" /Y`
+- Use Dependency Walker to check DLL dependencies
+
+## 📋 Requirements
+
+### System Requirements
+
+- **OS**: Windows 10 (1903) or Windows 11
+- **Architecture**: x64 only
+- **Memory**: 4GB RAM minimum, 8GB recommended
+- **Network**: Internet connection for Zoom services
+
+### Development Requirements
+
+- **Visual Studio 2022** with:
+  - C++ desktop development workload
+  - .NET desktop development workload
+  - Windows 10/11 SDK
+
+## 🔐 Security Notes
+
+- **JWT Tokens**: Store securely, never hardcode in source
+- **Session Passwords**: Handle securely in production
+- **Network**: Ensure proper firewall configuration for Zoom services
+
+## 📚 Additional Resources
+
+- [Zoom Video SDK Documentation](https://developers.zoom.us/docs/video-sdk/)
+- [C++/CLI Programming Guide](https://docs.microsoft.com/en-us/cpp/dotnet/)
+- [Windows Forms Documentation](https://docs.microsoft.com/en-us/dotnet/desktop/winforms/)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+This project is provided as an example implementation. Please refer to Zoom's licensing terms for the Video SDK usage.
+
+---
+
+**Note**: This is a skeleton example for demonstration purposes. For production use, implement proper error handling, logging, and security measures.

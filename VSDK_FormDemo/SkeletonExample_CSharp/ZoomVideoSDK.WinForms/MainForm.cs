@@ -42,7 +42,7 @@ namespace ZoomVideoSDK.WinForms
         private ToolStripStatusLabel _statusLabel;
         
         // SDK Manager
-        private ZoomSDKManager _zoomSDK;
+        private ZoomSDKInterop _zoomSDK;
         private bool _isInSession = false;
         private bool _isMicMuted = false;
         private bool _isSpeakerMuted = false;
@@ -337,14 +337,71 @@ namespace ZoomVideoSDK.WinForms
 
         private void PopulateDeviceLists()
         {
-            // Populate with default devices for now
-            _microphoneComboBox.Items.Add("Default Microphone");
-            _speakerComboBox.Items.Add("Default Speaker");
-            _cameraComboBox.Items.Add("Default Camera");
+            try
+            {
+                // Clear existing items
+                _microphoneComboBox.Items.Clear();
+                _speakerComboBox.Items.Clear();
+                _cameraComboBox.Items.Clear();
 
-            if (_microphoneComboBox.Items.Count > 0) _microphoneComboBox.SelectedIndex = 0;
-            if (_speakerComboBox.Items.Count > 0) _speakerComboBox.SelectedIndex = 0;
-            if (_cameraComboBox.Items.Count > 0) _cameraComboBox.SelectedIndex = 0;
+                if (_zoomSDK != null && _zoomSDK.IsInitialized)
+                {
+                    // Get real device lists from SDK
+                    var microphones = _zoomSDK.GetMicrophoneList();
+                    var speakers = _zoomSDK.GetSpeakerList();
+                    var cameras = _zoomSDK.GetCameraList();
+
+                    // Populate microphones
+                    foreach (var mic in microphones)
+                    {
+                        _microphoneComboBox.Items.Add(mic);
+                    }
+
+                    // Populate speakers
+                    foreach (var speaker in speakers)
+                    {
+                        _speakerComboBox.Items.Add(speaker);
+                    }
+
+                    // Populate cameras
+                    foreach (var camera in cameras)
+                    {
+                        _cameraComboBox.Items.Add(camera);
+                    }
+
+                    UpdateStatus($"Found {microphones.Length} microphones, {speakers.Length} speakers, {cameras.Length} cameras");
+                }
+                else
+                {
+                    // Fallback to default devices if SDK not initialized
+                    _microphoneComboBox.Items.Add("Default Microphone");
+                    _speakerComboBox.Items.Add("Default Speaker");
+                    _cameraComboBox.Items.Add("Default Camera");
+                    UpdateStatus("Using default devices (SDK not initialized)");
+                }
+
+                // Select first item in each list
+                if (_microphoneComboBox.Items.Count > 0) _microphoneComboBox.SelectedIndex = 0;
+                if (_speakerComboBox.Items.Count > 0) _speakerComboBox.SelectedIndex = 0;
+                if (_cameraComboBox.Items.Count > 0) _cameraComboBox.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                UpdateStatus($"Error populating device lists: {ex.Message}");
+                
+                // Fallback to default devices on error
+                _microphoneComboBox.Items.Clear();
+                _speakerComboBox.Items.Clear();
+                _cameraComboBox.Items.Clear();
+                
+                _microphoneComboBox.Items.Add("Default Microphone");
+                _speakerComboBox.Items.Add("Default Speaker");
+                _cameraComboBox.Items.Add("Default Camera");
+                
+                if (_microphoneComboBox.Items.Count > 0) _microphoneComboBox.SelectedIndex = 0;
+                if (_speakerComboBox.Items.Count > 0) _speakerComboBox.SelectedIndex = 0;
+                if (_cameraComboBox.Items.Count > 0) _cameraComboBox.SelectedIndex = 0;
+            }
         }
 
         private void LoadConfiguration()
@@ -404,14 +461,19 @@ namespace ZoomVideoSDK.WinForms
                 Invoke(new Action<string>(UpdateStatus), message);
                 return;
             }
-            _statusLabel.Text = message;
+            
+            // Add null check to prevent NullReferenceException
+            if (_statusLabel != null)
+            {
+                _statusLabel.Text = message;
+            }
         }
 
         private void InitializeZoomSDK()
         {
             try
             {
-                _zoomSDK = new ZoomSDKManager();
+                _zoomSDK = new ZoomSDKInterop();
                 
                 // Set up event handlers
                 _zoomSDK.SessionJoined += OnSessionJoined;
@@ -424,6 +486,8 @@ namespace ZoomVideoSDK.WinForms
                 if (_zoomSDK.Initialize())
                 {
                     UpdateStatus("Zoom SDK initialized successfully");
+                    // Refresh device lists now that SDK is initialized
+                    PopulateDeviceLists();
                 }
                 else
                 {
@@ -445,7 +509,7 @@ namespace ZoomVideoSDK.WinForms
             UpdateStatus(message);
         }
 
-        // Zoom SDK Event Handlers
+
         private void OnSessionJoined(object sender, EventArgs e)
         {
             if (InvokeRequired)
@@ -490,12 +554,12 @@ namespace ZoomVideoSDK.WinForms
                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        // Video event handlers
-        private void OnRemoteVideoReceived(object sender, ZoomVideoSDKWrapper.VideoFrameEventArgs e)
+        // Video event handlers - using the local VideoFrameEventArgs from ZoomSDKInterop
+        private void OnRemoteVideoReceived(object sender, VideoFrameEventArgs e)
         {
             if (InvokeRequired)
             {
-                Invoke(new Action<object, ZoomVideoSDKWrapper.VideoFrameEventArgs>(OnRemoteVideoReceived), sender, e);
+                Invoke(new Action<object, VideoFrameEventArgs>(OnRemoteVideoReceived), sender, e);
                 return;
             }
 
@@ -522,11 +586,11 @@ namespace ZoomVideoSDK.WinForms
             }
         }
 
-        private void OnPreviewVideoReceived(object sender, ZoomVideoSDKWrapper.VideoFrameEventArgs e)
+        private void OnPreviewVideoReceived(object sender, VideoFrameEventArgs e)
         {
             if (InvokeRequired)
             {
-                Invoke(new Action<object, ZoomVideoSDKWrapper.VideoFrameEventArgs>(OnPreviewVideoReceived), sender, e);
+                Invoke(new Action<object, VideoFrameEventArgs>(OnPreviewVideoReceived), sender, e);
                 return;
             }
 
@@ -865,8 +929,7 @@ namespace ZoomVideoSDK.WinForms
                 {
                     _isVideoStarted = true;
                     UpdateButtonStates();
-                    UpdateStatus("Video started");
-                    ShowVideoPlaceholder(); // Placeholder until video callbacks are implemented
+                    UpdateStatus("Video started - live preview should appear");
                 }
                 else
                 {
@@ -911,18 +974,6 @@ namespace ZoomVideoSDK.WinForms
             }
         }
 
-        private void ShowVideoPlaceholder()
-        {
-            // Create a simple placeholder image
-            var bitmap = new Bitmap(320, 240);
-            using (var g = Graphics.FromImage(bitmap))
-            {
-                g.Clear(Color.DarkBlue);
-                g.DrawString("Video Preview", new Font("Arial", 16), Brushes.White, 
-                           new PointF(bitmap.Width / 2 - 60, bitmap.Height / 2 - 10));
-            }
-            _selfVideoPanel.Image = bitmap;
-        }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {

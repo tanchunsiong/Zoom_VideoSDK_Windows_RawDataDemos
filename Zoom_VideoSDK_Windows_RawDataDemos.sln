@@ -47,6 +47,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VSDK_ShareScreenPreprocesso
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VSDK_DuilibDemo", "VSDK_DuilibDemo2\demo\videosdk_demo\videosdk_demo.vcxproj", "{A7C20212-4569-4E92-AE6A-566DDB2E2AAE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZoomVideoSDK.WinForms", "VSDK_FormDemo\SkeletonExample_CSharp\ZoomVideoSDK.WinForms\ZoomVideoSDK.WinForms.csproj", "{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZoomVideoSDK.Wrapper", "VSDK_FormDemo\SkeletonExample_CSharp\ZoomVideoSDK.Wrapper\ZoomVideoSDK.Wrapper.vcxproj", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -285,6 +289,30 @@ Global
 		{A7C20212-4569-4E92-AE6A-566DDB2E2AAE}.Release|x64.Build.0 = Release|x64
 		{A7C20212-4569-4E92-AE6A-566DDB2E2AAE}.Release|x86.ActiveCfg = Release|Win32
 		{A7C20212-4569-4E92-AE6A-566DDB2E2AAE}.Release|x86.Build.0 = Release|Win32
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Debug|Any CPU.Build.0 = Debug|x64
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Debug|x64.ActiveCfg = Debug|x64
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Debug|x64.Build.0 = Debug|x64
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Debug|x86.ActiveCfg = Debug|x64
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Debug|x86.Build.0 = Debug|x64
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Release|Any CPU.ActiveCfg = Release|x64
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Release|Any CPU.Build.0 = Release|x64
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Release|x64.ActiveCfg = Release|x64
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Release|x64.Build.0 = Release|x64
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Release|x86.ActiveCfg = Release|x64
+		{A876A1DD-D34C-4272-AB73-C2A51A5FF2E2}.Release|x86.Build.0 = Release|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.Build.0 = Debug|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|x64.ActiveCfg = Debug|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|x64.Build.0 = Debug|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|x86.ActiveCfg = Debug|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|x86.Build.0 = Debug|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.ActiveCfg = Release|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.Build.0 = Release|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|x64.ActiveCfg = Release|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|x64.Build.0 = Release|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|x86.ActiveCfg = Release|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

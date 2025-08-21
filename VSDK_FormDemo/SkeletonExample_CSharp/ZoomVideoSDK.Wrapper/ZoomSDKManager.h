@@ -72,15 +72,15 @@ namespace ZoomVideoSDKWrapper {
         void LeaveSession();
         
         // Audio Controls
-        bool MuteMicrophone(bool mute);
+        bool MuteAudio(bool mute);
         bool MuteSpeaker(bool mute);
-        bool IsMicrophoneMuted();
+        bool IsAudioMuted();
         bool IsSpeakerMuted();
 
         // Video Controls
-        bool StartCamera();
-        bool StopCamera();
-        bool IsCameraStarted();
+        bool StartVideo();
+        bool StopVideo();
+        bool IsVideoStarted();
 
         // Device Management
         array<String^>^ GetMicrophoneList();
@@ -92,6 +92,7 @@ namespace ZoomVideoSDKWrapper {
 
         // Properties
         property bool IsInSession { bool get(); }
+        property bool IsInitialized { bool get(); }
         property String^ CurrentSessionName { String^ get(); }
 
         // Public event handlers for native callbacks
@@ -103,13 +104,19 @@ namespace ZoomVideoSDKWrapper {
         void SubscribeToUserVideo(void* user);
         void UnsubscribeFromUserVideo(void* user);
         void HandleUserVideoStatusChange(void* user);
-        void CreateVideoPlaceholder(String^ userId);
+        
+        // Video preview methods
+        bool StartVideoPreview();
+        void StopVideoPreview();
+
+        // Helper methods (made public for native callback access)
+        Bitmap^ ConvertYUVToBitmap(char* yBuffer, char* uBuffer, char* vBuffer, 
+                                  int width, int height, int yStride, int uStride, int vStride);
 
     private:
         // Helper methods
-        Bitmap^ ConvertYUVToBitmap(char* yBuffer, char* uBuffer, char* vBuffer, 
-                                  int width, int height, int yStride, int uStride, int vStride);
         String^ ConvertToManagedString(const wchar_t* nativeString);
         std::wstring ConvertToNativeString(String^ managedString);
+        void CreateVideoPlaceholder(String^ userId);
     };
 }

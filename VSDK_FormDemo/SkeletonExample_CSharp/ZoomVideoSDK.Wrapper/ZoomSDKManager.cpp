@@ -1,17 +1,54 @@
 #include "ZoomSDKManager.h"
-#include "../../h/zoom_video_sdk_interface.h"
-#include "../../h/zoom_video_sdk_api.h"
-#include "../../h/zoom_video_sdk_delegate_interface.h"
-#include "../../h/zoom_video_sdk_session_info_interface.h"
-#include "../../h/helpers/zoom_video_sdk_audio_helper_interface.h"
-#include "../../h/helpers/zoom_video_sdk_video_helper_interface.h"
-#include "../../h/helpers/zoom_video_sdk_user_helper_interface.h"
+#include "../h/zoom_video_sdk_interface.h"
+#include "../h/zoom_video_sdk_api.h"
+#include "../h/zoom_video_sdk_delegate_interface.h"
+#include "../h/zoom_video_sdk_session_info_interface.h"
+#include "../h/helpers/zoom_video_sdk_audio_helper_interface.h"
+#include "../h/helpers/zoom_video_sdk_video_helper_interface.h"
+#include "../h/helpers/zoom_video_sdk_user_helper_interface.h"
+#include "../h/zoom_sdk_raw_data_def.h"
+#include "../h/zoom_video_sdk_vector_interface.h"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
 using namespace ZOOMVIDEOSDK;
 
 namespace ZoomVideoSDKWrapper {
+
+    // Forward declare the managed class
+    ref class ZoomSDKManager;
+
+    // Video preview handler for raw data pipe delegate
+    class VideoPreviewHandler : public IZoomVideoSDKRawDataPipeDelegate
+    {
+    private:
+        gcroot<ZoomSDKManager^> m_managedHandler;
+
+    public:
+        VideoPreviewHandler(ZoomSDKManager^ handler) : m_managedHandler(handler) {}
+        virtual ~VideoPreviewHandler() {}
+
+        virtual void onRawDataFrameReceived(YUVRawDataI420* data_) override;
+        virtual void onRawDataStatusChanged(RawDataStatus status) override;
+        virtual void onShareCursorDataReceived(ZoomVideoSDKShareCursorData info) override;
+    };
+
+    // Remote video handler for user video pipes
+    class RemoteVideoHandler : public IZoomVideoSDKRawDataPipeDelegate
+    {
+    private:
+        gcroot<ZoomSDKManager^> m_managedHandler;
+        gcroot<String^> m_userId;
+
+    public:
+        RemoteVideoHandler(ZoomSDKManager^ handler, String^ userId) 
+            : m_managedHandler(handler), m_userId(userId) {}
+        virtual ~RemoteVideoHandler() {}
+
+        virtual void onRawDataFrameReceived(YUVRawDataI420* data_) override;
+        virtual void onRawDataStatusChanged(RawDataStatus status) override;
+        virtual void onShareCursorDataReceived(ZoomVideoSDKShareCursorData info) override;
+    };
 
     // Simple native callback handler - implementing only essential callbacks
     class SimpleNativeHandler : public IZoomVideoSDKDelegate
@@ -25,35 +62,40 @@ namespace ZoomVideoSDKWrapper {
         // Essential callbacks
         virtual void onSessionJoin() override
         {
-            if (m_managedHandler)
-                m_managedHandler->OnSessionStatusChanged(SessionStatus::InSession, "Session joined successfully");
+            ZoomVideoSDKWrapper::ZoomSDKManager^ handler = static_cast<ZoomVideoSDKWrapper::ZoomSDKManager^>(m_managedHandler);
+            if (handler)
+                handler->OnSessionStatusChanged(SessionStatus::InSession, "Session joined successfully");
         }
 
         virtual void onSessionLeave() override
         {
-            if (m_managedHandler)
-                m_managedHandler->OnSessionStatusChanged(SessionStatus::Idle, "Session left");
+            ZoomVideoSDKWrapper::ZoomSDKManager^ handler = static_cast<ZoomVideoSDKWrapper::ZoomSDKManager^>(m_managedHandler);
+            if (handler)
+                handler->OnSessionStatusChanged(SessionStatus::Idle, "Session left");
         }
 
         virtual void onSessionLeave(ZoomVideoSDKSessionLeaveReason eReason) override
         {
-            if (m_managedHandler)
-                m_managedHandler->OnSessionStatusChanged(SessionStatus::Idle, "Session left with reason");
+            ZoomVideoSDKWrapper::ZoomSDKManager^ handler = static_cast<ZoomVideoSDKWrapper::ZoomSDKManager^>(m_managedHandler);
+            if (handler)
+                handler->OnSessionStatusChanged(SessionStatus::Idle, "Session left with reason");
         }
 
         virtual void onError(ZoomVideoSDKErrors errorCode, int detailErrorCode) override
         {
-            if (m_managedHandler)
+            ZoomVideoSDKWrapper::ZoomSDKManager^ handler = static_cast<ZoomVideoSDKWrapper::ZoomSDKManager^>(m_managedHandler);
+            if (handler)
             {
                 String^ errorMsg = String::Format("SDK Error: {0} (Detail: {1})", (int)errorCode, detailErrorCode);
-                m_managedHandler->OnSessionStatusChanged(SessionStatus::Error, errorMsg);
+                handler->OnSessionStatusChanged(SessionStatus::Error, errorMsg);
             }
         }
 
         // Video-related callbacks - now properly implemented
         virtual void onUserJoin(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) override 
         {
-            if (m_managedHandler && userList)
+            ZoomVideoSDKWrapper::ZoomSDKManager^ handler = static_cast<ZoomVideoSDKWrapper::ZoomSDKManager^>(m_managedHandler);
+            if (handler && userList)
             {
                 // Subscribe to video for each new user
                 for (int i = 0; i < userList->GetCount(); i++)
@@ -61,7 +103,7 @@ namespace ZoomVideoSDKWrapper {
                     IZoomVideoSDKUser* user = userList->GetItem(i);
                     if (user)
                     {
-                        m_managedHandler->SubscribeToUserVideo(user);
+                        handler->SubscribeToUserVideo(user);
                     }
                 }
             }
@@ -69,7 +111,8 @@ namespace ZoomVideoSDKWrapper {
         
         virtual void onUserLeave(IZoomVideoSDKUserHelper* pUserHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) override 
         {
-            if (m_managedHandler && userList)
+            ZoomVideoSDKWrapper::ZoomSDKManager^ handler = static_cast<ZoomVideoSDKWrapper::ZoomSDKManager^>(m_managedHandler);
+            if (handler && userList)
             {
                 // Unsubscribe from video for each leaving user
                 for (int i = 0; i < userList->GetCount(); i++)
@@ -77,7 +120,7 @@ namespace ZoomVideoSDKWrapper {
                     IZoomVideoSDKUser* user = userList->GetItem(i);
                     if (user)
                     {
-                        m_managedHandler->UnsubscribeFromUserVideo(user);
+                        handler->UnsubscribeFromUserVideo(user);
                     }
                 }
             }
@@ -85,7 +128,8 @@ namespace ZoomVideoSDKWrapper {
         
         virtual void onUserVideoStatusChanged(IZoomVideoSDKVideoHelper* pVideoHelper, IVideoSDKVector<IZoomVideoSDKUser*>* userList) override 
         {
-            if (m_managedHandler && userList)
+            ZoomVideoSDKWrapper::ZoomSDKManager^ handler = static_cast<ZoomVideoSDKWrapper::ZoomSDKManager^>(m_managedHandler);
+            if (handler && userList)
             {
                 // Handle video status changes for users
                 for (int i = 0; i < userList->GetCount(); i++)
@@ -93,7 +137,7 @@ namespace ZoomVideoSDKWrapper {
                     IZoomVideoSDKUser* user = userList->GetItem(i);
                     if (user)
                     {
-                        m_managedHandler->HandleUserVideoStatusChange(user);
+                        handler->HandleUserVideoStatusChange(user);
                     }
                 }
             }
@@ -234,7 +278,7 @@ namespace ZoomVideoSDKWrapper {
             OnSessionStatusChanged(SessionStatus::Idle, "SDK initialized successfully");
             return true;
         }
-        catch (...) {
+        catch (System::Exception^) {
             return false;
         }
     }
@@ -287,7 +331,7 @@ namespace ZoomVideoSDKWrapper {
             sessionContext.userName = nativeUserName.c_str();
             sessionContext.token = nativeToken.c_str();
             sessionContext.sessionPassword = nativePassword.empty() ? nullptr : nativePassword.c_str();
-            sessionContext.videoOption.localVideoOn = false;
+            sessionContext.videoOption.localVideoOn = true;  // Enable video transmission
             sessionContext.audioOption.connect = true;
             sessionContext.audioOption.mute = false;
 
@@ -304,7 +348,7 @@ namespace ZoomVideoSDKWrapper {
 
             return true;
         }
-        catch (...) {
+        catch (System::Exception^) {
             OnSessionStatusChanged(SessionStatus::Error, "Exception occurred while joining session");
             return false;
         }
@@ -322,7 +366,7 @@ namespace ZoomVideoSDKWrapper {
     }
 
     // Audio controls with real implementation
-    bool ZoomSDKManager::MuteMicrophone(bool mute)
+    bool ZoomSDKManager::MuteAudio(bool mute)
     {
         if (!m_bInitialized || !m_pVideoSDK)
             return false;
@@ -351,7 +395,7 @@ namespace ZoomVideoSDKWrapper {
         return false; // Not supported in current API
     }
 
-    bool ZoomSDKManager::IsMicrophoneMuted()
+    bool ZoomSDKManager::IsAudioMuted()
     {
         if (!m_bInitialized || !m_pVideoSDK)
             return false;
@@ -379,8 +423,8 @@ namespace ZoomVideoSDKWrapper {
         return false; // Not supported in current API
     }
 
-    // Video controls with real implementation
-    bool ZoomSDKManager::StartCamera()
+    // Video controls - WITH PREVIEW SUPPORT
+    bool ZoomSDKManager::StartVideo()
     {
         if (!m_bInitialized || !m_pVideoSDK)
             return false;
@@ -390,11 +434,30 @@ namespace ZoomVideoSDKWrapper {
         if (!videoHelper)
             return false;
 
+        // Start video transmission
         ZoomVideoSDKErrors ret = videoHelper->startVideo();
-        return ret == ZoomVideoSDKErrors_Success;
+        if (ret == ZoomVideoSDKErrors_Success)
+        {
+            OnSessionStatusChanged(SessionStatus::InSession, "Video started successfully");
+            
+            // Also start video preview for self video
+            try {
+                StartVideoPreview();
+            }
+            catch (System::Exception^) {
+                OnSessionStatusChanged(SessionStatus::InSession, "Video preview failed to start, but video transmission is working");
+            }
+            
+            return true;
+        }
+        else
+        {
+            OnSessionStatusChanged(SessionStatus::Error, String::Format("Failed to start video: {0}", (int)ret));
+            return false;
+        }
     }
 
-    bool ZoomSDKManager::StopCamera()
+    bool ZoomSDKManager::StopVideo()
     {
         if (!m_bInitialized || !m_pVideoSDK)
             return false;
@@ -408,7 +471,7 @@ namespace ZoomVideoSDKWrapper {
         return ret == ZoomVideoSDKErrors_Success;
     }
 
-    bool ZoomSDKManager::IsCameraStarted()
+    bool ZoomSDKManager::IsVideoStarted()
     {
         if (!m_bInitialized || !m_pVideoSDK)
             return false;
@@ -422,20 +485,107 @@ namespace ZoomVideoSDKWrapper {
         return false; // Not supported in current API
     }
 
-    // Simplified device management - return empty lists for now
+    // Real device management implementation using correct SDK interfaces
     array<String^>^ ZoomSDKManager::GetMicrophoneList()
     {
-        return gcnew array<String^>(0);
+        if (!m_bInitialized || !m_pVideoSDK)
+            return gcnew array<String^>(0);
+
+        try {
+            IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
+            IZoomVideoSDKAudioHelper* audioHelper = pSDK->getAudioHelper();
+            if (!audioHelper)
+                return gcnew array<String^>(0);
+
+            IVideoSDKVector<IZoomVideoSDKMicDevice*>* micList = audioHelper->getMicList();
+            if (!micList)
+                return gcnew array<String^>(0);
+
+            int count = micList->GetCount();
+            array<String^>^ result = gcnew array<String^>(count);
+            
+            for (int i = 0; i < count; i++)
+            {
+                IZoomVideoSDKMicDevice* micDevice = micList->GetItem(i);
+                if (micDevice)
+                {
+                    result[i] = ConvertToManagedString(micDevice->getDeviceName());
+                }
+            }
+            
+            return result;
+        }
+        catch (System::Exception^) {
+            return gcnew array<String^>(0);
+        }
     }
 
     array<String^>^ ZoomSDKManager::GetSpeakerList()
     {
-        return gcnew array<String^>(0);
+        if (!m_bInitialized || !m_pVideoSDK)
+            return gcnew array<String^>(0);
+
+        try {
+            IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
+            IZoomVideoSDKAudioHelper* audioHelper = pSDK->getAudioHelper();
+            if (!audioHelper)
+                return gcnew array<String^>(0);
+
+            IVideoSDKVector<IZoomVideoSDKSpeakerDevice*>* speakerList = audioHelper->getSpeakerList();
+            if (!speakerList)
+                return gcnew array<String^>(0);
+
+            int count = speakerList->GetCount();
+            array<String^>^ result = gcnew array<String^>(count);
+            
+            for (int i = 0; i < count; i++)
+            {
+                IZoomVideoSDKSpeakerDevice* speakerDevice = speakerList->GetItem(i);
+                if (speakerDevice)
+                {
+                    result[i] = ConvertToManagedString(speakerDevice->getDeviceName());
+                }
+            }
+            
+            return result;
+        }
+        catch (System::Exception^) {
+            return gcnew array<String^>(0);
+        }
     }
 
     array<String^>^ ZoomSDKManager::GetCameraList()
     {
-        return gcnew array<String^>(0);
+        if (!m_bInitialized || !m_pVideoSDK)
+            return gcnew array<String^>(0);
+
+        try {
+            IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
+            IZoomVideoSDKVideoHelper* videoHelper = pSDK->getVideoHelper();
+            if (!videoHelper)
+                return gcnew array<String^>(0);
+
+            IVideoSDKVector<IZoomVideoSDKCameraDevice*>* cameraList = videoHelper->getCameraList();
+            if (!cameraList)
+                return gcnew array<String^>(0);
+
+            int count = cameraList->GetCount();
+            array<String^>^ result = gcnew array<String^>(count);
+            
+            for (int i = 0; i < count; i++)
+            {
+                IZoomVideoSDKCameraDevice* cameraDevice = cameraList->GetItem(i);
+                if (cameraDevice)
+                {
+                    result[i] = ConvertToManagedString(cameraDevice->getDeviceName());
+                }
+            }
+            
+            return result;
+        }
+        catch (System::Exception^) {
+            return gcnew array<String^>(0);
+        }
     }
 
     bool ZoomSDKManager::SelectMicrophone(String^ deviceId)
@@ -450,7 +600,75 @@ namespace ZoomVideoSDKWrapper {
 
     bool ZoomSDKManager::SelectCamera(String^ deviceId)
     {
-        return false; // Simplified for now
+        if (!m_bInitialized || !m_pVideoSDK || !deviceId)
+            return false;
+
+        try {
+            IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
+            IZoomVideoSDKVideoHelper* videoHelper = pSDK->getVideoHelper();
+            if (!videoHelper)
+                return false;
+
+            // Get camera list to find the camera by name
+            IVideoSDKVector<IZoomVideoSDKCameraDevice*>* cameraList = videoHelper->getCameraList();
+            if (!cameraList)
+                return false;
+
+            // Find the camera device by name
+            IZoomVideoSDKCameraDevice* selectedCamera = nullptr;
+            for (int i = 0; i < cameraList->GetCount(); i++)
+            {
+                IZoomVideoSDKCameraDevice* camera = cameraList->GetItem(i);
+                if (camera)
+                {
+                    String^ cameraName = ConvertToManagedString(camera->getDeviceName());
+                    if (String::Equals(cameraName, deviceId, StringComparison::OrdinalIgnoreCase))
+                    {
+                        selectedCamera = camera;
+                        break;
+                    }
+                }
+            }
+
+            if (!selectedCamera)
+            {
+                OnSessionStatusChanged(SessionStatus::Error, String::Format("Camera not found: {0}", deviceId));
+                return false;
+            }
+
+            // Use the camera device ID, not the display name
+            const zchar_t* cameraDeviceId = selectedCamera->getDeviceId();
+            if (!cameraDeviceId)
+            {
+                OnSessionStatusChanged(SessionStatus::Error, "Camera device ID is null");
+                return false;
+            }
+
+            // Select the camera using the actual device ID
+            bool success = videoHelper->selectCamera(cameraDeviceId);
+            if (success)
+            {
+                OnSessionStatusChanged(SessionStatus::InSession, String::Format("Camera selected: {0}", deviceId));
+                
+                // If video preview is running, restart it to use the new camera
+                if (m_pPreviewHandler)
+                {
+                    StopVideoPreview();
+                    StartVideoPreview();
+                }
+                
+                return true;
+            }
+            else
+            {
+                OnSessionStatusChanged(SessionStatus::Error, String::Format("Failed to select camera: {0}", deviceId));
+                return false;
+            }
+        }
+        catch (System::Exception^) {
+            OnSessionStatusChanged(SessionStatus::Error, "Exception occurred while selecting camera");
+            return false;
+        }
     }
 
     // Properties
@@ -492,12 +710,38 @@ namespace ZoomVideoSDKWrapper {
         PreviewVideoReceived(this, gcnew VideoFrameEventArgs(frame, nullptr));
     }
 
-    // Simplified helper methods
+    // YUV to RGB conversion helper - simplified for now
     Bitmap^ ZoomSDKManager::ConvertYUVToBitmap(char* yBuffer, char* uBuffer, char* vBuffer, 
                                               int width, int height, int yStride, int uStride, int vStride)
     {
-        // Simplified implementation - return null for now
-        return nullptr;
+        if (!yBuffer || !uBuffer || !vBuffer || width <= 0 || height <= 0)
+            return nullptr;
+
+        try {
+            // For now, create a simple test pattern bitmap to show video is working
+            // In a full implementation, you would do proper YUV to RGB conversion
+            Bitmap^ bitmap = gcnew Bitmap(width, height);
+            
+            // Create a simple gradient pattern to show video is being processed
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    // Use Y channel data to create grayscale image
+                    int yIndex = y * yStride + x;
+                    int grayValue = (yIndex < (yStride * height)) ? yBuffer[yIndex] : 128;
+                    
+                    // Clamp to valid range
+                    grayValue = (grayValue < 0) ? 0 : (grayValue > 255) ? 255 : grayValue;
+                    
+                    Color pixelColor = Color::FromArgb(grayValue, grayValue, grayValue);
+                    bitmap->SetPixel(x, y, pixelColor);
+                }
+            }
+            
+            return bitmap;
+        }
+        catch (System::Exception^) {
+            return nullptr;
+        }
     }
 
     String^ ZoomSDKManager::ConvertToManagedString(const wchar_t* nativeString)
@@ -519,7 +763,7 @@ namespace ZoomVideoSDKWrapper {
         return result;
     }
 
-    // Video management methods
+    // Video management methods - SIMPLIFIED
     void ZoomSDKManager::SubscribeToUserVideo(void* user)
     {
         if (!m_bInitialized || !m_pVideoSDK || !user)
@@ -531,13 +775,9 @@ namespace ZoomVideoSDKWrapper {
             {
                 String^ userId = ConvertToManagedString(pUser->getUserName());
                 OnSessionStatusChanged(SessionStatus::InSession, String::Format("User {0} joined with video capability", userId));
-                
-                // For now, we'll create a placeholder bitmap to show video is available
-                // In a full implementation, you would set up video canvas or raw data pipes here
-                CreateVideoPlaceholder(userId);
             }
         }
-        catch (...) {
+        catch (System::Exception^) {
             OnSessionStatusChanged(SessionStatus::Error, "Error setting up user video");
         }
     }
@@ -553,12 +793,9 @@ namespace ZoomVideoSDKWrapper {
             {
                 String^ userId = ConvertToManagedString(pUser->getUserName());
                 OnSessionStatusChanged(SessionStatus::InSession, String::Format("User {0} left - cleaning up video", userId));
-                
-                // Clear any video display for this user
-                OnRemoteVideoReceived(nullptr, userId);
             }
         }
-        catch (...) {
+        catch (System::Exception^) {
             OnSessionStatusChanged(SessionStatus::Error, "Error cleaning up user video");
         }
     }
@@ -573,36 +810,87 @@ namespace ZoomVideoSDKWrapper {
             if (pUser)
             {
                 String^ userId = ConvertToManagedString(pUser->getUserName());
-                
-                // Get video helper to access video status
-                IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
-                IZoomVideoSDKVideoHelper* videoHelper = pSDK->getVideoHelper();
-                
-                bool hasVideo = false;
-                if (videoHelper)
-                {
-                    // Try to get video canvas or pipe to determine video status
-                    // For now, assume video is available if user exists
-                    hasVideo = true; // Simplified - in real implementation, check video pipe status
-                }
-                
-                if (hasVideo)
-                {
-                    OnSessionStatusChanged(SessionStatus::InSession, String::Format("User {0} video status changed", userId));
-                    CreateVideoPlaceholder(userId);
-                }
-                else
-                {
-                    OnSessionStatusChanged(SessionStatus::InSession, String::Format("User {0} video stopped", userId));
-                    OnRemoteVideoReceived(nullptr, userId);
-                }
+                OnSessionStatusChanged(SessionStatus::InSession, String::Format("User {0} video status changed", userId));
             }
         }
-        catch (...) {
+        catch (System::Exception^) {
             OnSessionStatusChanged(SessionStatus::Error, "Error handling user video status change");
         }
     }
 
+    // Video preview methods - REAL IMPLEMENTATION
+    bool ZoomSDKManager::StartVideoPreview()
+    {
+        if (!m_bInitialized || !m_pVideoSDK)
+            return false;
+
+        try {
+            IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
+            IZoomVideoSDKVideoHelper* videoHelper = pSDK->getVideoHelper();
+            if (!videoHelper)
+                return false;
+
+            // Create preview handler if not exists
+            if (!m_pPreviewHandler)
+            {
+                m_pPreviewHandler = new VideoPreviewHandler(this);
+            }
+
+            // Start video preview with raw data pipe delegate
+            ZoomVideoSDKErrors ret = videoHelper->startVideoPreview(
+                static_cast<IZoomVideoSDKRawDataPipeDelegate*>(m_pPreviewHandler),
+                nullptr, // Use default camera
+                ZoomVideoSDKResolution_720P
+            );
+
+            if (ret == ZoomVideoSDKErrors_Success)
+            {
+                OnSessionStatusChanged(SessionStatus::InSession, "Video preview started successfully");
+                return true;
+            }
+            else
+            {
+                OnSessionStatusChanged(SessionStatus::Error, String::Format("Failed to start video preview: {0}", (int)ret));
+                return false;
+            }
+        }
+        catch (System::Exception^) {
+            OnSessionStatusChanged(SessionStatus::Error, "Exception occurred while starting video preview");
+            return false;
+        }
+    }
+
+    void ZoomSDKManager::StopVideoPreview()
+    {
+        if (!m_bInitialized || !m_pVideoSDK || !m_pPreviewHandler)
+            return;
+
+        try {
+            IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
+            IZoomVideoSDKVideoHelper* videoHelper = pSDK->getVideoHelper();
+            if (!videoHelper)
+                return;
+
+            // Stop video preview
+            ZoomVideoSDKErrors ret = videoHelper->stopVideoPreview(
+                static_cast<IZoomVideoSDKRawDataPipeDelegate*>(m_pPreviewHandler)
+            );
+
+            if (ret == ZoomVideoSDKErrors_Success)
+            {
+                OnSessionStatusChanged(SessionStatus::InSession, "Video preview stopped successfully");
+            }
+            else
+            {
+                OnSessionStatusChanged(SessionStatus::Error, String::Format("Failed to stop video preview: {0}", (int)ret));
+            }
+        }
+        catch (System::Exception^) {
+            OnSessionStatusChanged(SessionStatus::Error, "Exception occurred while stopping video preview");
+        }
+    }
+
+    // CreateVideoPlaceholder method implementation
     void ZoomSDKManager::CreateVideoPlaceholder(String^ userId)
     {
         try {
@@ -611,8 +899,116 @@ namespace ZoomVideoSDKWrapper {
             OnRemoteVideoReceived(nullptr, userId);
             OnSessionStatusChanged(SessionStatus::InSession, String::Format("Video placeholder created for user {0}", userId));
         }
-        catch (...) {
+        catch (System::Exception^) {
             OnSessionStatusChanged(SessionStatus::Error, "Error creating video placeholder");
         }
     }
+
+    // Property implementations
+    bool ZoomSDKManager::IsInitialized::get()
+    {
+        return m_bInitialized;
+    }
+
+    // Implementation of VideoPreviewHandler methods - INSIDE the namespace
+    void VideoPreviewHandler::onRawDataFrameReceived(YUVRawDataI420* data_)
+    {
+        ZoomSDKManager^ handler = static_cast<ZoomSDKManager^>(m_managedHandler);
+        if (handler && data_)
+        {
+            try {
+                // Get frame dimensions
+                int width = data_->GetStreamWidth();
+                int height = data_->GetStreamHeight();
+                
+                // Get YUV buffer pointers
+                char* yBuffer = data_->GetYBuffer();
+                char* uBuffer = data_->GetUBuffer();
+                char* vBuffer = data_->GetVBuffer();
+                
+                // Convert YUV to bitmap
+                Bitmap^ bitmap = handler->ConvertYUVToBitmap(
+                    yBuffer, uBuffer, vBuffer,
+                    width, height,
+                    width, width/2, width/2  // Simplified stride calculation
+                );
+                
+                if (bitmap)
+                {
+                    handler->OnPreviewVideoReceived(bitmap);
+                }
+            }
+            catch (System::Exception^) {
+                // Handle conversion errors silently
+            }
+        }
+    }
+
+    void VideoPreviewHandler::onRawDataStatusChanged(RawDataStatus status)
+    {
+        ZoomSDKManager^ handler = static_cast<ZoomSDKManager^>(m_managedHandler);
+        if (handler)
+        {
+            String^ statusMsg = (status == RawData_On) ? "Preview video data ON" : "Preview video data OFF";
+            handler->OnSessionStatusChanged(SessionStatus::InSession, statusMsg);
+        }
+    }
+
+    void VideoPreviewHandler::onShareCursorDataReceived(ZoomVideoSDKShareCursorData info)
+    {
+        // Not used for video preview
+    }
+
+    // Implementation of RemoteVideoHandler methods - INSIDE the namespace
+    void RemoteVideoHandler::onRawDataFrameReceived(YUVRawDataI420* data_)
+    {
+        ZoomSDKManager^ handler = static_cast<ZoomSDKManager^>(m_managedHandler);
+        String^ userId = static_cast<String^>(m_userId);
+        if (handler && data_ && userId)
+        {
+            try {
+                // Get frame dimensions
+                int width = data_->GetStreamWidth();
+                int height = data_->GetStreamHeight();
+                
+                // Get YUV buffer pointers
+                char* yBuffer = data_->GetYBuffer();
+                char* uBuffer = data_->GetUBuffer();
+                char* vBuffer = data_->GetVBuffer();
+                
+                // Convert YUV to bitmap
+                Bitmap^ bitmap = handler->ConvertYUVToBitmap(
+                    yBuffer, uBuffer, vBuffer,
+                    width, height,
+                    width, width/2, width/2  // Simplified stride calculation
+                );
+                
+                if (bitmap)
+                {
+                    handler->OnRemoteVideoReceived(bitmap, userId);
+                }
+            }
+            catch (System::Exception^) {
+                // Handle conversion errors silently
+            }
+        }
+    }
+
+    void RemoteVideoHandler::onRawDataStatusChanged(RawDataStatus status)
+    {
+        ZoomSDKManager^ handler = static_cast<ZoomSDKManager^>(m_managedHandler);
+        String^ userId = static_cast<String^>(m_userId);
+        if (handler && userId)
+        {
+            String^ statusMsg = String::Format("Remote video data for {0}: {1}", 
+                userId, (status == RawData_On) ? "ON" : "OFF");
+            handler->OnSessionStatusChanged(SessionStatus::InSession, statusMsg);
+        }
+    }
+
+    void RemoteVideoHandler::onShareCursorDataReceived(ZoomVideoSDKShareCursorData info)
+    {
+        // Not used for video
+    }
+
 }
