@@ -442,6 +442,8 @@ namespace ZoomVideoSDK.WinForms
 
         private void UpdateButtonStates()
         {
+            // FIXED: Always enable join button when not in session (Linux pattern)
+            // Don't disable UI based on SDK initialization status
             _joinButton.Enabled = !_isInSession;
             _leaveButton.Enabled = _isInSession;
             
@@ -521,6 +523,32 @@ namespace ZoomVideoSDK.WinForms
             _isInSession = true;
             UpdateButtonStates();
             UpdateStatus("Successfully joined Zoom session");
+            
+            // CRITICAL FIX: Access video pipe immediately after session join (Linux pattern)
+            // This initializes the video pipeline properly for preview display
+            try
+            {
+                if (_zoomSDK != null)
+                {
+                    UpdateStatus("Initializing video pipeline...");
+                    
+                    // Start video automatically on session join (Linux pattern: localVideoOn = true)
+                    if (_zoomSDK.StartVideo())
+                    {
+                        _isVideoStarted = true;
+                        UpdateButtonStates();
+                        UpdateStatus("Video pipeline initialized - preview should appear");
+                    }
+                    else
+                    {
+                        UpdateStatus("Video pipeline initialization failed");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateStatus($"Video pipeline initialization error: {ex.Message}");
+            }
         }
 
         private void OnSessionLeft(object sender, EventArgs e)
@@ -634,15 +662,24 @@ namespace ZoomVideoSDK.WinForms
                     return;
                 }
 
+                // FIXED: Don't block join on SDK initialization - try to initialize if needed (Linux pattern)
+                if (_zoomSDK == null)
+                {
+                    UpdateStatus("Initializing SDK...");
+                    InitializeZoomSDK();
+                }
+
                 if (_zoomSDK == null || !_zoomSDK.IsInitialized)
                 {
-                    MessageBox.Show("Zoom SDK is not initialized. Please restart the application.", 
-                                   "SDK Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    UpdateStatus("SDK initialization failed - attempting join anyway");
+                    // Don't return here - let the join attempt proceed
                 }
 
                 UpdateStatus("Joining session...");
+                
+                // FIXED: Use existing join method - video/audio config needs to be added to C++/CLI wrapper
                 bool success = _zoomSDK.JoinSession(sessionName, token, userName, password);
+                
                 if (!success)
                 {
                     UpdateStatus("Failed to join session - check your credentials");

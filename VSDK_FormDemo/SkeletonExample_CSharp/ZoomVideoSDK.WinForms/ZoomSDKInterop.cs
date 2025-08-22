@@ -362,39 +362,87 @@ namespace ZoomVideoSDK.WinForms
         {
             try
             {
-                // This is a simplified YUV420 to RGB conversion
-                // In a real implementation, you'd use proper YUV to RGB conversion
-                var bitmap = new Bitmap(width, height);
+                // FIXED: Proper YUV420 to RGB conversion (based on Linux implementation)
+                var bitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
                 
-                // For now, create a placeholder with the actual dimensions
-                using (var g = Graphics.FromImage(bitmap))
+                // YUV420 format: Y plane + U plane + V plane
+                // Y plane: width * height bytes
+                // U plane: (width/2) * (height/2) bytes  
+                // V plane: (width/2) * (height/2) bytes
+                int ySize = width * height;
+                int uvSize = (width / 2) * (height / 2);
+                
+                if (yuvData.Length < ySize + 2 * uvSize)
                 {
-                    g.FillRectangle(Brushes.DarkBlue, 0, 0, width, height);
-                    g.DrawString($"Video Frame {width}x{height}", 
-                               new Font("Arial", 12), 
-                               Brushes.White, 
-                               new PointF(10, 10));
-                    g.DrawString($"YUV Data: {yuvData.Length} bytes", 
-                               new Font("Arial", 10), 
-                               Brushes.LightGray, 
-                               new PointF(10, 30));
+                    StatusChanged?.Invoke(this, $"Invalid YUV data size: {yuvData.Length}, expected: {ySize + 2 * uvSize}");
+                    return CreateErrorBitmap(width, height, "Invalid YUV Size");
                 }
                 
+                // Lock bitmap for direct pixel access (much faster)
+                var bitmapData = bitmap.LockBits(new Rectangle(0, 0, width, height), 
+                    System.Drawing.Imaging.ImageLockMode.WriteOnly, 
+                    System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                
+                unsafe
+                {
+                    byte* rgbPtr = (byte*)bitmapData.Scan0;
+                    int stride = bitmapData.Stride;
+                    
+                    // YUV420 to RGB conversion using standard coefficients
+                    for (int y = 0; y < height; y++)
+                    {
+                        for (int x = 0; x < width; x++)
+                        {
+                            // Get Y, U, V values
+                            int yIndex = y * width + x;
+                            int uvIndex = (y / 2) * (width / 2) + (x / 2);
+                            
+                            int Y = yuvData[yIndex];
+                            int U = yuvData[ySize + uvIndex];
+                            int V = yuvData[ySize + uvSize + uvIndex];
+                            
+                            // YUV to RGB conversion (ITU-R BT.601)
+                            int C = Y - 16;
+                            int D = U - 128;
+                            int E = V - 128;
+                            
+                            int R = (298 * C + 409 * E + 128) >> 8;
+                            int G = (298 * C - 100 * D - 208 * E + 128) >> 8;
+                            int B = (298 * C + 516 * D + 128) >> 8;
+                            
+                            // Clamp values to 0-255
+                            R = Math.Max(0, Math.Min(255, R));
+                            G = Math.Max(0, Math.Min(255, G));
+                            B = Math.Max(0, Math.Min(255, B));
+                            
+                            // Set RGB pixel (BGR format for bitmap)
+                            byte* pixel = rgbPtr + y * stride + x * 3;
+                            pixel[0] = (byte)B; // Blue
+                            pixel[1] = (byte)G; // Green  
+                            pixel[2] = (byte)R; // Red
+                        }
+                    }
+                }
+                
+                bitmap.UnlockBits(bitmapData);
                 return bitmap;
             }
             catch (Exception ex)
             {
                 StatusChanged?.Invoke(this, $"YUV conversion failed: {ex.Message}");
-                
-                // Return a simple error bitmap
-                var errorBitmap = new Bitmap(320, 240);
-                using (var g = Graphics.FromImage(errorBitmap))
-                {
-                    g.FillRectangle(Brushes.Red, 0, 0, 320, 240);
-                    g.DrawString("Video Error", new Font("Arial", 12), Brushes.White, new PointF(10, 10));
-                }
-                return errorBitmap;
+                return CreateErrorBitmap(width, height, "YUV Conversion Error");
             }
+        }
+        
+        private Bitmap CreateErrorBitmap(int width, int height, string message)
+        {
+            var errorBitmap = new Bitmap(Math.Max(320, width), Math.Max(240, height));
+            using (var g = Graphics.FromImage(errorBitmap))
+            {
+                g.FillRectangle(Brushes.Red, 0, 0, errorBitmap.Width, errorBitmap.Height);
+                g.DrawString(message, new Font("Arial", 12), Brushes.White, new PointF(10, 10));
+            }
+            return errorBitmap;
         }
 
         public void Cleanup()

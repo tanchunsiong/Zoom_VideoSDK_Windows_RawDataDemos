@@ -6,6 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <PlatformTarget>x64</PlatformTarget>
     <Platforms>x64</Platforms>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -60,8 +61,8 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if exist &quot;$(SolutionDir)..\..\bin\videosdk.dll&quot; copy &quot;$(SolutionDir)..\..\bin\videosdk.dll&quot; &quot;$(TargetDir)&quot;" />
-    <Exec Command="if exist &quot;$(SolutionDir)..\..\bin\*.dll&quot; copy &quot;$(SolutionDir)..\..\bin\*.dll&quot; &quot;$(TargetDir)&quot;" />
+    <Exec Command="if exist &quot;$(SolutionDir)sdk\x64\bin\videosdk.dll&quot; copy &quot;$(SolutionDir)sdk\x64\bin\videosdk.dll&quot; &quot;$(TargetDir)&quot;" />
+    <Exec Command="if exist &quot;$(SolutionDir)sdk\x64\bin\*.dll&quot; copy &quot;$(SolutionDir)sdk\x64\bin\*.dll&quot; &quot;$(TargetDir)&quot;" />
     <Exec Command="if exist &quot;$(SolutionDir)bin\$(Configuration)\ZoomVideoSDK.Wrapper.dll&quot; copy &quot;$(SolutionDir)bin\$(Configuration)\ZoomVideoSDK.Wrapper.dll&quot; &quot;$(TargetDir)&quot;" />
     <Exec Command="if exist &quot;$(SolutionDir)bin\$(Configuration)\*.dll&quot; copy &quot;$(SolutionDir)bin\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot;" />
   </Target>

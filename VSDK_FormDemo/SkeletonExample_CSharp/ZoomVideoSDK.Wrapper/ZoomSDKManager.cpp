@@ -1,13 +1,13 @@
 #include "ZoomSDKManager.h"
-#include "../h/zoom_video_sdk_interface.h"
-#include "../h/zoom_video_sdk_api.h"
-#include "../h/zoom_video_sdk_delegate_interface.h"
-#include "../h/zoom_video_sdk_session_info_interface.h"
-#include "../h/helpers/zoom_video_sdk_audio_helper_interface.h"
-#include "../h/helpers/zoom_video_sdk_video_helper_interface.h"
-#include "../h/helpers/zoom_video_sdk_user_helper_interface.h"
-#include "../h/zoom_sdk_raw_data_def.h"
-#include "../h/zoom_video_sdk_vector_interface.h"
+#include "../sdk/x64/h/zoom_video_sdk_interface.h"
+#include "../sdk/x64/h/zoom_video_sdk_api.h"
+#include "../sdk/x64/h/zoom_video_sdk_delegate_interface.h"
+#include "../sdk/x64/h/zoom_video_sdk_session_info_interface.h"
+#include "../sdk/x64/h/helpers/zoom_video_sdk_audio_helper_interface.h"
+#include "../sdk/x64/h/helpers/zoom_video_sdk_video_helper_interface.h"
+#include "../sdk/x64/h/helpers/zoom_video_sdk_user_helper_interface.h"
+#include "../sdk/x64/h/zoom_sdk_raw_data_def.h"
+#include "../sdk/x64/h/zoom_video_sdk_vector_interface.h"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
