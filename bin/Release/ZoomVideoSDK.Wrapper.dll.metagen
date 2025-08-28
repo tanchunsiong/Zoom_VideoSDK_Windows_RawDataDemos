@@ -1,0 +1,93 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly ZoomVideoSDK.Wrapper, Version=0.0.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=None, flags=None
+Assembly System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class ZoomVideoSDKWrapper.SessionStatusEventArgs: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.EventArgs
+    Void .ctor(ZoomVideoSDKWrapper.SessionStatus, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Properties:
+    System.String Message 'get set' : 
+    ZoomVideoSDKWrapper.SessionStatus Status 'get set' : 
+  Methods:
+    get_Status(): PrivateScope, Public, HideBySig, SpecialName
+    set_Status(SessionStatus): PrivateScope, Public, HideBySig, SpecialName
+    get_Message(): PrivateScope, Public, HideBySig, SpecialName
+    set_Message(String): PrivateScope, Public, HideBySig, SpecialName
+Class ZoomVideoSDKWrapper.VideoFrameEventArgs: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.EventArgs
+    Void .ctor(System.Drawing.Bitmap, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Properties:
+    System.String UserId 'get set' : 
+    System.Drawing.Bitmap Frame 'get set' : 
+  Methods:
+    get_Frame(): PrivateScope, Public, HideBySig, SpecialName
+    set_Frame(Bitmap): PrivateScope, Public, HideBySig, SpecialName
+    get_UserId(): PrivateScope, Public, HideBySig, SpecialName
+    set_UserId(String): PrivateScope, Public, HideBySig, SpecialName
+Class ZoomVideoSDKWrapper.ZoomSDKManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Properties:
+    System.String CurrentSessionName 'get ' : 
+    Boolean IsInitialized 'get ' : 
+    Boolean IsInSession 'get ' : 
+  Events:
+    System.EventHandler`1[ZoomVideoSDKWrapper.VideoFrameEventArgs] PreviewVideoReceived: SpecialName
+    System.EventHandler`1[ZoomVideoSDKWrapper.VideoFrameEventArgs] RemoteVideoReceived: SpecialName
+    System.EventHandler`1[ZoomVideoSDKWrapper.SessionStatusEventArgs] SessionStatusChanged: SpecialName
+  Methods:
+    add_SessionStatusChanged(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
+    remove_SessionStatusChanged(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
+    add_RemoteVideoReceived(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
+    remove_RemoteVideoReceived(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
+    add_PreviewVideoReceived(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
+    remove_PreviewVideoReceived(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
+    Initialize(): PrivateScope, Public, HideBySig
+    Cleanup(): PrivateScope, Public, HideBySig
+    JoinSession(String, String, String, String): PrivateScope, Public, HideBySig
+    LeaveSession(): PrivateScope, Public, HideBySig
+    MuteAudio(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
+    MuteSpeaker(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
+    IsAudioMuted(): PrivateScope, Public, HideBySig
+    IsSpeakerMuted(): PrivateScope, Public, HideBySig
+    StartVideo(): PrivateScope, Public, HideBySig
+    StopVideo(): PrivateScope, Public, HideBySig
+    IsVideoStarted(): PrivateScope, Public, HideBySig
+    GetMicrophoneList(): PrivateScope, Public, HideBySig
+    GetSpeakerList(): PrivateScope, Public, HideBySig
+    GetCameraList(): PrivateScope, Public, HideBySig
+    SelectMicrophone(String): PrivateScope, Public, HideBySig
+    SelectSpeaker(String): PrivateScope, Public, HideBySig
+    SelectCamera(String): PrivateScope, Public, HideBySig
+    get_IsInSession(): PrivateScope, Public, HideBySig, SpecialName
+    get_IsInitialized(): PrivateScope, Public, HideBySig, SpecialName
+    get_CurrentSessionName(): PrivateScope, Public, HideBySig, SpecialName
+    OnSessionStatusChanged(SessionStatus, String): PrivateScope, Public, HideBySig
+    OnRemoteVideoReceived(Bitmap, String): PrivateScope, Public, HideBySig
+    OnPreviewVideoReceived(Bitmap): PrivateScope, Public, HideBySig
+    SubscribeToUserVideo(Void*): PrivateScope, Public, HideBySig
+    UnsubscribeFromUserVideo(Void*): PrivateScope, Public, HideBySig
+    HandleUserVideoStatusChange(Void*): PrivateScope, Public, HideBySig
+    StartVideoPreview(): PrivateScope, Public, HideBySig
+    StopVideoPreview(): PrivateScope, Public, HideBySig
+    ConvertYUVToBitmap(SByte*, SByte*, SByte*, Int32, Int32, Int32, Int32, Int32): PrivateScope, Public, HideBySig
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Struct ZoomVideoSDKWrapper.SessionStatus: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    ZoomVideoSDKWrapper.SessionStatus Idle = 0 : Public, Static, Literal, HasDefault
+    ZoomVideoSDKWrapper.SessionStatus Joining = 1 : Public, Static, Literal, HasDefault
+    ZoomVideoSDKWrapper.SessionStatus InSession = 2 : Public, Static, Literal, HasDefault
+    ZoomVideoSDKWrapper.SessionStatus Leaving = 3 : Public, Static, Literal, HasDefault
+    ZoomVideoSDKWrapper.SessionStatus Reconnecting = 4 : Public, Static, Literal, HasDefault
+    ZoomVideoSDKWrapper.SessionStatus Failed = 5 : Public, Static, Literal, HasDefault
+    ZoomVideoSDKWrapper.SessionStatus Error = 6 : Public, Static, Literal, HasDefault

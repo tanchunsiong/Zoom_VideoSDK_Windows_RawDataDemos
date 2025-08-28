@@ -710,7 +710,7 @@ namespace ZoomVideoSDKWrapper {
         PreviewVideoReceived(this, gcnew VideoFrameEventArgs(frame, nullptr));
     }
 
-    // YUV to RGB conversion helper - simplified for now
+    // OPTIMIZED YUV to RGB conversion using LockBits for high performance
     Bitmap^ ZoomSDKManager::ConvertYUVToBitmap(char* yBuffer, char* uBuffer, char* vBuffer, 
                                               int width, int height, int yStride, int uStride, int vStride)
     {
@@ -718,28 +718,81 @@ namespace ZoomVideoSDKWrapper {
             return nullptr;
 
         try {
-            // For now, create a simple test pattern bitmap to show video is working
-            // In a full implementation, you would do proper YUV to RGB conversion
-            Bitmap^ bitmap = gcnew Bitmap(width, height);
+            // Create bitmap with 24-bit RGB format for optimal performance
+            Bitmap^ bitmap = gcnew Bitmap(width, height, System::Drawing::Imaging::PixelFormat::Format24bppRgb);
             
-            // Create a simple gradient pattern to show video is being processed
+            // Lock bitmap for direct memory access (much faster than SetPixel)
+            System::Drawing::Rectangle rect(0, 0, width, height);
+            System::Drawing::Imaging::BitmapData^ bitmapData = bitmap->LockBits(
+                rect, 
+                System::Drawing::Imaging::ImageLockMode::WriteOnly, 
+                System::Drawing::Imaging::PixelFormat::Format24bppRgb
+            );
+            
+            // Get pointer to bitmap data and stride
+            unsigned char* rgbPtr = static_cast<unsigned char*>(bitmapData->Scan0.ToPointer());
+            int stride = bitmapData->Stride;
+            
+            // FAST YUV420 to RGB conversion with proper color space
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
-                    // Use Y channel data to create grayscale image
+                    // Get YUV values for current pixel
                     int yIndex = y * yStride + x;
-                    int grayValue = (yIndex < (yStride * height)) ? yBuffer[yIndex] : 128;
+                    int uvIndex = (y / 2) * uStride + (x / 2);
                     
-                    // Clamp to valid range
-                    grayValue = (grayValue < 0) ? 0 : (grayValue > 255) ? 255 : grayValue;
+                    // Ensure we don't read beyond buffer bounds
+                    if (yIndex >= yStride * height || uvIndex >= uStride * (height / 2))
+                        continue;
                     
-                    Color pixelColor = Color::FromArgb(grayValue, grayValue, grayValue);
-                    bitmap->SetPixel(x, y, pixelColor);
+                    int Y = static_cast<unsigned char>(yBuffer[yIndex]);
+                    int U = static_cast<unsigned char>(uBuffer[uvIndex]);
+                    int V = static_cast<unsigned char>(vBuffer[uvIndex]);
+                    
+                    // YUV to RGB conversion (ITU-R BT.601 standard)
+                    int C = Y - 16;
+                    int D = U - 128;
+                    int E = V - 128;
+                    
+                    int R = (298 * C + 409 * E + 128) >> 8;
+                    int G = (298 * C - 100 * D - 208 * E + 128) >> 8;
+                    int B = (298 * C + 516 * D + 128) >> 8;
+                    
+                    // Clamp values to 0-255 range
+                    R = (R < 0) ? 0 : (R > 255) ? 255 : R;
+                    G = (G < 0) ? 0 : (G > 255) ? 255 : G;
+                    B = (B < 0) ? 0 : (B > 255) ? 255 : B;
+                    
+                    // Set RGB pixel directly in memory (BGR format for bitmap)
+                    unsigned char* pixel = rgbPtr + y * stride + x * 3;
+                    pixel[0] = static_cast<unsigned char>(B); // Blue
+                    pixel[1] = static_cast<unsigned char>(G); // Green
+                    pixel[2] = static_cast<unsigned char>(R); // Red
                 }
             }
             
+            // Unlock bitmap data
+            bitmap->UnlockBits(bitmapData);
             return bitmap;
         }
         catch (System::Exception^) {
+            // Fallback to error bitmap if conversion fails
+            return CreateErrorBitmap(width, height, "YUV Conversion Error");
+        }
+    }
+    
+    // Helper method to create error bitmap
+    Bitmap^ ZoomSDKManager::CreateErrorBitmap(int width, int height, String^ message)
+    {
+        try {
+            Bitmap^ errorBitmap = gcnew Bitmap(Math::Max(320, width), Math::Max(240, height));
+            Graphics^ g = Graphics::FromImage(errorBitmap);
+            g->FillRectangle(Brushes::Red, 0, 0, errorBitmap->Width, errorBitmap->Height);
+            g->DrawString(message, gcnew System::Drawing::Font("Arial", 12), Brushes::White, PointF(10, 10));
+            delete g;
+            return errorBitmap;
+        }
+        catch (System::Exception^) {
+            // If even error bitmap fails, return null
             return nullptr;
         }
     }
@@ -840,7 +893,7 @@ namespace ZoomVideoSDKWrapper {
             ZoomVideoSDKErrors ret = videoHelper->startVideoPreview(
                 static_cast<IZoomVideoSDKRawDataPipeDelegate*>(m_pPreviewHandler),
                 nullptr, // Use default camera
-                ZoomVideoSDKResolution_720P
+                ZoomVideoSDKResolution_360P  // Downscaled for better performance
             );
 
             if (ret == ZoomVideoSDKErrors_Success)

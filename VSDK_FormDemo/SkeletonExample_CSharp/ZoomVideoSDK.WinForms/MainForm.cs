@@ -47,6 +47,11 @@ namespace ZoomVideoSDK.WinForms
         private bool _isMicMuted = false;
         private bool _isSpeakerMuted = false;
         private bool _isVideoStarted = false;
+        
+        // Frame rate throttling for smooth video
+        private DateTime _lastRemoteVideoUpdate = DateTime.MinValue;
+        private DateTime _lastPreviewVideoUpdate = DateTime.MinValue;
+        private readonly TimeSpan _videoUpdateInterval = TimeSpan.FromMilliseconds(33); // ~30fps
 
         public MainForm()
         {
@@ -516,39 +521,16 @@ namespace ZoomVideoSDK.WinForms
         {
             if (InvokeRequired)
             {
-                Invoke(new Action<object, EventArgs>(OnSessionJoined), sender, e);
+                BeginInvoke(new Action<object, EventArgs>(OnSessionJoined), sender, e);
                 return;
             }
 
             _isInSession = true;
             UpdateButtonStates();
-            UpdateStatus("Successfully joined Zoom session");
+            UpdateStatus("Successfully joined Zoom session - use Start Video button to begin video");
             
-            // CRITICAL FIX: Access video pipe immediately after session join (Linux pattern)
-            // This initializes the video pipeline properly for preview display
-            try
-            {
-                if (_zoomSDK != null)
-                {
-                    UpdateStatus("Initializing video pipeline...");
-                    
-                    // Start video automatically on session join (Linux pattern: localVideoOn = true)
-                    if (_zoomSDK.StartVideo())
-                    {
-                        _isVideoStarted = true;
-                        UpdateButtonStates();
-                        UpdateStatus("Video pipeline initialized - preview should appear");
-                    }
-                    else
-                    {
-                        UpdateStatus("Video pipeline initialization failed");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Video pipeline initialization error: {ex.Message}");
-            }
+            // REMOVED: Automatic video start to prevent repeated initialization
+            // User now has full control over when to start video via the Start Video button
         }
 
         private void OnSessionLeft(object sender, EventArgs e)
@@ -587,12 +569,21 @@ namespace ZoomVideoSDK.WinForms
         {
             if (InvokeRequired)
             {
-                Invoke(new Action<object, VideoFrameEventArgs>(OnRemoteVideoReceived), sender, e);
+                BeginInvoke(new Action<object, VideoFrameEventArgs>(OnRemoteVideoReceived), sender, e);
                 return;
             }
 
             try
             {
+                // Frame rate throttling - limit to ~30fps to reduce choppiness
+                DateTime now = DateTime.Now;
+                if (now - _lastRemoteVideoUpdate < _videoUpdateInterval)
+                {
+                    // Skip this frame to maintain smooth frame rate
+                    return;
+                }
+                _lastRemoteVideoUpdate = now;
+
                 if (e.Frame != null)
                 {
                     // Display the received video frame in the remote video panel
@@ -618,12 +609,21 @@ namespace ZoomVideoSDK.WinForms
         {
             if (InvokeRequired)
             {
-                Invoke(new Action<object, VideoFrameEventArgs>(OnPreviewVideoReceived), sender, e);
+                BeginInvoke(new Action<object, VideoFrameEventArgs>(OnPreviewVideoReceived), sender, e);
                 return;
             }
 
             try
             {
+                // Frame rate throttling - limit to ~30fps to reduce choppiness
+                DateTime now = DateTime.Now;
+                if (now - _lastPreviewVideoUpdate < _videoUpdateInterval)
+                {
+                    // Skip this frame to maintain smooth frame rate
+                    return;
+                }
+                _lastPreviewVideoUpdate = now;
+
                 if (e.Frame != null)
                 {
                     // Display the preview video frame in the self video panel

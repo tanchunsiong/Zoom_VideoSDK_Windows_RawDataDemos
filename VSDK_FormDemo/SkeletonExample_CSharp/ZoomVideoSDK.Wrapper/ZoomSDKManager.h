@@ -112,6 +112,7 @@ namespace ZoomVideoSDKWrapper {
         // Helper methods (made public for native callback access)
         Bitmap^ ConvertYUVToBitmap(char* yBuffer, char* uBuffer, char* vBuffer, 
                                   int width, int height, int yStride, int uStride, int vStride);
+        Bitmap^ CreateErrorBitmap(int width, int height, String^ message);
 
     private:
         // Helper methods

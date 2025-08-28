@@ -13,7 +13,7 @@
 			
 			<!-- Enhanced Session Configuration -->
 			<VerticalLayout padding="20,20,20,20">
-				<Label text="Enhanced Single Window Demo" font="2" textcolor="#FFFFFFFF" align="center" height="40" />
+				<Label text="Single Window Demo" font="2" textcolor="#FFFFFFFF" align="center" height="40" />
 				
 				<!-- Input Fields -->
 				<Label padding="0,20,0,0" text="Session Name" textcolor="#FFFFFFFF" font="0" height="30" />
