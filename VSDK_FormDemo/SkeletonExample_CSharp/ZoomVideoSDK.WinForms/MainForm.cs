@@ -12,35 +12,6 @@ namespace ZoomVideoSDK.WinForms
         // Configuration
         private SessionConfig _config;
         
-        // UI Controls
-        private GroupBox _sessionGroup;
-        private GroupBox _audioGroup;
-        private GroupBox _videoGroup;
-        private GroupBox _deviceGroup;
-        
-        private TextBox _sessionNameTextBox;
-        private TextBox _tokenTextBox;
-        private TextBox _userNameTextBox;
-        private TextBox _passwordTextBox;
-        private Button _joinButton;
-        private Button _leaveButton;
-        private Button _previewTokenButton;
-        
-        private Button _muteMicButton;
-        private Button _muteSpeakerButton;
-        private Button _startVideoButton;
-        private Button _stopVideoButton;
-        
-        private ComboBox _microphoneComboBox;
-        private ComboBox _speakerComboBox;
-        private ComboBox _cameraComboBox;
-        
-        private PictureBox _selfVideoPanel;
-        private PictureBox _remoteVideoPanel;
-        
-        private StatusStrip _statusStrip;
-        private ToolStripStatusLabel _statusLabel;
-        
         // SDK Manager
         private ZoomSDKInterop _zoomSDK;
         private bool _isInSession = false;
@@ -56,253 +27,20 @@ namespace ZoomVideoSDK.WinForms
         public MainForm()
         {
             InitializeComponent();
-            SetupUI();
             LoadConfiguration();
             InitializeZoomSDK();
             UpdateButtonStates();
-        }
-
-        private void InitializeComponent()
-        {
-            this.SuspendLayout();
             
-            // Form properties
-            this.Text = "Zoom Video SDK - Windows Forms Demo";
-            this.Size = new Size(1000, 700);
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
+            // Add video labels to the designer-created video panels
+            AddVideoLabels();
             
-            this.ResumeLayout(false);
-        }
-
-        private void SetupUI()
-        {
-            // Create main layout
-            var mainPanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 2,
-                RowCount = 3,
-                Padding = new Padding(10)
-            };
-            
-            // Set column and row styles
-            mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
-            mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
-            mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
-            mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
-            mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-
-            // Create control groups
-            CreateSessionGroup();
-            CreateAudioGroup();
-            CreateVideoGroup();
-            CreateDeviceGroup();
-            CreateVideoDisplays();
-            CreateStatusBar();
-
-            // Add groups to layout
-            var controlsPanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 1,
-                RowCount = 4
-            };
-            
-            controlsPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 140F)); // Increased height for password field
-            controlsPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 120F)); // Session & audio controls
-            controlsPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
-            controlsPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            
-            controlsPanel.Controls.Add(_sessionGroup, 0, 0);
-            controlsPanel.Controls.Add(_audioGroup, 0, 1);
-            controlsPanel.Controls.Add(_videoGroup, 0, 2);
-            controlsPanel.Controls.Add(_deviceGroup, 0, 3);
-
-            mainPanel.Controls.Add(controlsPanel, 0, 0);
-            mainPanel.SetRowSpan(controlsPanel, 3);
-            
-            // Video displays
-            var videoPanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 1,
-                RowCount = 2
-            };
-            
-            videoPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            videoPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            
-            videoPanel.Controls.Add(_selfVideoPanel, 0, 0);
-            videoPanel.Controls.Add(_remoteVideoPanel, 0, 1);
-            
-            mainPanel.Controls.Add(videoPanel, 1, 0);
-            mainPanel.SetRowSpan(videoPanel, 3);
-
-            this.Controls.Add(mainPanel);
-            this.Controls.Add(_statusStrip);
-        }
-
-        private void CreateSessionGroup()
-        {
-            _sessionGroup = new GroupBox
-            {
-                Text = "Session Configuration",
-                Dock = DockStyle.Fill,
-                Padding = new Padding(10)
-            };
-
-            var layout = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 2,
-                RowCount = 4
-            };
-
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-
-            // Session Name
-            layout.Controls.Add(new Label { Text = "Session:", TextAlign = ContentAlignment.MiddleLeft }, 0, 0);
-            _sessionNameTextBox = new TextBox { Dock = DockStyle.Fill };
-            layout.Controls.Add(_sessionNameTextBox, 1, 0);
-
-            // Token
-            layout.Controls.Add(new Label { Text = "Token:", TextAlign = ContentAlignment.MiddleLeft }, 0, 1);
-            _tokenTextBox = new TextBox { Dock = DockStyle.Fill };
-            layout.Controls.Add(_tokenTextBox, 1, 1);
-
-            // User Name
-            layout.Controls.Add(new Label { Text = "User:", TextAlign = ContentAlignment.MiddleLeft }, 0, 2);
-            _userNameTextBox = new TextBox { Dock = DockStyle.Fill };
-            layout.Controls.Add(_userNameTextBox, 1, 2);
-
-            // Password (optional)
-            layout.Controls.Add(new Label { Text = "Password:", TextAlign = ContentAlignment.MiddleLeft }, 0, 3);
-            _passwordTextBox = new TextBox { Dock = DockStyle.Fill, UseSystemPasswordChar = true };
-            layout.Controls.Add(_passwordTextBox, 1, 3);
-
-            _sessionGroup.Controls.Add(layout);
-        }
-
-        private void CreateAudioGroup()
-        {
-            _audioGroup = new GroupBox
-            {
-                Text = "Session & Audio Controls",
-                Dock = DockStyle.Fill,
-                Padding = new Padding(10)
-            };
-
-            var buttonPanel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                FlowDirection = FlowDirection.LeftToRight
-            };
-
-            // Add join/leave buttons here so they're clearly visible
-            _joinButton = new Button { Text = "JOIN SESSION", Size = new Size(120, 35), BackColor = Color.Green, ForeColor = Color.White, Font = new Font("Arial", 10, FontStyle.Bold) };
-            _leaveButton = new Button { Text = "LEAVE SESSION", Size = new Size(120, 35), BackColor = Color.Red, ForeColor = Color.White, Font = new Font("Arial", 10, FontStyle.Bold) };
-            _previewTokenButton = new Button { Text = "PREVIEW TOKEN", Size = new Size(120, 35), BackColor = Color.Blue, ForeColor = Color.White, Font = new Font("Arial", 10, FontStyle.Bold) };
-            
-            _joinButton.Click += JoinButton_Click;
-            _leaveButton.Click += LeaveButton_Click;
-            _previewTokenButton.Click += PreviewTokenButton_Click;
-
-            _muteMicButton = new Button { Text = "Mute Mic", Size = new Size(100, 30) };
-            _muteSpeakerButton = new Button { Text = "Mute Speaker", Size = new Size(100, 30) };
-
-            _muteMicButton.Click += MuteMicButton_Click;
-            _muteSpeakerButton.Click += MuteSpeakerButton_Click;
-
-            buttonPanel.Controls.Add(_previewTokenButton);
-            buttonPanel.Controls.Add(_joinButton);
-            buttonPanel.Controls.Add(_leaveButton);
-            buttonPanel.Controls.Add(_muteMicButton);
-            buttonPanel.Controls.Add(_muteSpeakerButton);
-
-            _audioGroup.Controls.Add(buttonPanel);
-        }
-
-        private void CreateVideoGroup()
-        {
-            _videoGroup = new GroupBox
-            {
-                Text = "Video Controls",
-                Dock = DockStyle.Fill,
-                Padding = new Padding(10)
-            };
-
-            var buttonPanel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                FlowDirection = FlowDirection.LeftToRight
-            };
-
-            _startVideoButton = new Button { Text = "Start Video", Size = new Size(100, 30) };
-            _stopVideoButton = new Button { Text = "Stop Video", Size = new Size(100, 30) };
-
-            _startVideoButton.Click += StartVideoButton_Click;
-            _stopVideoButton.Click += StopVideoButton_Click;
-
-            buttonPanel.Controls.Add(_startVideoButton);
-            buttonPanel.Controls.Add(_stopVideoButton);
-
-            _videoGroup.Controls.Add(buttonPanel);
-        }
-
-        private void CreateDeviceGroup()
-        {
-            _deviceGroup = new GroupBox
-            {
-                Text = "Device Selection",
-                Dock = DockStyle.Fill,
-                Padding = new Padding(10)
-            };
-
-            var layout = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 2,
-                RowCount = 3
-            };
-
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-
-            // Microphone
-            layout.Controls.Add(new Label { Text = "Microphone:", TextAlign = ContentAlignment.MiddleLeft }, 0, 0);
-            _microphoneComboBox = new ComboBox { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
-            layout.Controls.Add(_microphoneComboBox, 1, 0);
-
-            // Speaker
-            layout.Controls.Add(new Label { Text = "Speaker:", TextAlign = ContentAlignment.MiddleLeft }, 0, 1);
-            _speakerComboBox = new ComboBox { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
-            layout.Controls.Add(_speakerComboBox, 1, 1);
-
-            // Camera
-            layout.Controls.Add(new Label { Text = "Camera:", TextAlign = ContentAlignment.MiddleLeft }, 0, 2);
-            _cameraComboBox = new ComboBox { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
-            layout.Controls.Add(_cameraComboBox, 1, 2);
-
-            _deviceGroup.Controls.Add(layout);
-
-            // Populate device lists
+            // Populate device lists after SDK initialization
             PopulateDeviceLists();
         }
 
-        private void CreateVideoDisplays()
+        private void AddVideoLabels()
         {
-            // Self video panel
-            _selfVideoPanel = new PictureBox
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.Black,
-                SizeMode = PictureBoxSizeMode.Zoom,
-                BorderStyle = BorderStyle.FixedSingle
-            };
-
+            // Add "Self Video" label to self video panel
             var selfLabel = new Label
             {
                 Text = "Self Video",
@@ -313,15 +51,7 @@ namespace ZoomVideoSDK.WinForms
             };
             _selfVideoPanel.Controls.Add(selfLabel);
 
-            // Remote video panel
-            _remoteVideoPanel = new PictureBox
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.Black,
-                SizeMode = PictureBoxSizeMode.Zoom,
-                BorderStyle = BorderStyle.FixedSingle
-            };
-
+            // Add "Remote Video" label to remote video panel
             var remoteLabel = new Label
             {
                 Text = "Remote Video",
@@ -331,13 +61,6 @@ namespace ZoomVideoSDK.WinForms
                 Dock = DockStyle.Fill
             };
             _remoteVideoPanel.Controls.Add(remoteLabel);
-        }
-
-        private void CreateStatusBar()
-        {
-            _statusStrip = new StatusStrip();
-            _statusLabel = new ToolStripStatusLabel("Ready");
-            _statusStrip.Items.Add(_statusLabel);
         }
 
         private void PopulateDeviceLists()
