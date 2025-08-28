@@ -98,6 +98,6 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(SolutionDir)sdk\x64\bin\*.dll&quot; &quot;$(OutDir)&quot; /Y" />
+    <Exec Command="copy &quot;$(ProjectDir)..\sdk\x64\bin\*.dll&quot; &quot;$(OutDir)&quot; /Y" />
   </Target>
 </Project>

@@ -113,6 +113,7 @@ namespace ZoomVideoSDKWrapper {
         Bitmap^ ConvertYUVToBitmap(char* yBuffer, char* uBuffer, char* vBuffer, 
                                   int width, int height, int yStride, int uStride, int vStride);
         Bitmap^ CreateErrorBitmap(int width, int height, String^ message);
+        void* GetCurrentUser(); // Helper to get current user for comparison
 
     private:
         // Helper methods

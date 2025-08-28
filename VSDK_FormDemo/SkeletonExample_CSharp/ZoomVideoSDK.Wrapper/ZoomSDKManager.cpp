@@ -97,12 +97,16 @@ namespace ZoomVideoSDKWrapper {
             ZoomVideoSDKWrapper::ZoomSDKManager^ handler = static_cast<ZoomVideoSDKWrapper::ZoomSDKManager^>(m_managedHandler);
             if (handler && userList)
             {
-                // Subscribe to video for each new user
+                // Get current user for comparison
+                IZoomVideoSDKUser* currentUser = static_cast<IZoomVideoSDKUser*>(handler->GetCurrentUser());
+                
+                // Subscribe to video for each new user, but exclude current user (self)
                 for (int i = 0; i < userList->GetCount(); i++)
                 {
                     IZoomVideoSDKUser* user = userList->GetItem(i);
-                    if (user)
+                    if (user && user != currentUser)
                     {
+                        // Only subscribe to remote users, not the current user (self)
                         handler->SubscribeToUserVideo(user);
                     }
                 }
@@ -131,12 +135,16 @@ namespace ZoomVideoSDKWrapper {
             ZoomVideoSDKWrapper::ZoomSDKManager^ handler = static_cast<ZoomVideoSDKWrapper::ZoomSDKManager^>(m_managedHandler);
             if (handler && userList)
             {
-                // Handle video status changes for users
+                // Get current user for comparison
+                IZoomVideoSDKUser* currentUser = static_cast<IZoomVideoSDKUser*>(handler->GetCurrentUser());
+                
+                // Handle video status changes for users, but exclude current user (self)
                 for (int i = 0; i < userList->GetCount(); i++)
                 {
                     IZoomVideoSDKUser* user = userList->GetItem(i);
-                    if (user)
+                    if (user && user != currentUser)
                     {
+                        // Only handle video status changes for remote users, not the current user (self)
                         handler->HandleUserVideoStatusChange(user);
                     }
                 }
@@ -423,7 +431,7 @@ namespace ZoomVideoSDKWrapper {
         return false; // Not supported in current API
     }
 
-    // Video controls - WITH PREVIEW SUPPORT
+    // Video controls - FIXED TO PREVENT REPEATED STARTS
     bool ZoomSDKManager::StartVideo()
     {
         if (!m_bInitialized || !m_pVideoSDK)
@@ -438,14 +446,21 @@ namespace ZoomVideoSDKWrapper {
         ZoomVideoSDKErrors ret = videoHelper->startVideo();
         if (ret == ZoomVideoSDKErrors_Success)
         {
-            OnSessionStatusChanged(SessionStatus::InSession, "Video started successfully");
+            OnSessionStatusChanged(SessionStatus::InSession, "Video transmission started successfully");
             
-            // Also start video preview for self video
-            try {
-                StartVideoPreview();
+            // Only start video preview if not already started
+            if (!m_pPreviewHandler)
+            {
+                try {
+                    StartVideoPreview();
+                }
+                catch (System::Exception^) {
+                    OnSessionStatusChanged(SessionStatus::InSession, "Video preview failed to start, but video transmission is working");
+                }
             }
-            catch (System::Exception^) {
-                OnSessionStatusChanged(SessionStatus::InSession, "Video preview failed to start, but video transmission is working");
+            else
+            {
+                OnSessionStatusChanged(SessionStatus::InSession, "Video preview already running");
             }
             
             return true;
@@ -816,7 +831,7 @@ namespace ZoomVideoSDKWrapper {
         return result;
     }
 
-    // Video management methods - SIMPLIFIED
+    // Video management methods - ENHANCED FOR REMOTE PARTICIPANTS
     void ZoomSDKManager::SubscribeToUserVideo(void* user)
     {
         if (!m_bInitialized || !m_pVideoSDK || !user)
@@ -824,14 +839,40 @@ namespace ZoomVideoSDKWrapper {
 
         try {
             IZoomVideoSDKUser* pUser = static_cast<IZoomVideoSDKUser*>(user);
-            if (pUser)
+            if (!pUser)
+                return;
+
+            String^ userId = ConvertToManagedString(pUser->getUserName());
+            
+            // Check if user has video capability
+            IZoomVideoSDKRawDataPipe* videoPipe = pUser->GetVideoPipe();
+            if (!videoPipe)
             {
-                String^ userId = ConvertToManagedString(pUser->getUserName());
-                OnSessionStatusChanged(SessionStatus::InSession, String::Format("User {0} joined with video capability", userId));
+                OnSessionStatusChanged(SessionStatus::InSession, String::Format("User {0} joined but no video pipe available", userId));
+                return;
+            }
+
+            // Create remote video handler for this user
+            RemoteVideoHandler* remoteHandler = new RemoteVideoHandler(this, userId);
+            
+            // Subscribe to user's video with 360p resolution for performance
+            ZoomVideoSDKErrors ret = videoPipe->subscribe(
+                ZoomVideoSDKResolution_360P,
+                static_cast<IZoomVideoSDKRawDataPipeDelegate*>(remoteHandler)
+            );
+
+            if (ret == ZoomVideoSDKErrors_Success)
+            {
+                OnSessionStatusChanged(SessionStatus::InSession, String::Format("Successfully subscribed to {0}'s video", userId));
+            }
+            else
+            {
+                OnSessionStatusChanged(SessionStatus::Error, String::Format("Failed to subscribe to {0}'s video: {1}", userId, (int)ret));
+                delete remoteHandler;
             }
         }
         catch (System::Exception^) {
-            OnSessionStatusChanged(SessionStatus::Error, "Error setting up user video");
+            OnSessionStatusChanged(SessionStatus::Error, "Exception occurred while subscribing to user video");
         }
     }
 
@@ -842,14 +883,35 @@ namespace ZoomVideoSDKWrapper {
 
         try {
             IZoomVideoSDKUser* pUser = static_cast<IZoomVideoSDKUser*>(user);
-            if (pUser)
+            if (!pUser)
+                return;
+
+            String^ userId = ConvertToManagedString(pUser->getUserName());
+            
+            // Get user's video pipe
+            IZoomVideoSDKRawDataPipe* videoPipe = pUser->GetVideoPipe();
+            if (videoPipe)
             {
-                String^ userId = ConvertToManagedString(pUser->getUserName());
-                OnSessionStatusChanged(SessionStatus::InSession, String::Format("User {0} left - cleaning up video", userId));
+                // Unsubscribe from video (this will stop the callbacks)
+                ZoomVideoSDKErrors ret = videoPipe->unSubscribe(static_cast<IZoomVideoSDKRawDataPipeDelegate*>(nullptr));
+                
+                if (ret == ZoomVideoSDKErrors_Success)
+                {
+                    OnSessionStatusChanged(SessionStatus::InSession, String::Format("Successfully unsubscribed from {0}'s video", userId));
+                    
+                    // Send null frame to clear the remote video display
+                    OnRemoteVideoReceived(nullptr, userId);
+                }
+                else
+                {
+                    OnSessionStatusChanged(SessionStatus::Error, String::Format("Failed to unsubscribe from {0}'s video: {1}", userId, (int)ret));
+                }
             }
+            
+            OnSessionStatusChanged(SessionStatus::InSession, String::Format("User {0} left - video cleaned up", userId));
         }
         catch (System::Exception^) {
-            OnSessionStatusChanged(SessionStatus::Error, "Error cleaning up user video");
+            OnSessionStatusChanged(SessionStatus::Error, "Exception occurred while unsubscribing from user video");
         }
     }
 
@@ -860,14 +922,18 @@ namespace ZoomVideoSDKWrapper {
 
         try {
             IZoomVideoSDKUser* pUser = static_cast<IZoomVideoSDKUser*>(user);
-            if (pUser)
-            {
-                String^ userId = ConvertToManagedString(pUser->getUserName());
-                OnSessionStatusChanged(SessionStatus::InSession, String::Format("User {0} video status changed", userId));
-            }
+            if (!pUser)
+                return;
+
+            String^ userId = ConvertToManagedString(pUser->getUserName());
+            
+            // For video status changes, always try to subscribe
+            // The subscription will fail gracefully if user doesn't have video
+            OnSessionStatusChanged(SessionStatus::InSession, String::Format("User {0} video status changed - attempting subscription", userId));
+            SubscribeToUserVideo(user);
         }
         catch (System::Exception^) {
-            OnSessionStatusChanged(SessionStatus::Error, "Error handling user video status change");
+            OnSessionStatusChanged(SessionStatus::Error, "Exception occurred while handling user video status change");
         }
     }
 
@@ -961,6 +1027,25 @@ namespace ZoomVideoSDKWrapper {
     bool ZoomSDKManager::IsInitialized::get()
     {
         return m_bInitialized;
+    }
+
+    // GetCurrentUser method implementation
+    void* ZoomSDKManager::GetCurrentUser()
+    {
+        if (!m_bInitialized || !m_pVideoSDK)
+            return nullptr;
+
+        try {
+            IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
+            IZoomVideoSDKSession* session = pSDK->getSessionInfo();
+            if (!session)
+                return nullptr;
+
+            return session->getMyself();
+        }
+        catch (System::Exception^) {
+            return nullptr;
+        }
     }
 
     // Implementation of VideoPreviewHandler methods - INSIDE the namespace
@@ -1064,4 +1149,4 @@ namespace ZoomVideoSDKWrapper {
         // Not used for video
     }
 
-}
+} // namespace ZoomVideoSDKWrapper
